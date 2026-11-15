@@ -654,6 +654,12 @@ export function createRecord(THREE, { reducedMotion = () => false, lite = false,
   // The wordmark as printed: its angular length round the record (rad) and its radius, measured when
   // the label is drawn (for setLabelFacing).
   const wordmark = { span: 1.2, r: 1.23, base: 1.21 };
+  // The record's title and the two small notes, as printed (angular length, radius, baseline), and
+  // where each sits on the unrolled strip (a fraction of its width; the wordmark is at 0.25). The
+  // title moves off its place opposite the wordmark only when the planet would hide part of it there.
+  const titleGeom = { span: 1.2, r: 1.26, base: 1.24 };
+  const smallSpan = { side: 0.3, span: 0.6 };
+  const layout = { title: 0.75, side: 0.5, span: 0 };
   function drawLabel() {
     const ctx = labelCanvas.getContext("2d");
     if (!ctx) return;
@@ -700,7 +706,11 @@ export function createRecord(THREE, { reducedMotion = () => false, lite = false,
           wordmark.span = (ctx.measureText(text).width / sx / W) * TAU;
           wordmark.r = r;
           wordmark.base = rowR(rowTop + px * 0.72);
-        }
+        } else if (flip && px === 30) {
+          titleGeom.span = (ctx.measureText(text).width / sx / W) * TAU;
+          titleGeom.r = r;
+          titleGeom.base = rowR(rowTop + px * 0.65); // printed tops inward: the tops are nearest the planet
+        } else if (px === 22) smallSpan[flip ? "span" : "side"] = (ctx.measureText(text).width / sx / W) * TAU;
         for (const off of [0, -W, W]) {
           ctx.save();
           ctx.translate(cx + off, y0 + rowTop + px * 0.36);
@@ -714,9 +724,9 @@ export function createRecord(THREE, { reducedMotion = () => false, lite = false,
       // Tops outward, reading clockwise: the wordmark. Opposite, tops inward (upright when that part
       // of the record faces the viewer): the record's title.
       word(WORDMARK, W * 0.25, 16, 40, 3, false); // letter spacing kept tight so it fits beside the planet in the home view
-      if (labelText.title) word(labelText.title.toUpperCase(), W * 0.75, 18, 30, 4, true);
-      word(sideI === 0 ? "SIDE A" : "SIDE B", W * 0.5, 22, 22, 6, false, 500);
-      if (labelText.span) word(labelText.span, 0, 22, 22, 5, true, 500);
+      if (labelText.title) word(labelText.title.toUpperCase(), W * layout.title, 18, 30, 4, true);
+      word(sideI === 0 ? "SIDE A" : "SIDE B", W * layout.side, 22, 22, 6, false, 500);
+      if (labelText.span) word(labelText.span, W * layout.span, 22, 22, 5, true, 500);
       ctx.restore();
     }
     labelTex.needsUpdate = true;
@@ -1024,6 +1034,86 @@ export function createRecord(THREE, { reducedMotion = () => false, lite = false,
     st.wordWhole = fullScore > -1e9;
     if (st.wordWhole) return full;
     return best;
+  }
+
+  const fit = { rx: 0, ry: 0, side: 1, min: 0 };
+  /**
+   * How upright the title reads centered at th (0 to 1), or null where some of it would read upside
+   * down; fit.min is then the least clearance of its tops-inward letters' edge (the wordmark's test:
+   * whole when it is at least FACING_CLEAR).
+   */
+  function titleFit(th) {
+    const half = titleGeom.span / 2, rb = titleGeom.base, side = fit.side;
+    let level = 0;
+    fit.min = 1e9;
+    for (let k = -3; k <= 3; k++) {
+      const a = th + side * (k / 3) * half;
+      const ca = Math.cos(a), sa = Math.sin(a);
+      fit.min = Math.min(fit.min, clearance(rb * ca, rb * sa));
+      // Printed tops inward, it reads counterclockwise as seen: upright where that points right.
+      const right = -side * sa * fit.rx + side * ca * fit.ry;
+      if (right < -0.45) return null;
+      level += right;
+    }
+    return level / 7;
+  }
+  function cdist(a, b) { const d = Math.abs(a - b) % 1; return Math.min(d, 1 - d); }
+
+  /**
+   * Where the record's title sits on the strip, for the overview's facing: opposite the wordmark (its
+   * printed place) when it is whole and upright there; otherwise, among the places upright and clear
+   * of the wordmark, the one nearest the bottom of the picture where it is whole, or, when it is
+   * whole nowhere, the one where the planet's air comes least near it (its letters' tips at most;
+   * with the planet itself over it everywhere, it keeps its printed place). SIDE and the span of
+   * dates keep their places unless the title would cover them; then they take the middles of the two
+   * gaps between the wordmark and the title. The strip is redrawn only when this changes.
+   */
+  function placeTitle(camera, thWord, rot, side) {
+    if (!camera || !labelText.title) return;
+    const e = group.matrixWorld.elements;
+    const c = camera.matrixWorld.elements;
+    fit.rx = c[0] * e[0] + c[1] * e[1] + c[2] * e[2]; fit.ry = c[0] * e[4] + c[1] * e[5] + c[2] * e[6];
+    fit.side = side;
+    const ux = c[4] * e[0] + c[5] * e[1] + c[6] * e[2], uy = c[4] * e[4] + c[5] * e[5] + c[6] * e[6];
+    let u = 0.75;
+    // Its printed place is kept down to the planet's air itself (1.06), without the wordmark's margin.
+    if (titleFit(rot - side * 0.75 * TAU) == null || fit.min < FACING_CLEAR - 0.02) {
+      const cur = rot - side * layout.title * TAU;
+      let best = null, bestScore = -1e9, bestMin = 0;
+      const gap = (wordmark.span + titleGeom.span) / 2 + 0.08;
+      // A finer search than the wordmark's: the title is long, and its window can be barely longer.
+      for (let i = 0; i < 180; i++) {
+        const th = thWord + ((i + 0.5) / 180) * TAU;
+        if (Math.abs(wrapPi(th - thWord)) < gap) continue;
+        const level = titleFit(th);
+        if (level == null || fit.min < 1) continue;
+        const low = -(Math.cos(th) * ux + Math.sin(th) * uy); // 1 at the bottom of the picture
+        // Whole places first (by height in the picture); else the most clear one.
+        const score = (fit.min >= FACING_CLEAR ? 100 + low + 0.3 * level : 20 * fit.min + 0.1 * low) + 0.05 * Math.cos(th - cur);
+        if (score > bestScore) { bestScore = score; best = th; bestMin = fit.min; }
+      }
+      if (best != null) {
+        // Near the best place and as clear as it, the title stays (no redraw for small camera moves).
+        if (layout.title !== 0.75 && Math.abs(wrapPi(best - cur)) < 0.17 && titleFit(cur) != null &&
+            fit.min >= Math.min(FACING_CLEAR, bestMin - 0.005)) return;
+        const ub = (-side * (best - rot)) / TAU;
+        u = ub - Math.floor(ub);
+      }
+    }
+    if (u === layout.title) return;
+    layout.title = u;
+    // SIDE and the span of dates: in place unless the title covers them, else in the two gaps.
+    const hitsSide = cdist(u, 0.5) < (titleGeom.span + smallSpan.side) / (2 * TAU) + 0.012;
+    const hitsSpan = cdist(u, 0) < (titleGeom.span + smallSpan.span) / (2 * TAU) + 0.012;
+    if (u === 0.75 || (!hitsSide && !hitsSpan)) { layout.side = 0.5; layout.span = 0; }
+    else {
+      const d1 = (((u - 0.25) % 1) + 1) % 1;
+      const mA = (0.25 + d1 / 2) % 1, mB = (u + (1 - d1) / 2) % 1;
+      // Each takes the gap nearer its own printed place.
+      if (cdist(mA, 0.5) + cdist(mB, 0) <= cdist(mB, 0.5) + cdist(mA, 0)) { layout.side = mA; layout.span = mB; }
+      else { layout.side = mB; layout.span = mA; }
+    }
+    drawLabel();
   }
 
   /** The stylus: from the place along its local vertical, curving down onto the groove shown. */
@@ -1418,7 +1508,9 @@ export function createRecord(THREE, { reducedMotion = () => false, lite = false,
       if (st.facing != null) {
         // The wordmark's middle sits at print angle WORD_A on face A (seen from the north) and WORD_B
         // on face B: turned by uLabelRot it lies at that angle plus the turn. Bring it to the far side.
-        const target = wordmarkAngle(camera) - (camL.z >= 0 ? WORD_A : WORD_B);
+        const thWord = wordmarkAngle(camera);
+        const target = thWord - (camL.z >= 0 ? WORD_A : WORD_B);
+        placeTitle(camera, thWord, target, camL.z >= 0 ? 1 : -1);
         const rot = discUniforms.uLabelRot.value;
         const diff = wrapPi(target - rot);
         if (!st.facingInit || reducedMotion() || Math.abs(diff) < 1e-4) {
@@ -1488,6 +1580,8 @@ export function createRecord(THREE, { reducedMotion = () => false, lite = false,
         labelFacing: st.facing == null ? null : +st.facing.toFixed(3),
         labelRot: +discUniforms.uLabelRot.value.toFixed(3),
         wordmarkWhole: st.wordWhole,
+        labelLayout: { title: +layout.title.toFixed(3), side: +layout.side.toFixed(3), span: +layout.span.toFixed(3),
+          clear: titleFit(discUniforms.uLabelRot.value - fit.side * layout.title * TAU) == null ? "upside down" : +fit.min.toFixed(3) },
         wordmarkSpanDeg: +(wordmark.span / RAD).toFixed(1),
         wordmarkAzimuth: +wrapPi(discUniforms.uLabelRot.value + (camL.z >= 0 ? WORD_A : WORD_B)).toFixed(3),
       };

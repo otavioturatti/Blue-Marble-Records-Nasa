@@ -9,6 +9,10 @@
 
 // Every line of the script, keyed by its id, so the text and the clip file names cannot drift.
 // S00 is not in the script yet: the voice's first words must say how to turn it off.
+// The clips' version, in their address: raise it whenever a clip is recorded again, so a browser that
+// kept the old file (the site lets recordings be cached for a day) fetches the new one.
+const CLIPS_V = "3";
+
 export const LINES = {
   en: {
     S00: "Voice guide on. To turn it off, press G.",
@@ -290,7 +294,7 @@ export function createVoice({ lang = () => "en", duck = () => {}, base = "voice/
   /** Do the recorded clips exist for this language? Probed once (one request for its first line). */
   function probe(l) {
     if (clips.has(l)) return Promise.resolve(clips.get(l));
-    const p = fetch(`${base}${l}/S01.mp3`, { method: "HEAD" }).then((r) => r.ok, () => false).then((ok) => { clips.set(l, ok); return ok; });
+    const p = fetch(`${base}${l}/S01.mp3?v=${CLIPS_V}`, { method: "HEAD" }).then((r) => r.ok, () => false).then((ok) => { clips.set(l, ok); return ok; });
     clips.set(l, p);
     return p;
   }
@@ -341,7 +345,7 @@ export function createVoice({ lang = () => "en", duck = () => {}, base = "voice/
     if (recorded && player) {
       const ok = await new Promise((resolve) => {
         audio = player;
-        audio.src = `${base}${l}/${id}.mp3`;
+        audio.src = `${base}${l}/${id}.mp3?v=${CLIPS_V}`;
         audio.onended = () => resolve(true);
         audio.onerror = () => resolve(null); // this clip is missing: the device voice says it
         audio.play().catch(() => resolve(null));

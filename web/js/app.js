@@ -62,7 +62,7 @@ let pendingPlay = 0; // the token of a Play that is waiting to start (0: none)
 let gateWoken = false;
 let voiceTouch = false;
 let lastRawPointerAt = -Infinity;
-let gateSelected = "b"; // the gate's option chosen and not yet confirmed (after the wake)
+let gateSelected = "a"; // the gate's option chosen and not yet confirmed (after the wake)
 let lastGateTap = null; // { t, x, y } of the last raw tap on the gate, for the double tap
 let lastTouchAt = -Infinity;
 /**
@@ -1990,9 +1990,13 @@ function wakeGate(kind, lines = null) {
 /** Enter one of the gate's options (a: the tour with the reader; b: with the app's voice; c: explore). */
 function enterGate(option) {
   const btn = { a: $("tour-start"), b: $("tour-voice"), c: $("start") }[option];
-  if (option === "a" && choiceSaysScreenReader(btn.id, touchUi())) srLikely = true; // she told us
+  // A raw finger reaching the page proves no screen reader is running: the tour "with my screen
+  // reader" would be silent, so the app's voice leads it. A screen reader's own activation never
+  // sets fingerProven, and gets the reader path.
+  const byFinger = option === "a" && fingerProven && touchUi();
+  if (option === "a" && !byFinger && choiceSaysScreenReader(btn.id, touchUi())) srLikely = true; // she told us
   if (option === "c") { if (leaveGate(btn, { explore: true })) startSound(); return; }
-  if (leaveGate(btn)) startTour({ voice: option === "b", button: btn });
+  if (leaveGate(btn)) startTour({ voice: option === "b" || byFinger, button: btn });
 }
 
 /** Select a gate option (focus and the selected look); the voice says its name unless told not to. */

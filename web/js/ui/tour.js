@@ -130,13 +130,14 @@ export const GATE_OPTIONS = Object.freeze(["a", "b", "c"]);
  * "swipeDown" (a finger on the gate). target: "a", "b", "c" or "bg" (the background). Returns
  * { action: "enter" | "wake" | "select" | "say" | "none", option, lines }.
  */
-export function gateDecision({ input, woken = false, target = "bg", selected = "b" } = {}) {
+export function gateDecision({ input, woken = false, target = "bg", selected = "a" } = {}) {
   const name = (o) => `G02${o}`;
   const isOpt = GATE_OPTIONS.includes(target);
   if (input === "assist") return isOpt ? { action: "enter", option: target, lines: [] } : { action: "none", option: selected, lines: [] };
   if (!woken) {
-    // A finger proves no screen reader and lands anywhere: always b. A mouse: the option clicked.
-    const option = input === "mouse" && isOpt ? target : "b";
+    // The first option of the list, wherever a finger landed (it lands anywhere). A mouse: the option
+    // clicked. Entered by a raw finger, the first option is led by the app's voice (app.js enterGate).
+    const option = input === "mouse" && isOpt ? target : "a";
     return { action: "wake", option, lines: [input === "mouse" ? "G01" : "G01t", name(option)] };
   }
   if (input === "double") return { action: "enter", option: selected, lines: [] };

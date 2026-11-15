@@ -1155,3 +1155,10 @@ html.gate-leaving .bar .mark { opacity: 0; }
    the picture and the remote (no console, no flat frame below). */
 html.voice-touch, html.voice-touch body { touch-action: none; overscroll-behavior: none; overflow: hidden; }
 body.guided-touch #console, body.guided-touch .sleeve, body.guided-touch .console-toggle { display: none; }
+
+/* The gate's selected option (chosen, not yet confirmed): the focus ring's own look. While the gate
+   fits the screen, a finger's swipes and double taps are the gate's (no scroll, no zoom); taller, it
+   scrolls and only the double tap zoom is off. */
+.gate .remote__entry .is-selected { outline: 2px solid var(--focus); outline-offset: 3px; }
+html.gate-on .gate { touch-action: manipulation; }
+html.gate-on.gate-fits .gate { touch-action: none; }

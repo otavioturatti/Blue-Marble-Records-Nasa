@@ -15,7 +15,7 @@ import * as view from "./ui/view.js";
 import * as haptics from "./ui/haptics.js";
 import { createVoice, linesFor, lineText, placeLine, FULL_POLICY } from "./ui/voice.js";
 import { splitLine, GUARD_MS, FOCUS_MS } from "./ui/pace.js";
-import { TOUR, stopRange, inputKind, remoteKey, gateKey, choiceSaysScreenReader, guidedKey, touchGesture } from "./ui/tour.js";
+import { TOUR, stopRange, inputKind, remoteKey, gateKey, choiceSaysScreenReader, guidedKey, touchGesture, gateDecision, isDoubleTap, GATE_OPTIONS } from "./ui/tour.js";
 
 const $ = (id) => document.getElementById(id);
 // Play through time: one date every two beats of the label's 84 BPM. Change PLAY_BPM alone:
@@ -62,6 +62,8 @@ let pendingPlay = 0; // the token of a Play that is waiting to start (0: none)
 let gateWoken = false;
 let voiceTouch = false;
 let lastRawPointerAt = -Infinity;
+let gateSelected = "b"; // the gate's option chosen and not yet confirmed (after the wake)
+let lastGateTap = null; // { t, x, y } of the last raw tap on the gate, for the double tap
 let lastTouchAt = -Infinity;
 /**
  * The voice's policy: the visitor chooses the voice explicitly at the entrance (off by default), so
@@ -1424,6 +1426,7 @@ async function pause() {
 function stopAll({ quiet = false } = {}) {
   const wasTour = tour.active;
   stopTour({ quiet: true });
+  cutSpeech(); // Stop, Esc or a hidden page end any line being said, in or out of the tour
   cancelAutoPlay(); // and a Play waiting for its lead-in
   pausedHere = false;
   playToken += 1; // also cancels a Play still starting
@@ -1702,12 +1705,9 @@ function wire() {
   // The entrance: the guided tour (the primary action, what Space does) or Explore on my own (the
   // sound starts as before, no tour).
   // The gate's three buttons: the gate leaves (inert removed at once), then the chosen start.
-  $("tour-start").addEventListener("click", (e) => {
-    if (choiceSaysScreenReader(e.currentTarget.id, touchUi())) srLikely = true; // she told us
-    if (leaveGate(e.currentTarget)) startTour({ voice: false, button: e.currentTarget });
-  });
-  $("tour-voice").addEventListener("click", (e) => { if (leaveGate(e.currentTarget)) startTour({ voice: true, button: e.currentTarget }); });
-  $("start").addEventListener("click", (e) => { if (leaveGate(e.currentTarget, { explore: true })) startSound(); });
+  $("tour-start").addEventListener("click", () => enterGate("a"));
+  $("tour-voice").addEventListener("click", () => enterGate("b"));
+  $("start").addEventListener("click", () => enterGate("c"));
   // The remote.
   $("r-play").addEventListener("click", () => remotePlay());
   $("r-next").addEventListener("click", () => remoteStep(1));
@@ -1766,15 +1766,42 @@ function wire() {
   // with a real pointer (no screen reader in between) wakes the app's voice (G01t; G01 for a mouse);
   // the next one starts the tour with the app's voice.
   window.addEventListener("pointerdown", (e) => { if (e.isTrusted) lastRawPointerAt = performance.now(); }, true);
+  // The gate's rule: the first raw press only speaks; an option is chosen, then confirmed. A click
+  // with no raw pointer (a screen reader, or Enter or Space on a focused button) enters at once.
   window.addEventListener("click", (e) => {
     if (!e.isTrusted || !document.documentElement.classList.contains("gate-on") || gateLeaving) return;
     const t = e.target instanceof Element ? e.target : null;
-    if (t?.closest("button, a, input, select, textarea, label")) return;
-    if (performance.now() - lastRawPointerAt > 1500) return; // a click with no pointer: a screen reader
-    if (e.pointerType !== "mouse" && touchUi()) fingerProven = true;
-    if (!gateWoken) wakeGate(e.pointerType === "mouse" ? "key" : "touch");
-    else startVoiceTour();
+    if (t?.closest(".gate__lang") || !t?.closest("#gate")) return; // the language switch stays direct
+    const raw = e.detail > 0 && performance.now() - lastRawPointerAt <= 1500;
+    if (!raw) return; // assistive activation: the button's own handler enters it
+    e.preventDefault();
+    e.stopPropagation();
+    const btn = t.closest("#tour-start, #tour-voice, #start");
+    const target = btn ? GATE_OPTIONS[[$("tour-start"), $("tour-voice"), $("start")].indexOf(btn)] : "bg";
+    const mouse = e.pointerType === "mouse";
+    if (!mouse && touchUi()) fingerProven = true;
+    const tap = { t: performance.now(), x: e.clientX, y: e.clientY };
+    const double = gateWoken && (e.detail >= 2 || isDoubleTap(lastGateTap, tap));
+    lastGateTap = tap;
+    gateAct(gateDecision({ input: double ? "double" : mouse ? "mouse" : "touch", woken: gateWoken, target, selected: gateSelected }), mouse ? "mouse" : "touch");
   }, true);
+  // A finger's swipe up or down on the gate: the previous or next option (while the gate fits).
+  let gateTouch = null;
+  window.addEventListener("touchstart", (e) => {
+    if (!document.documentElement.classList.contains("gate-on") || gateLeaving || e.touches.length > 1) { gateTouch = null; return; }
+    const p = e.changedTouches[0];
+    gateTouch = { x: p.clientX, y: p.clientY, t: performance.now() };
+  }, { capture: true, passive: true });
+  window.addEventListener("touchend", (e) => {
+    if (!gateTouch || !document.documentElement.classList.contains("gate-on") || gateLeaving) return;
+    const p = e.changedTouches[0];
+    const dy = p.clientY - gateTouch.y;
+    const g = touchGesture({ dx: p.clientX - gateTouch.x, dy, ms: performance.now() - gateTouch.t });
+    gateTouch = null;
+    if (g !== "switch" || !document.documentElement.classList.contains("gate-fits")) return;
+    fingerProven = touchUi() || fingerProven;
+    gateAct(gateDecision({ input: dy > 0 ? "swipeDown" : "swipeUp", woken: gateWoken, target: "bg", selected: gateSelected }), "touch");
+  }, { capture: true, passive: true });
   // The voice tour on a touch screen: a tap anywhere that is not a control pauses and continues, a
   // swipe left or right goes to the next or previous place, up or down switches sea and fire. Kept
   // from the globe and the page (no rotating, zooming or scrolling under the finger).
@@ -1849,11 +1876,10 @@ function wire() {
   // pending from a first activation that did not count as one (engine.start() is safe to repeat).
   const wake = (e) => {
     if (!e.isTrusted) return;
-    if (voice) {
-      voice.arm();
-      const own = e.type === "keydown" ? (e.key || "").toLowerCase() === "g" || ["Shift", "Control", "Alt", "Meta"].includes(e.key) : e.target instanceof Element && !!e.target.closest("#voice-row");
-      if (!own) voice.cancel();
-    }
+    // The gesture arms the voice and never cuts it: only an action that starts something else
+    // (another place, the other record, pause, stop) ends a line, so a visitor who turns the Earth,
+    // closes the panel or presses a stray key keeps hearing the narration.
+    voice?.arm();
     if (!engine) return;
     // Only a started engine that the browser suspended; a start under way is never started again
     // (each start builds the audio graph, and a second Tone.js could load).
@@ -1895,10 +1921,10 @@ function wire() {
         if (!e.isTrusted) return;
         e.preventDefault();
         wakeGate("key");
-        if (next != null) rows[next].focus();
+        if (next != null) selectGate(GATE_OPTIONS[next], { say: false });
         return;
       }
-      if (next != null) { e.preventDefault(); rows[next].focus(); voice?.say(`G02${"abc"[next]}`, { force: true, kind: "status" }); return; }
+      if (next != null) { e.preventDefault(); selectGate(GATE_OPTIONS[next]); return; }
       if (e.key === " " && !onControl) { e.preventDefault(); startVoiceTour(); }
       return;
     }
@@ -1953,12 +1979,44 @@ function wire() {
  * same gesture the sound starts (the audio unlocks, the recordings start loading) and the app's
  * voice says the gate's prompt: G01t after a touch, G01 after a key. The gate stays up.
  */
-function wakeGate(kind) {
+function wakeGate(kind, lines = null) {
   gateWoken = true;
   voice?.arm();
-  voice?.unlock();
+  voice?.unlock(); // inside the gesture: the audio element and speech synthesis
   ensureStarted({ button: document.createElement("span") }).catch?.(() => {});
-  voice?.say(kind === "touch" ? "G01t" : "G01", { force: true, kind: "status" });
+  voice?.say(lines || [kind === "touch" ? "G01t" : "G01"], { force: true, kind: "status" });
+}
+
+/** Enter one of the gate's options (a: the tour with the reader; b: with the app's voice; c: explore). */
+function enterGate(option) {
+  const btn = { a: $("tour-start"), b: $("tour-voice"), c: $("start") }[option];
+  if (option === "a" && choiceSaysScreenReader(btn.id, touchUi())) srLikely = true; // she told us
+  if (option === "c") { if (leaveGate(btn, { explore: true })) startSound(); return; }
+  if (leaveGate(btn)) startTour({ voice: option === "b", button: btn });
+}
+
+/** Select a gate option (focus and the selected look); the voice says its name unless told not to. */
+function selectGate(option, { say = true } = {}) {
+  gateSelected = option;
+  const rows = { a: $("tour-start"), b: $("tour-voice"), c: $("start") };
+  for (const [o, el] of Object.entries(rows)) el.classList.toggle("is-selected", o === option);
+  rows[option].focus({ preventScroll: true });
+  if (say) voice?.say(`G02${option}`, { force: true, kind: "status" });
+}
+
+/** Carry out the gate's decision (tour.js gateDecision). */
+function gateAct(d, kind) {
+  if (d.action === "enter") { enterGate(d.option); return; }
+  if (d.action === "wake") { selectGate(d.option, { say: false }); wakeGate(kind, d.lines); return; }
+  if (d.action === "select") { selectGate(d.option); return; }
+  if (d.action === "say") voice?.say(d.lines, { force: true, kind: "status" });
+}
+
+/** While the gate fits the screen a finger's swipes and double taps are its own (css: gate-fits). */
+function fitGate() {
+  const g = $("gate");
+  if (!g) return;
+  document.documentElement.classList.toggle("gate-fits", g.scrollHeight <= g.clientHeight + 1);
 }
 
 /** The tour with the app's voice, from the gate (the second tap, or Space on the page). */
@@ -2013,6 +2071,8 @@ async function boot() {
   // Touch screens: the visible words say "tap" and name the buttons (set before the first setLang).
   if (touchUi()) $("places-help").dataset.i18n = "placesHelpTouch";
   holdGate();
+  fitGate();
+  addEventListener("resize", fitGate);
   // Touch screens show the help sentence and no key caps; keyboards get the key-cap hint instead.
   document.body.classList.toggle("touch-ui", touchUi());
   // The remote's height: the console starts under it on the desktop; on a phone the page keeps room

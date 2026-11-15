@@ -104,7 +104,7 @@ function startLang(search, stored, languages) {
     <div class="mark gate__mark" id="gate-mark" aria-hidden="true"><span class="mark__name">Blue Marble</span> <span class="mark__sub"><span class="mark__word">Rec<span class="mark__o">o<svg class="mark__disc" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle class="md-body" cx="16" cy="16" r="14.4"/><circle class="md-groove" cx="16" cy="16" r="9.7"/><path class="md-sheen" d="M16 16L22.06 4.61A12.9 12.9 0 0 1 26.17 8.06ZM16 16L9.94 27.39A12.9 12.9 0 0 1 5.83 23.94Z"/><circle class="md-label" cx="16" cy="16" r="5.6"/><circle class="md-hole" cx="16" cy="16" r="1.5"/></svg></span>rds</span></span></div>
     <hr class="gate__rule" aria-hidden="true">
 <!-- The statement of purpose (text only: no NASA logo or mark anywhere near it). -->
-<p class="gate__tap" aria-hidden="true" data-i18n="gateTap">Tap the screen or press any key to hear the instructions.</p>
+<p class="gate__tap" id="gate-tap" aria-hidden="true" data-i18n="gateTap">Click an option or use ↑ ↓ to hear it; click it again or press Enter to confirm.</p>
 <p class="remote__purpose" id="purpose" data-i18n="purpose">Built for the NASA Space Apps Challenge 2026, a NASA hackathon. Made for blind and low-vision people, and for anyone who wants to listen.</p>
 <div class="remote__entry" id="remote-entry" role="group" aria-labelledby="entry-q">
   <h2 class="remote__q" id="entry-q" data-i18n="entryQuestion">How do you want to start?</h2>
@@ -130,12 +130,13 @@ function startLang(search, stored, languages) {
 (function () {
   var r = document.documentElement;
   if (r.lang === "pt-BR") {
-    var T = {"purpose": "Desenvolvido para o NASA Space Apps Challenge 2026, um hackathon da NASA. Feito para pessoas cegas e com baixa visão, e para quem quiser ouvir.", "entryQuestion": "Como você quer começar?", "tourSr": "Passeio guiado, com o meu leitor de tela", "hintSr": "O seu leitor de tela fala; o aplicativo fica quieto entre as músicas.", "tourVoice": "Passeio guiado, com a voz do aplicativo", "hintVoice": "Uma voz sintética fala; para quem não usa leitor de tela.", "explore": "Explorar por conta própria", "language": "Idioma", "gateChoose": "escolher", "gateConfirm": "confirma", "gateTap": "Toque na tela ou aperte qualquer tecla para ouvir as instruções."};
+    var T = {"purpose": "Desenvolvido para o NASA Space Apps Challenge 2026, um hackathon da NASA. Feito para pessoas cegas e com baixa visão, e para quem quiser ouvir.", "entryQuestion": "Como você quer começar?", "tourSr": "Passeio guiado, com o meu leitor de tela", "hintSr": "O seu leitor de tela fala; o aplicativo fica quieto entre as músicas.", "tourVoice": "Passeio guiado, com a voz do aplicativo", "hintVoice": "Uma voz sintética fala; para quem não usa leitor de tela.", "explore": "Explorar por conta própria", "language": "Idioma", "gateChoose": "escolher", "gateConfirm": "confirma", "gateTap": "Clique numa opção ou use ↑ ↓ para ouvir; clique de novo ou aperte Enter para confirmar.", "gateTapTouch": "Deslize para cima ou para baixo para ouvir as opções. Toque duas vezes para confirmar."};
     var els = document.querySelectorAll("#gate [data-i18n]");
     for (var i = 0; i < els.length; i++) { var k = els[i].getAttribute("data-i18n"); if (T[k]) els[i].textContent = T[k]; }
     var b = document.querySelectorAll("#gate .lang__btn");
     for (var j = 0; j < b.length; j++) b[j].setAttribute("aria-pressed", String(b[j].getAttribute("data-lang") === "pt-BR"));
   }
+  try { if (matchMedia("(hover: none) and (pointer: coarse)").matches) { var h = document.getElementById("gate-tap"); h.setAttribute("data-i18n", "gateTapTouch"); if (r.lang === "pt-BR") h.textContent = T.gateTapTouch; else h.textContent = "Swipe up or down to hear the options. Double tap to confirm."; } } catch (e) { /* none */ }
   r.classList.remove("lang-pending");
 })();
 </script>

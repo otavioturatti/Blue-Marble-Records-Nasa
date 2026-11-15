@@ -85,7 +85,7 @@ export const LINES = {
     S10v: "End of this place. Swipe sideways for another place, or tap to hear it again.",
     // The gate speaks (a visitor without a screen reader: a raw touch or key reached the page).
     G01: "Blue Marble Records. Hear the planet NASA sees. Press Space to start the guided tour with this voice. The arrow keys show the other options.",
-    G01t: "Blue Marble Records. Hear the planet NASA sees. Tap the screen again to start the guided tour with this voice.",
+    G01t: "Blue Marble Records. Hear the planet NASA sees. Swipe up or down to hear the options. Double tap to confirm.",
     G02a: "Guided tour, with my screen reader.",
     G02b: "Guided tour, with the app's voice.",
     G02c: "Explore on my own.",
@@ -164,7 +164,7 @@ export const LINES = {
     T05: "Passeio parado. Começar o passeio recomeça.",
     S10v: "Fim deste lugar. Deslize para o lado para outro lugar, ou toque para ouvir de novo.",
     G01: "Blue Marble Records. Ouça o planeta que a NASA vê. Aperte Espaço para começar o passeio guiado com esta voz. As setas mostram as outras opções.",
-    G01t: "Blue Marble Records. Ouça o planeta que a NASA vê. Toque na tela de novo para começar o passeio guiado com esta voz.",
+    G01t: "Blue Marble Records. Ouça o planeta que a NASA vê. Deslize para cima ou para baixo para ouvir as opções. Toque duas vezes para confirmar.",
     G02a: "Passeio guiado, com o meu leitor de tela.",
     G02b: "Passeio guiado, com a voz do aplicativo.",
     G02c: "Explorar por conta própria.",
@@ -283,6 +283,7 @@ export function createVoice({ lang = () => "en", duck = () => {}, base = "voice/
   const player = typeof Audio !== "undefined" ? new Audio() : null;
   const SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
   let unlocked = false;
+  let synthPrimed = false;
   const clips = new Map(); // lang -> true (clips exist), false (use speech synthesis), Promise (probing)
   const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
 
@@ -308,7 +309,9 @@ export function createVoice({ lang = () => "en", duck = () => {}, base = "voice/
         timer = 0;
         let ok = true;
         for (const id of list) {
-          if (!(await one(id, my))) { ok = false; break; }
+          if (await one(id, my)) continue;
+          ok = false;
+          if (my !== token) break; // cancelled; a line that could not be said goes on to the next
         }
         if (my !== token) { resolve(false); return; }
         speaking = false;
@@ -375,6 +378,8 @@ export function createVoice({ lang = () => "en", duck = () => {}, base = "voice/
     arm() { armed = true; },
     /** Inside a gesture: start the one audio element once (silently), so later clips may play. */
     unlock() {
+      // Speech synthesis too, inside the gesture (some phones refuse it later): a silent utterance.
+      try { if (synth && typeof SpeechSynthesisUtterance !== "undefined" && !synthPrimed) { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; u.lang = lang(); synth.speak(u); synthPrimed = true; } } catch { /* none */ }
       if (unlocked || !player) return;
       unlocked = true;
       try { player.src = SILENT; const p = player.play(); p?.catch?.(() => { unlocked = false; }); } catch { unlocked = false; }

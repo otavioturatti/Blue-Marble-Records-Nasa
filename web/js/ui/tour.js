@@ -119,3 +119,40 @@ export function touchGesture({ dx = 0, dy = 0, ms = 0 } = {}) {
   if (ay >= 60 && ay >= 1.5 * ax) return "switch";
   return null;
 }
+
+/** The gate's three options, in order: a (with my screen reader), b (with the app's voice), c (explore). */
+export const GATE_OPTIONS = Object.freeze(["a", "b", "c"]);
+
+/**
+ * The gate's rule: the first raw interaction only speaks; an option is chosen, then confirmed.
+ * input: "assist" (a click with no raw pointer: a screen reader, or Enter or Space on a focused
+ * button), "touch" or "mouse" (a raw press), "double" (a double tap or click), "swipeUp" or
+ * "swipeDown" (a finger on the gate). target: "a", "b", "c" or "bg" (the background). Returns
+ * { action: "enter" | "wake" | "select" | "say" | "none", option, lines }.
+ */
+export function gateDecision({ input, woken = false, target = "bg", selected = "b" } = {}) {
+  const name = (o) => `G02${o}`;
+  const isOpt = GATE_OPTIONS.includes(target);
+  if (input === "assist") return isOpt ? { action: "enter", option: target, lines: [] } : { action: "none", option: selected, lines: [] };
+  if (!woken) {
+    // A finger proves no screen reader and lands anywhere: always b. A mouse: the option clicked.
+    const option = input === "mouse" && isOpt ? target : "b";
+    return { action: "wake", option, lines: [input === "mouse" ? "G01" : "G01t", name(option)] };
+  }
+  if (input === "double") return { action: "enter", option: selected, lines: [] };
+  if (input === "swipeUp" || input === "swipeDown") {
+    const i = GATE_OPTIONS.indexOf(selected);
+    const option = GATE_OPTIONS[(i + (input === "swipeDown" ? 1 : -1) + 3) % 3];
+    return { action: "select", option, lines: [name(option)] };
+  }
+  if (!isOpt) return { action: "say", option: selected, lines: [name(selected)] };
+  if (target === selected) return { action: "enter", option: target, lines: [] };
+  return { action: "select", option: target, lines: [name(target)] };
+}
+
+/** Two taps or clicks close enough in time and place to be one double tap. */
+export function isDoubleTap(prev, next, { ms = 350, px = 40 } = {}) {
+  if (!prev || !next) return false;
+  return next.t - prev.t <= ms && Math.hypot(next.x - prev.x, next.y - prev.y) <= px;
+}
+

@@ -1,0 +1,137 @@
+[
+ {
+  "midi": 54,
+  "file": "54.flac",
+  "centsOff": 1.0,
+  "loopStart": 0.999977324,
+  "loopEnd": 3.906643991,
+  "levelDbA": -20.7,
+  "source": "BassRecorder_Sus_F#2_rr1_Main.wav"
+ },
+ {
+  "midi": 60,
+  "file": "60.flac",
+  "centsOff": -2.4,
+  "loopStart": 2.127709751,
+  "loopEnd": 3.024376417,
+  "levelDbA": -21.1,
+  "source": "TenRecorder_Sus_C3_rr1_Main.wav"
+ },
+ {
+  "midi": 62,
+  "file": "62.flac",
+  "centsOff": -1.8,
+  "loopStart": 0.620045351,
+  "loopEnd": 1.676712018,
+  "levelDbA": -21.6,
+  "source": "TenRecorder_Sus_D3_rr1_Main.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.flac",
+  "centsOff": 0.9,
+  "loopStart": 0.634965986,
+  "loopEnd": 3.66829932,
+  "levelDbA": -23.7,
+  "source": "BassRecorder_Sus_E3_rr1_Main.wav"
+ },
+ {
+  "midi": 66,
+  "file": "66.flac",
+  "centsOff": -0.2,
+  "loopStart": 0.820181406,
+  "loopEnd": 4.780181406,
+  "levelDbA": -23.0,
+  "source": "BassRecorder_Sus_F#3_rr1_Main.wav"
+ },
+ {
+  "midi": 68,
+  "file": "68.flac",
+  "centsOff": 0.4,
+  "loopStart": 0.794920635,
+  "loopEnd": 4.671587302,
+  "levelDbA": -22.4,
+  "source": "BassRecorder_Sus_G#3_rr1_Main.wav"
+ },
+ {
+  "midi": 70,
+  "file": "70.flac",
+  "centsOff": -1.1,
+  "loopStart": 0.434965986,
+  "loopEnd": 2.43829932,
+  "levelDbA": -21.7,
+  "source": "BassRecorder_Sus_A#3_rr1_Main.wav"
+ },
+ {
+  "midi": 72,
+  "file": "72.flac",
+  "centsOff": 1.9,
+  "loopStart": 1.359183673,
+  "loopEnd": 4.75585034,
+  "levelDbA": -20.9,
+  "source": "BassRecorder_Sus_C4_rr1_Main.wav"
+ },
+ {
+  "midi": 74,
+  "file": "74.flac",
+  "centsOff": 0.5,
+  "loopStart": 2.169727891,
+  "loopEnd": 4.683061224,
+  "levelDbA": -20.3,
+  "source": "TenRecorder_Sus_D4_rr1_Main.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.flac",
+  "centsOff": 2.5,
+  "loopStart": 0.590045351,
+  "loopEnd": 3.093378685,
+  "levelDbA": -19.5,
+  "source": "TenRecorder_Sus_E4_rr1_Main.wav"
+ },
+ {
+  "midi": 78,
+  "file": "78.flac",
+  "centsOff": 2.2,
+  "loopStart": 0.34,
+  "loopEnd": 3.503333333,
+  "levelDbA": -19.1,
+  "source": "TenRecorder_Sus_F#4_rr1_Main.wav"
+ },
+ {
+  "midi": 80,
+  "file": "80.flac",
+  "centsOff": 0.3,
+  "loopStart": 1.569773243,
+  "loopEnd": 4.663106576,
+  "levelDbA": -18.6,
+  "source": "TenRecorder_Sus_G#4_rr1_Main.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.flac",
+  "centsOff": 1.7,
+  "loopStart": 1.503265306,
+  "loopEnd": 2.506598639,
+  "levelDbA": -17.9,
+  "source": "TenRecorder_Sus_C5_rr1_Main.wav"
+ },
+ {
+  "midi": 86,
+  "file": "86.flac",
+  "centsOff": 0.3,
+  "loopStart": 3.102086168,
+  "loopEnd": 4.605419501,
+  "levelDbA": -17.5,
+  "source": "AltRecorder_Sus_D5_rr1_Main.wav"
+ },
+ {
+  "midi": 88,
+  "file": "88.flac",
+  "centsOff": 2.3,
+  "loopStart": 0.444648526,
+  "loopEnd": 2.847981859,
+  "levelDbA": -17.3,
+  "source": "AltRecorder_Sus_E5_rr1_Main.wav"
+ }
+]

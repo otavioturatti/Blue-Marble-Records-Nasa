@@ -1,0 +1,263 @@
+{
+  "id": "fire",
+  "title": "Active Fires",
+  "short": "Fire activity (hot-pixel density)",
+  "svs_id": 5113,
+  "svs_url": "https://svs.gsfc.nasa.gov/5113/",
+  "dataset": "VIIRS active fires (Suomi NPP and NOAA-21), 5-day moving window, via NASA SVS",
+  "quantity": "fire activity (hot-pixel density, relative)",
+  "unit": "% of land pixels with fire dots",
+  "surface": "land",
+  "default_place": "uberlandia",
+  "scale": {
+    "min": 0,
+    "max": 50.0,
+    "saturates": true,
+    "kind": "sequential"
+  },
+  "grid": {
+    "width": 360,
+    "height": 180,
+    "lat0": 89.5,
+    "lon0": -179.5,
+    "step": 1
+  },
+  "dates": [
+    "2024-12-10",
+    "2025-01-10",
+    "2025-02-10",
+    "2025-03-10",
+    "2025-04-10",
+    "2025-05-10",
+    "2025-06-10",
+    "2025-07-10",
+    "2025-08-10",
+    "2025-09-10",
+    "2025-10-10",
+    "2025-11-10",
+    "2025-12-10",
+    "2026-01-10",
+    "2026-02-10",
+    "2026-03-10",
+    "2026-04-10",
+    "2026-05-10",
+    "2026-06-10",
+    "2026-07-10",
+    "2026-08-10",
+    "2026-09-10",
+    "2026-10-10"
+  ],
+  "frames": "frames/{date}.png",
+  "display": "display/{date}.jpg",
+  "display_hd": "display-hd/{date}.jpg",
+  "display_uhd": "display-uhd/{date}.jpg",
+  "disc": "disc/{date}.jpg",
+  "disc_thumb": "disc-thumb/{date}.jpg",
+  "land_mask": "../landmask-fire-hd.png",
+  "compare": [
+    {
+      "place": "uberlandia",
+      "a": "2025-02-10",
+      "b": "2025-09-10",
+      "note": "Wet season vs dry season in the Cerrado around Uberlândia (5-day windows)"
+    }
+  ],
+  "synthetic": false,
+  "validation": {
+    "points": 80,
+    "dates": 5,
+    "presence_agreement": 0.975,
+    "missed_by_us": 1,
+    "extra_in_ours": 1,
+    "spearman_rho": 0.972,
+    "spearman_rho_fire_cells": 0.943,
+    "fire_cells": 41,
+    "quiet_cells": "land within 3 cells of fire, 60S to 60N, no Greenland",
+    "reference": "NASA GIBS VIIRS_SNPP and VIIRS_NOAA21 Thermal_Anomalies_375m_All, union of the 5 days ending on the date, same 1-degree cell",
+    "note": "amounts are compared by rank only: our values are a share of dots in the SVS rendering, GIBS draws the same detections at a different size",
+    "file": "validation.csv",
+    "created": "2026-11-14T16:49:02Z"
+  },
+  "method": {
+    "source_frames": "SVS 5113 'SoaS' equirectangular EXR without labels, 4096 x 2048 (about 10 km per pixel); each frame draws the VIIRS detections of a 5-day moving window",
+    "window": "SVS says 'moving five-day window' without saying how it aligns; NASA GIBS daily detections match the 5 days ending on the frame date best (inferred, not documented)",
+    "frame_dates": "frames are numbered, not dated; dates read from the date stamp of the labeled EIC version of the 2026-11-14 generation (frames 001, 035, 111, 368, 372, 450, 817, 822, 859, 897, 900 checked): date(n) = 2024-11-13 + floor((n - 1) * 730 / 899) days",
+    "classification": "fire pixel = more than 20 delta E (CIELAB) away from the same pixel of the empty frame 900 (the base map), whatever the dot color; land = base map pixels nearer to land black than to ocean blue",
+    "density": "fire pixels / land pixels in each 1-degree cell; no data if less than 50% of the cell is land",
+    "scale": "fixed for all dates: 0 to 50%; saturates above (where detection dots overlap, mostly African savannas at the peak of their season)",
+    "relative": "a share of map pixels covered by detection dots drawn about 10 km wide, not a share of land that burned; rankings are robust, absolute values depend on the rendering",
+    "excluded_dates": {
+      "2026-11-10": "incomplete: the newest frames are still being filled in near real time (frames for 2026-11-11 to 2026-11-13 are empty)"
+    },
+    "not_measured": "fire radiative power (MW): overlapping dots over 5 days do not give a power per cell, so dot colors are used only to see where fire is",
+    "per_date": {
+      "2024-12-10": {
+        "fire_pixels": 67026,
+        "cells_with_fire": 4285,
+        "p99_density": 0.8954,
+        "max_density": 1.0,
+        "saturated_cells": 289
+      },
+      "2025-01-10": {
+        "fire_pixels": 77408,
+        "cells_with_fire": 3985,
+        "p99_density": 0.99,
+        "max_density": 1.0,
+        "saturated_cells": 385
+      },
+      "2025-02-10": {
+        "fire_pixels": 80275,
+        "cells_with_fire": 4000,
+        "p99_density": 0.9451,
+        "max_density": 1.0,
+        "saturated_cells": 422
+      },
+      "2025-03-10": {
+        "fire_pixels": 92342,
+        "cells_with_fire": 4753,
+        "p99_density": 0.87,
+        "max_density": 1.0,
+        "saturated_cells": 413
+      },
+      "2025-04-10": {
+        "fire_pixels": 75992,
+        "cells_with_fire": 5132,
+        "p99_density": 0.7904,
+        "max_density": 1.0,
+        "saturated_cells": 235
+      },
+      "2025-05-10": {
+        "fire_pixels": 65486,
+        "cells_with_fire": 5155,
+        "p99_density": 0.735,
+        "max_density": 0.975,
+        "saturated_cells": 194
+      },
+      "2025-06-10": {
+        "fire_pixels": 56149,
+        "cells_with_fire": 4972,
+        "p99_density": 0.855,
+        "max_density": 1.0,
+        "saturated_cells": 182
+      },
+      "2025-07-10": {
+        "fire_pixels": 67762,
+        "cells_with_fire": 4940,
+        "p99_density": 0.98,
+        "max_density": 1.0,
+        "saturated_cells": 286
+      },
+      "2025-08-10": {
+        "fire_pixels": 75558,
+        "cells_with_fire": 4866,
+        "p99_density": 0.99,
+        "max_density": 1.0,
+        "saturated_cells": 359
+      },
+      "2025-09-10": {
+        "fire_pixels": 87727,
+        "cells_with_fire": 5003,
+        "p99_density": 0.99,
+        "max_density": 1.0,
+        "saturated_cells": 424
+      },
+      "2025-10-10": {
+        "fire_pixels": 80673,
+        "cells_with_fire": 5047,
+        "p99_density": 0.9013,
+        "max_density": 1.0,
+        "saturated_cells": 325
+      },
+      "2025-11-10": {
+        "fire_pixels": 60472,
+        "cells_with_fire": 4758,
+        "p99_density": 0.75,
+        "max_density": 0.975,
+        "saturated_cells": 173
+      },
+      "2025-12-10": {
+        "fire_pixels": 62098,
+        "cells_with_fire": 4113,
+        "p99_density": 0.8697,
+        "max_density": 1.0,
+        "saturated_cells": 227
+      },
+      "2026-01-10": {
+        "fire_pixels": 69753,
+        "cells_with_fire": 3898,
+        "p99_density": 0.98,
+        "max_density": 1.0,
+        "saturated_cells": 325
+      },
+      "2026-02-10": {
+        "fire_pixels": 76011,
+        "cells_with_fire": 3956,
+        "p99_density": 0.9036,
+        "max_density": 1.0,
+        "saturated_cells": 357
+      },
+      "2026-03-10": {
+        "fire_pixels": 81111,
+        "cells_with_fire": 4300,
+        "p99_density": 0.915,
+        "max_density": 1.0,
+        "saturated_cells": 379
+      },
+      "2026-04-10": {
+        "fire_pixels": 76346,
+        "cells_with_fire": 4944,
+        "p99_density": 0.875,
+        "max_density": 1.0,
+        "saturated_cells": 276
+      },
+      "2026-05-10": {
+        "fire_pixels": 59604,
+        "cells_with_fire": 5089,
+        "p99_density": 0.7453,
+        "max_density": 0.9921,
+        "saturated_cells": 164
+      },
+      "2026-06-10": {
+        "fire_pixels": 57559,
+        "cells_with_fire": 4742,
+        "p99_density": 0.91,
+        "max_density": 1.0,
+        "saturated_cells": 208
+      },
+      "2026-07-10": {
+        "fire_pixels": 71913,
+        "cells_with_fire": 5009,
+        "p99_density": 0.9891,
+        "max_density": 1.0,
+        "saturated_cells": 310
+      },
+      "2026-08-10": {
+        "fire_pixels": 88278,
+        "cells_with_fire": 5176,
+        "p99_density": 0.98,
+        "max_density": 1.0,
+        "saturated_cells": 409
+      },
+      "2026-09-10": {
+        "fire_pixels": 88948,
+        "cells_with_fire": 5073,
+        "p99_density": 0.9504,
+        "max_density": 1.0,
+        "saturated_cells": 416
+      },
+      "2026-10-10": {
+        "fire_pixels": 87714,
+        "cells_with_fire": 5275,
+        "p99_density": 0.9113,
+        "max_density": 1.0,
+        "saturated_cells": 352
+      }
+    }
+  },
+  "provenance": {
+    "generator": "pipeline/build_fire.py",
+    "source": "NASA SVS 5113",
+    "created": "2026-11-14T16:28:08Z",
+    "si_assisted_code": true
+  }
+}

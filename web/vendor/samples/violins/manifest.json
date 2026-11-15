@@ -1,0 +1,92 @@
+[
+ {
+  "midi": 55,
+  "file": "55.flac",
+  "centsOff": -2.7,
+  "loopStart": 2.743333333,
+  "loopEnd": 4.243333333,
+  "levelDbA": -19.7,
+  "source": "VlnEns_Trem_G2_v1.wav"
+ },
+ {
+  "midi": 59,
+  "file": "59.flac",
+  "centsOff": -1.5,
+  "loopStart": 2.023333333,
+  "loopEnd": 3.543333333,
+  "levelDbA": -19.3,
+  "source": "VlnEns_Trem_B2_v1.wav"
+ },
+ {
+  "midi": 62,
+  "file": "62.flac",
+  "centsOff": -4.0,
+  "loopStart": 1.963333333,
+  "loopEnd": 3.543333333,
+  "levelDbA": -19.6,
+  "source": "VlnEns_Trem_D3_v1.wav"
+ },
+ {
+  "midi": 66,
+  "file": "66.flac",
+  "centsOff": 2.5,
+  "loopStart": 1.663333333,
+  "loopEnd": 3.863333333,
+  "levelDbA": -19.1,
+  "source": "VlnEns_Trem_F#3_v1.wav"
+ },
+ {
+  "midi": 69,
+  "file": "69.flac",
+  "centsOff": -6.0,
+  "loopStart": 2.633333333,
+  "loopEnd": 4.233333333,
+  "levelDbA": -19.9,
+  "source": "VlnEns_Trem_A3_v1.wav"
+ },
+ {
+  "midi": 72,
+  "file": "72.flac",
+  "centsOff": 9.3,
+  "loopStart": 0.973333333,
+  "loopEnd": 2.893333333,
+  "levelDbA": -19.3,
+  "source": "VlnEns_Trem_C4_v1.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.flac",
+  "centsOff": -0.5,
+  "loopStart": 1.433333333,
+  "loopEnd": 3.033333333,
+  "levelDbA": -17.5,
+  "source": "VlnEns_Trem_E4_v1.wav"
+ },
+ {
+  "midi": 79,
+  "file": "79.flac",
+  "centsOff": -1.0,
+  "loopStart": 1.653333333,
+  "loopEnd": 3.913333333,
+  "levelDbA": -17.6,
+  "source": "VlnEns_Trem_G4_v1.wav"
+ },
+ {
+  "midi": 83,
+  "file": "83.flac",
+  "centsOff": 0.0,
+  "loopStart": 1.853333333,
+  "loopEnd": 3.563333333,
+  "levelDbA": -17.3,
+  "source": "VlnEns_Trem_B4_v1.wav"
+ },
+ {
+  "midi": 86,
+  "file": "86.flac",
+  "centsOff": 0.5,
+  "loopStart": 1.733333333,
+  "loopEnd": 3.233333333,
+  "levelDbA": -17.0,
+  "source": "VlnEns_Trem_D5_v1.wav"
+ }
+]

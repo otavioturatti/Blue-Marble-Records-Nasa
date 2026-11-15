@@ -1,0 +1,12 @@
+[
+  {
+    "id": "sst-anomaly",
+    "title": "Sea Surface Temperature Anomaly",
+    "meta": "sst-anomaly/meta.json"
+  },
+  {
+    "id": "fire",
+    "title": "Active Fires",
+    "meta": "fire/meta.json"
+  }
+]

@@ -1,0 +1,38 @@
+[
+ {
+  "midi": 79,
+  "file": "79.mp3",
+  "centsOff": 8.4,
+  "source": "glock_soft_G4_01.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.mp3",
+  "centsOff": 12.2,
+  "source": "glock_soft_C5_02.wav"
+ },
+ {
+  "midi": 91,
+  "file": "91.mp3",
+  "centsOff": 12.1,
+  "source": "glock_soft_G5_01.wav"
+ },
+ {
+  "midi": 96,
+  "file": "96.mp3",
+  "centsOff": 15.5,
+  "source": "glock_soft_C6_01.wav"
+ },
+ {
+  "midi": 103,
+  "file": "103.mp3",
+  "centsOff": 15.8,
+  "source": "glock_soft_G6_01.wav"
+ },
+ {
+  "midi": 108,
+  "file": "108.mp3",
+  "centsOff": 24.4,
+  "source": "glock_soft_C7_03.wav"
+ }
+]

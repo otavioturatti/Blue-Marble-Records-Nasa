@@ -1,0 +1,349 @@
+{
+  "id": "sst-anomaly",
+  "title": "Sea Surface Temperature Anomaly",
+  "short": "Ocean temperature vs normal",
+  "svs_id": 5176,
+  "svs_url": "https://svs.gsfc.nasa.gov/5176/",
+  "dataset": "MUR SST v4.1 anomaly (JPL), via NASA SVS",
+  "quantity": "sea surface temperature anomaly",
+  "unit": "°C",
+  "scale": {
+    "min": -4,
+    "max": 4,
+    "saturates": true,
+    "kind": "diverging"
+  },
+  "surface": "ocean",
+  "compare": [
+    {
+      "place": "equatorial-pacific",
+      "a": "2025-11-10",
+      "b": "2026-11-10",
+      "note": "NOAA CPC: La Niña Advisory (13 Nov 2025) vs El Niño Advisory (12 Nov 2026)"
+    }
+  ],
+  "default_place": "equatorial-pacific",
+  "grid": {
+    "width": 360,
+    "height": 180,
+    "lat0": 89.5,
+    "lon0": -179.5,
+    "step": 1
+  },
+  "dates": [
+    "2024-06-10",
+    "2024-07-10",
+    "2024-08-10",
+    "2024-09-10",
+    "2024-10-10",
+    "2024-11-10",
+    "2024-12-10",
+    "2025-01-10",
+    "2025-02-10",
+    "2025-03-10",
+    "2025-04-10",
+    "2025-05-10",
+    "2025-06-10",
+    "2025-07-10",
+    "2025-08-10",
+    "2025-09-10",
+    "2025-10-10",
+    "2025-11-10",
+    "2025-12-10",
+    "2026-01-10",
+    "2026-02-10",
+    "2026-03-10",
+    "2026-04-10",
+    "2026-05-10",
+    "2026-06-10",
+    "2026-07-10",
+    "2026-08-10",
+    "2026-09-10",
+    "2026-10-10",
+    "2026-11-10"
+  ],
+  "frames": "frames/{date}.png",
+  "display": "display/{date}.jpg",
+  "display_hd": "display-hd/{date}.jpg",
+  "display_uhd": "display-uhd/{date}.jpg",
+  "disc": "disc/{date}.jpg",
+  "disc_thumb": "disc-thumb/{date}.jpg",
+  "colorbar": "colorbar.jpg",
+  "colorbar_strip": "colorbar-strip.png",
+  "land_mask": "../landmask-hd.png",
+  "synthetic": false,
+  "validation": {
+    "points": 93,
+    "dates": 8,
+    "mae": 0.172,
+    "bias": 0.042,
+    "p90_abs_error": 0.344,
+    "within_0_25": 0.774,
+    "same_class": 0.882,
+    "classes": "cold < -0.5 °C, neutral, warm > +0.5 °C",
+    "unit": "°C",
+    "reference": "NASA GIBS GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies (0.1 °C classes), median of the same 1-degree cell",
+    "excluded": {
+      "saturated": 2,
+      "no_reference": 1
+    },
+    "file": "validation.csv",
+    "created": "2026-11-14T16:29:59Z"
+  },
+  "method": {
+    "source_frames": "SVS 5176 'nodates' equirectangular EXR, 4096 x 2048, linear RGB",
+    "colorbar": "SVS 5176 sst_mur_anomaly_auto_colorbar_01.exr; ticks -4..+4 at x = 510.5, 893.0, 1278.0, 1663.0, 2049.0, 2432.0, 2817.0, 3202.0, 3584.5",
+    "decoding": "nearest colorbar color in CIELAB; pixels with delta E > 8.0 are no data (land, sea ice, coast blends)",
+    "aggregation": "median of valid pixels per 1-degree cell; no data if fewer than 50% valid",
+    "quantization": "8-bit: 254 steps over 8 °C, about 0.03 °C per step",
+    "saturation": "the colorbar ends at -4 and +4 °C; p = 1 and p = 255 mean at or beyond the end",
+    "per_date": {
+      "2024-06-10": {
+        "valid_pixels": 0.5301,
+        "median_delta_e": 1.1,
+        "p95_delta_e": 2.66,
+        "ambiguous_pixels": 0.0081,
+        "saturated_high_cells": 68,
+        "saturated_low_cells": 2
+      },
+      "2024-07-10": {
+        "valid_pixels": 0.5313,
+        "median_delta_e": 1.05,
+        "p95_delta_e": 2.53,
+        "ambiguous_pixels": 0.007,
+        "saturated_high_cells": 135,
+        "saturated_low_cells": 16
+      },
+      "2024-08-10": {
+        "valid_pixels": 0.5382,
+        "median_delta_e": 1.08,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0089,
+        "saturated_high_cells": 339,
+        "saturated_low_cells": 17
+      },
+      "2024-09-10": {
+        "valid_pixels": 0.5415,
+        "median_delta_e": 1.08,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0093,
+        "saturated_high_cells": 265,
+        "saturated_low_cells": 6
+      },
+      "2024-10-10": {
+        "valid_pixels": 0.5371,
+        "median_delta_e": 1.1,
+        "p95_delta_e": 2.71,
+        "ambiguous_pixels": 0.0089,
+        "saturated_high_cells": 219,
+        "saturated_low_cells": 17
+      },
+      "2024-11-10": {
+        "valid_pixels": 0.5259,
+        "median_delta_e": 1.04,
+        "p95_delta_e": 2.57,
+        "ambiguous_pixels": 0.0073,
+        "saturated_high_cells": 33,
+        "saturated_low_cells": 1
+      },
+      "2024-12-10": {
+        "valid_pixels": 0.531,
+        "median_delta_e": 1.09,
+        "p95_delta_e": 2.51,
+        "ambiguous_pixels": 0.0065,
+        "saturated_high_cells": 49,
+        "saturated_low_cells": 12
+      },
+      "2025-01-10": {
+        "valid_pixels": 0.541,
+        "median_delta_e": 1.13,
+        "p95_delta_e": 2.51,
+        "ambiguous_pixels": 0.0068,
+        "saturated_high_cells": 28,
+        "saturated_low_cells": 27
+      },
+      "2025-02-10": {
+        "valid_pixels": 0.5522,
+        "median_delta_e": 1.01,
+        "p95_delta_e": 2.54,
+        "ambiguous_pixels": 0.0072,
+        "saturated_high_cells": 34,
+        "saturated_low_cells": 4
+      },
+      "2025-03-10": {
+        "valid_pixels": 0.549,
+        "median_delta_e": 1.0,
+        "p95_delta_e": 2.45,
+        "ambiguous_pixels": 0.0064,
+        "saturated_high_cells": 16,
+        "saturated_low_cells": 18
+      },
+      "2025-04-10": {
+        "valid_pixels": 0.5386,
+        "median_delta_e": 1.0,
+        "p95_delta_e": 2.52,
+        "ambiguous_pixels": 0.0064,
+        "saturated_high_cells": 18,
+        "saturated_low_cells": 17
+      },
+      "2025-05-10": {
+        "valid_pixels": 0.5316,
+        "median_delta_e": 1.01,
+        "p95_delta_e": 2.52,
+        "ambiguous_pixels": 0.0067,
+        "saturated_high_cells": 15,
+        "saturated_low_cells": 3
+      },
+      "2025-06-10": {
+        "valid_pixels": 0.5305,
+        "median_delta_e": 1.07,
+        "p95_delta_e": 2.51,
+        "ambiguous_pixels": 0.0064,
+        "saturated_high_cells": 60,
+        "saturated_low_cells": 2
+      },
+      "2025-07-10": {
+        "valid_pixels": 0.532,
+        "median_delta_e": 1.12,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0088,
+        "saturated_high_cells": 386,
+        "saturated_low_cells": 24
+      },
+      "2025-08-10": {
+        "valid_pixels": 0.5375,
+        "median_delta_e": 1.1,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0095,
+        "saturated_high_cells": 360,
+        "saturated_low_cells": 24
+      },
+      "2025-09-10": {
+        "valid_pixels": 0.5385,
+        "median_delta_e": 1.15,
+        "p95_delta_e": 2.62,
+        "ambiguous_pixels": 0.0084,
+        "saturated_high_cells": 40,
+        "saturated_low_cells": 7
+      },
+      "2025-10-10": {
+        "valid_pixels": 0.5346,
+        "median_delta_e": 1.13,
+        "p95_delta_e": 2.71,
+        "ambiguous_pixels": 0.0089,
+        "saturated_high_cells": 43,
+        "saturated_low_cells": 4
+      },
+      "2025-11-10": {
+        "valid_pixels": 0.5263,
+        "median_delta_e": 1.15,
+        "p95_delta_e": 2.68,
+        "ambiguous_pixels": 0.0082,
+        "saturated_high_cells": 24,
+        "saturated_low_cells": 3
+      },
+      "2025-12-10": {
+        "valid_pixels": 0.5321,
+        "median_delta_e": 1.09,
+        "p95_delta_e": 2.61,
+        "ambiguous_pixels": 0.0077,
+        "saturated_high_cells": 21,
+        "saturated_low_cells": 7
+      },
+      "2026-01-10": {
+        "valid_pixels": 0.5433,
+        "median_delta_e": 1.08,
+        "p95_delta_e": 2.65,
+        "ambiguous_pixels": 0.008,
+        "saturated_high_cells": 25,
+        "saturated_low_cells": 3
+      },
+      "2026-02-10": {
+        "valid_pixels": 0.5473,
+        "median_delta_e": 1.0,
+        "p95_delta_e": 2.62,
+        "ambiguous_pixels": 0.0076,
+        "saturated_high_cells": 22,
+        "saturated_low_cells": 7
+      },
+      "2026-03-10": {
+        "valid_pixels": 0.5467,
+        "median_delta_e": 1.03,
+        "p95_delta_e": 2.61,
+        "ambiguous_pixels": 0.0075,
+        "saturated_high_cells": 32,
+        "saturated_low_cells": 4
+      },
+      "2026-04-10": {
+        "valid_pixels": 0.5385,
+        "median_delta_e": 1.07,
+        "p95_delta_e": 2.69,
+        "ambiguous_pixels": 0.0081,
+        "saturated_high_cells": 65,
+        "saturated_low_cells": 10
+      },
+      "2026-05-10": {
+        "valid_pixels": 0.5327,
+        "median_delta_e": 1.08,
+        "p95_delta_e": 2.71,
+        "ambiguous_pixels": 0.0084,
+        "saturated_high_cells": 37,
+        "saturated_low_cells": 7
+      },
+      "2026-06-10": {
+        "valid_pixels": 0.5305,
+        "median_delta_e": 1.05,
+        "p95_delta_e": 2.71,
+        "ambiguous_pixels": 0.0087,
+        "saturated_high_cells": 66,
+        "saturated_low_cells": 10
+      },
+      "2026-07-10": {
+        "valid_pixels": 0.5307,
+        "median_delta_e": 1.09,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0085,
+        "saturated_high_cells": 225,
+        "saturated_low_cells": 12
+      },
+      "2026-08-10": {
+        "valid_pixels": 0.5359,
+        "median_delta_e": 1.12,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0088,
+        "saturated_high_cells": 522,
+        "saturated_low_cells": 19
+      },
+      "2026-09-10": {
+        "valid_pixels": 0.5386,
+        "median_delta_e": 1.14,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0096,
+        "saturated_high_cells": 516,
+        "saturated_low_cells": 15
+      },
+      "2026-10-10": {
+        "valid_pixels": 0.5341,
+        "median_delta_e": 1.15,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0085,
+        "saturated_high_cells": 675,
+        "saturated_low_cells": 2
+      },
+      "2026-11-10": {
+        "valid_pixels": 0.5265,
+        "median_delta_e": 1.11,
+        "p95_delta_e": 2.73,
+        "ambiguous_pixels": 0.0076,
+        "saturated_high_cells": 690,
+        "saturated_low_cells": 15
+      }
+    }
+  },
+  "provenance": {
+    "generator": "pipeline/build_sst.py",
+    "source": "NASA SVS 5176",
+    "created": "2026-11-14T14:54:15Z",
+    "si_assisted_code": true
+  }
+}

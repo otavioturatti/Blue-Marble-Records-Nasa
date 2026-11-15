@@ -1,0 +1,38 @@
+[
+ {
+  "midi": 75,
+  "file": "75.flac",
+  "centsOff": 26.1,
+  "loopStart": 0.999047619,
+  "loopEnd": 2.649047619,
+  "levelDbA": -19.9,
+  "source": "glass1_D#4_Slow_1_Main.wav"
+ },
+ {
+  "midi": 78,
+  "file": "78.flac",
+  "centsOff": -10.7,
+  "loopStart": 0.999795918,
+  "loopEnd": 2.909795918,
+  "levelDbA": -19.1,
+  "source": "glass2_F#4_Slow_1_Main.wav"
+ },
+ {
+  "midi": 82,
+  "file": "82.flac",
+  "centsOff": 52.5,
+  "loopStart": 0.999229025,
+  "loopEnd": 2.575895692,
+  "levelDbA": -18.1,
+  "source": "glass3_A#4_Slow_1_Main.wav"
+ },
+ {
+  "midi": 86,
+  "file": "86.flac",
+  "centsOff": 4.1,
+  "loopStart": 1.000249433,
+  "loopEnd": 4.173582766,
+  "levelDbA": -17.6,
+  "source": "glass4_D5_Slow_2_Main.wav"
+ }
+]

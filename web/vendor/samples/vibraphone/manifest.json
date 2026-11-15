@@ -1,0 +1,62 @@
+[
+ {
+  "midi": 57,
+  "file": "57.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_A2_v1_rr1_Main.wav"
+ },
+ {
+  "midi": 60,
+  "file": "60.mp3",
+  "centsOff": -0.4,
+  "source": "Vibes_soft_C3_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_E3_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 67,
+  "file": "67.mp3",
+  "centsOff": -0.1,
+  "source": "Vibes_soft_G3_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 71,
+  "file": "71.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_B3_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 74,
+  "file": "74.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_D4_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 77,
+  "file": "77.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_F4_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 81,
+  "file": "81.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_A4_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_C5_v2_rr1_Main.wav"
+ },
+ {
+  "midi": 88,
+  "file": "88.mp3",
+  "centsOff": 0.0,
+  "source": "Vibes_soft_E5_v2_rr1_Main.wav"
+ }
+]

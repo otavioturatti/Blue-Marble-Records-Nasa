@@ -1,0 +1,116 @@
+[
+ {
+  "midi": 34,
+  "file": "34.mp3",
+  "centsOff": -5.1,
+  "source": "JHPiano_NoSus_Close_A#1_vl3_rr1.wav"
+ },
+ {
+  "midi": 36,
+  "file": "36.mp3",
+  "centsOff": -5.2,
+  "source": "JHPiano_NoSus_Close_C2_vl3_rr1.wav"
+ },
+ {
+  "midi": 38,
+  "file": "38.mp3",
+  "centsOff": -3.8,
+  "source": "JHPiano_NoSus_Close_D2_vl3_rr1.wav"
+ },
+ {
+  "midi": 40,
+  "file": "40.mp3",
+  "centsOff": -4.0,
+  "source": "JHPiano_NoSus_Close_E2_vl3_rr1.wav"
+ },
+ {
+  "midi": 42,
+  "file": "42.mp3",
+  "centsOff": -1.1,
+  "source": "JHPiano_NoSus_Close_F#2_vl3_rr1.wav"
+ },
+ {
+  "midi": 44,
+  "file": "44.mp3",
+  "centsOff": -1.8,
+  "source": "JHPiano_NoSus_Close_G#2_vl3_rr1.wav"
+ },
+ {
+  "midi": 46,
+  "file": "46.mp3",
+  "centsOff": -4.0,
+  "source": "JHPiano_NoSus_Close_A#2_vl3_rr1.wav"
+ },
+ {
+  "midi": 48,
+  "file": "48.mp3",
+  "centsOff": -2.0,
+  "source": "JHPiano_NoSus_Close_C3_vl3_rr1.wav"
+ },
+ {
+  "midi": 50,
+  "file": "50.mp3",
+  "centsOff": -1.7,
+  "source": "JHPiano_NoSus_Close_D3_vl3_rr1.wav"
+ },
+ {
+  "midi": 52,
+  "file": "52.mp3",
+  "centsOff": -4.0,
+  "source": "JHPiano_NoSus_Close_E3_vl3_rr1.wav"
+ },
+ {
+  "midi": 54,
+  "file": "54.mp3",
+  "centsOff": -2.9,
+  "source": "JHPiano_NoSus_Close_F#3_vl3_rr1.wav"
+ },
+ {
+  "midi": 56,
+  "file": "56.mp3",
+  "centsOff": -2.7,
+  "source": "JHPiano_NoSus_Close_G#3_vl3_rr1.wav"
+ },
+ {
+  "midi": 60,
+  "file": "60.mp3",
+  "centsOff": -0.2,
+  "source": "JHPiano_NoSus_Close_C4_vl3_rr1.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.mp3",
+  "centsOff": -1.9,
+  "source": "JHPiano_NoSus_Close_E4_vl3_rr1.wav"
+ },
+ {
+  "midi": 68,
+  "file": "68.mp3",
+  "centsOff": -2.6,
+  "source": "JHPiano_NoSus_Close_G#4_vl3_rr1.wav"
+ },
+ {
+  "midi": 72,
+  "file": "72.mp3",
+  "centsOff": -2.3,
+  "source": "JHPiano_NoSus_Close_C5_vl3_rr1.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.mp3",
+  "centsOff": -1.0,
+  "source": "JHPiano_NoSus_Close_E5_vl3_rr1.wav"
+ },
+ {
+  "midi": 80,
+  "file": "80.mp3",
+  "centsOff": -2.1,
+  "source": "JHPiano_NoSus_Close_G#5_vl3_rr1.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.mp3",
+  "centsOff": -1.4,
+  "source": "JHPiano_NoSus_Close_C6_vl3_rr1.wav"
+ }
+]

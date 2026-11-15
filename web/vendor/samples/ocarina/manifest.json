@@ -1,0 +1,92 @@
+[
+ {
+  "midi": 69,
+  "file": "69.flac",
+  "centsOff": -1.0,
+  "loopStart": 0.500136054,
+  "loopEnd": 3.633469388,
+  "levelDbA": -22.1,
+  "source": "StdOcarina_Sus_A3.wav"
+ },
+ {
+  "midi": 71,
+  "file": "71.flac",
+  "centsOff": 0.1,
+  "loopStart": 0.35,
+  "loopEnd": 3.463333333,
+  "levelDbA": -21.3,
+  "source": "StdOcarina_Sus_B3.wav"
+ },
+ {
+  "midi": 73,
+  "file": "73.flac",
+  "centsOff": 0.4,
+  "loopStart": 0.560045351,
+  "loopEnd": 3.676712018,
+  "levelDbA": -20.6,
+  "source": "StdOcarina_Sus_C#4.wav"
+ },
+ {
+  "midi": 74,
+  "file": "74.flac",
+  "centsOff": 0.4,
+  "loopStart": 0.535102041,
+  "loopEnd": 3.691768707,
+  "levelDbA": -20.3,
+  "source": "StdOcarina_Sus_D4.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.flac",
+  "centsOff": 1.7,
+  "loopStart": 1.114761905,
+  "loopEnd": 3.708095238,
+  "levelDbA": -19.7,
+  "source": "StdOcarina_Sus_E4.wav"
+ },
+ {
+  "midi": 78,
+  "file": "78.flac",
+  "centsOff": -4.9,
+  "loopStart": 2.226575964,
+  "loopEnd": 3.739909297,
+  "levelDbA": -19.1,
+  "source": "StdOcarina_Sus_F#4.wav"
+ },
+ {
+  "midi": 81,
+  "file": "81.flac",
+  "centsOff": 4.3,
+  "loopStart": 2.396848073,
+  "loopEnd": 3.673514739,
+  "levelDbA": -18.4,
+  "source": "StdOcarina_Sus_A4.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.flac",
+  "centsOff": -5.3,
+  "loopStart": 0.595306122,
+  "loopEnd": 3.288639456,
+  "levelDbA": -17.9,
+  "source": "ocarina_C5_sustain0.wav"
+ },
+ {
+  "midi": 86,
+  "file": "86.flac",
+  "centsOff": -2.4,
+  "loopStart": 0.364875283,
+  "loopEnd": 3.374875283,
+  "levelDbA": -17.6,
+  "source": "ocarina_D5_sustain0.wav"
+ },
+ {
+  "midi": 88,
+  "file": "88.flac",
+  "centsOff": 6.2,
+  "loopStart": 0.625034014,
+  "loopEnd": 3.695034014,
+  "levelDbA": -17.3,
+  "source": "ocarina_E5_sustain0.wav"
+ }
+]

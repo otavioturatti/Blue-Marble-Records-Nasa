@@ -1,0 +1,92 @@
+[
+ {
+  "midi": 60,
+  "file": "60.flac",
+  "centsOff": -4.9,
+  "loopStart": 0.539750567,
+  "loopEnd": 3.429750567,
+  "levelDbA": -25.7,
+  "source": "LDFlute_susNV_C3_v1_1.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.flac",
+  "centsOff": -1.2,
+  "loopStart": 1.279115646,
+  "loopEnd": 3.255782313,
+  "levelDbA": -23.7,
+  "source": "LDFlute_susNV_E3_v1_1.wav"
+ },
+ {
+  "midi": 69,
+  "file": "69.flac",
+  "centsOff": -1.5,
+  "loopStart": 2.501360544,
+  "loopEnd": 4.528027211,
+  "levelDbA": -21.3,
+  "source": "LDFlute_susNV_A3_v1_1.wav"
+ },
+ {
+  "midi": 72,
+  "file": "72.flac",
+  "centsOff": 0.3,
+  "loopStart": 1.439433107,
+  "loopEnd": 4.439433107,
+  "levelDbA": -20.5,
+  "source": "LDFlute_susNV_C4_v1_1.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.flac",
+  "centsOff": 1.0,
+  "loopStart": 2.163469388,
+  "loopEnd": 4.260136054,
+  "levelDbA": -19.6,
+  "source": "LDFlute_susNV_E4_v1_1.wav"
+ },
+ {
+  "midi": 81,
+  "file": "81.flac",
+  "centsOff": 0.5,
+  "loopStart": 1.729342404,
+  "loopEnd": 3.85600907,
+  "levelDbA": -18.4,
+  "source": "LDFlute_susNV_A4_v1_1.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.flac",
+  "centsOff": 1.2,
+  "loopStart": 2.64600907,
+  "loopEnd": 4.78600907,
+  "levelDbA": -17.8,
+  "source": "LDFlute_susNV_C5_v1_1.wav"
+ },
+ {
+  "midi": 88,
+  "file": "88.flac",
+  "centsOff": -1.6,
+  "loopStart": 3.686598639,
+  "loopEnd": 4.726598639,
+  "levelDbA": -17.3,
+  "source": "LDFlute_susNV_E5_v1_1.wav"
+ },
+ {
+  "midi": 93,
+  "file": "93.flac",
+  "centsOff": -0.8,
+  "loopStart": 1.290249433,
+  "loopEnd": 4.7469161,
+  "levelDbA": -16.9,
+  "source": "LDFlute_susNV_A5_v1_1.wav"
+ },
+ {
+  "midi": 96,
+  "file": "96.flac",
+  "centsOff": -0.4,
+  "loopStart": 1.324829932,
+  "loopEnd": 4.511496599,
+  "levelDbA": -16.8,
+  "source": "LDFlute_susNV_C6_v1_1.wav"
+ }
+]

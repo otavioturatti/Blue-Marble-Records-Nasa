@@ -1,0 +1,50 @@
+[
+ {
+  "midi": 55,
+  "file": "55.flac",
+  "centsOff": 23.5,
+  "loopStart": 1.5076,
+  "loopEnd": 2.1142,
+  "source": "Button Accordion HN G4.wav"
+ },
+ {
+  "midi": 57,
+  "file": "57.flac",
+  "centsOff": 21.4,
+  "loopStart": 1.3688,
+  "loopEnd": 1.6903,
+  "source": "Button Accordion HN A4.wav"
+ },
+ {
+  "midi": 59,
+  "file": "59.flac",
+  "centsOff": 15.2,
+  "loopStart": 1.7264,
+  "loopEnd": 2.0654,
+  "source": "Button Accordion HN B4.wav"
+ },
+ {
+  "midi": 60,
+  "file": "60.flac",
+  "centsOff": 16.0,
+  "loopStart": 1.6537,
+  "loopEnd": 1.9547,
+  "source": "Button Accordion HN C5.wav"
+ },
+ {
+  "midi": 62,
+  "file": "62.flac",
+  "centsOff": 22.5,
+  "loopStart": 1.6555,
+  "loopEnd": 1.9561,
+  "source": "Button Accordion HN D5.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.flac",
+  "centsOff": 17.3,
+  "loopStart": 1.4903,
+  "loopEnd": 1.8957,
+  "source": "Button Accordion HN E5.wav"
+ }
+]

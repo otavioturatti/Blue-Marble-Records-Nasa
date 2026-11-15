@@ -1,0 +1,19 @@
+{
+  "file": "landmask.png",
+  "encoding": "255 = land, 0 = ocean; same 1-degree grid as the frames (docs/CONTRACT.md 2.4)",
+  "grid": {
+    "width": 360,
+    "height": 180,
+    "lat0": 89.5,
+    "lon0": -179.5,
+    "step": 1
+  },
+  "provenance": {
+    "generator": "pipeline/make_landmask.py",
+    "source": "NASA SVS 5176 (land drawn in gray in the SST anomaly frame)",
+    "source_url": "https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005176/sst_mur_anomaly_nodates_most_recent_print.jpg",
+    "source_last_modified": "Fri, 13 Nov 2026 21:31:38 GMT",
+    "created": "2026-11-15T05:14:32Z",
+    "si_assisted_code": true
+  }
+}

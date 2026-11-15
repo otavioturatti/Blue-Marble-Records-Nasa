@@ -1,0 +1,80 @@
+[
+ {
+  "midi": 28,
+  "file": "28.mp3",
+  "centsOff": 0.6,
+  "source": "BKCtbss_Pizz_E0_v1_rr1.wav"
+ },
+ {
+  "midi": 30,
+  "file": "30.mp3",
+  "centsOff": -3.2,
+  "source": "BKCtbss_Pizz_F#0_v1_rr1.wav"
+ },
+ {
+  "midi": 31,
+  "file": "31.mp3",
+  "centsOff": -4.8,
+  "source": "BKCtbss_Pizz_G0_v1_rr1.wav"
+ },
+ {
+  "midi": 34,
+  "file": "34.mp3",
+  "centsOff": 4.4,
+  "source": "BKCtbss_Pizz_A#0_v1_rr1.wav"
+ },
+ {
+  "midi": 36,
+  "file": "36.mp3",
+  "centsOff": 15.7,
+  "source": "BKCtbss_Pizz_C1_v1_rr1.wav"
+ },
+ {
+  "midi": 38,
+  "file": "38.mp3",
+  "centsOff": 14.4,
+  "source": "BKCtbss_Pizz_D1_v1_rr1.wav"
+ },
+ {
+  "midi": 40,
+  "file": "40.mp3",
+  "centsOff": -11.0,
+  "source": "BKCtbss_Pizz_E1_v1_rr1.wav"
+ },
+ {
+  "midi": 42,
+  "file": "42.mp3",
+  "centsOff": 0.2,
+  "source": "BKCtbss_Pizz_F#1_v1_rr1.wav"
+ },
+ {
+  "midi": 44,
+  "file": "44.mp3",
+  "centsOff": 7.2,
+  "source": "BKCtbss_Pizz_G#1_v1_rr1.wav"
+ },
+ {
+  "midi": 45,
+  "file": "45.mp3",
+  "centsOff": 15.5,
+  "source": "BKCtbss_Pizz_A1_v1_rr1.wav"
+ },
+ {
+  "midi": 49,
+  "file": "49.mp3",
+  "centsOff": 3.5,
+  "source": "BKCtbss_Pizz_C#2_v1_rr1.wav"
+ },
+ {
+  "midi": 52,
+  "file": "52.mp3",
+  "centsOff": 2.0,
+  "source": "BKCtbss_Pizz_E2_v1_rr1.wav"
+ },
+ {
+  "midi": 56,
+  "file": "56.mp3",
+  "centsOff": -5.0,
+  "source": "BKCtbss_Pizz_G#2_v1_rr1.wav"
+ }
+]

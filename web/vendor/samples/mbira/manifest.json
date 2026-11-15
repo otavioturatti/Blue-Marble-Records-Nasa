@@ -1,0 +1,92 @@
+[
+ {
+  "midi": 61,
+  "file": "61.mp3",
+  "centsOff": -7.3,
+  "source": "MBira4_pluck_Main_C#3_2_50_100_rr5.wav"
+ },
+ {
+  "midi": 63,
+  "file": "63.mp3",
+  "centsOff": 7.9,
+  "source": "MBira4_pluck_Main_D#3_15_50_100_rr1.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.mp3",
+  "centsOff": 11.1,
+  "source": "MBira4_pluck_Main_E3_9_50_100_rr4.wav"
+ },
+ {
+  "midi": 66,
+  "file": "66.mp3",
+  "centsOff": 14.6,
+  "source": "MBira4_pluck_Main_F#3_11_50_100_rr2.wav"
+ },
+ {
+  "midi": 68,
+  "file": "68.mp3",
+  "centsOff": 11.6,
+  "source": "MBira4_pluck_Main_G#3_7_50_100_rr2.wav"
+ },
+ {
+  "midi": 69,
+  "file": "69.mp3",
+  "centsOff": 19.8,
+  "source": "MBira4_pluck_Main_A3_5_50_100_rr1.wav"
+ },
+ {
+  "midi": 71,
+  "file": "71.mp3",
+  "centsOff": 12.3,
+  "source": "MBira4_pluck_Main_B3_3_50_100_rr2.wav"
+ },
+ {
+  "midi": 73,
+  "file": "73.mp3",
+  "centsOff": 1.9,
+  "source": "MBira4_pluck_Main_C#4_1_50_100_rr1.wav"
+ },
+ {
+  "midi": 75,
+  "file": "75.mp3",
+  "centsOff": 7.5,
+  "source": "MBira4_pluck_Main_D#4_18_50_100_rr5.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.mp3",
+  "centsOff": 10.2,
+  "source": "MBira4_pluck_Main_E4_19_50_100_rr2.wav"
+ },
+ {
+  "midi": 78,
+  "file": "78.mp3",
+  "centsOff": 4.5,
+  "source": "MBira4_pluck_Main_F#4_20_50_100_rr3.wav"
+ },
+ {
+  "midi": 80,
+  "file": "80.mp3",
+  "centsOff": 53.3,
+  "source": "MBira4_pluck_Main_G#4_21_50_100_rr3.wav"
+ },
+ {
+  "midi": 81,
+  "file": "81.mp3",
+  "centsOff": 46.4,
+  "source": "MBira4_pluck_Main_A4_22_50_100_rr3.wav"
+ },
+ {
+  "midi": 83,
+  "file": "83.mp3",
+  "centsOff": 31.4,
+  "source": "MBira4_pluck_Main_B4_23_50_100_rr3.wav"
+ },
+ {
+  "midi": 86,
+  "file": "86.mp3",
+  "centsOff": -48.6,
+  "source": "MBira4_pluck_Main_C#5_24_50_100_rr5.wav"
+ }
+]

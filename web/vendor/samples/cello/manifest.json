@@ -1,0 +1,83 @@
+[
+ {
+  "midi": 36,
+  "file": "36.flac",
+  "centsOff": 1.8,
+  "loopStart": 1.995555556,
+  "loopEnd": 3.005555556,
+  "levelDbA": -25.1,
+  "source": "susvib_C1_v1_1.wav"
+ },
+ {
+  "midi": 40,
+  "file": "40.flac",
+  "centsOff": -2.5,
+  "loopStart": 1.588979592,
+  "loopEnd": 3.595646259,
+  "levelDbA": -24.7,
+  "source": "susvib_E1_v1_1.wav"
+ },
+ {
+  "midi": 43,
+  "file": "43.flac",
+  "centsOff": 0.5,
+  "loopStart": 2.087913832,
+  "loopEnd": 3.587913832,
+  "levelDbA": -28.2,
+  "source": "susvib_G1_v1_1.wav"
+ },
+ {
+  "midi": 47,
+  "file": "47.flac",
+  "centsOff": 1.8,
+  "loopStart": 2.493265306,
+  "loopEnd": 3.729931973,
+  "levelDbA": -23.4,
+  "source": "susvib_B1_v1_1.wav"
+ },
+ {
+  "midi": 50,
+  "file": "50.flac",
+  "centsOff": 0.1,
+  "loopStart": 2.871609977,
+  "loopEnd": 4.124943311,
+  "levelDbA": -26.5,
+  "source": "susvib_D2_v1_1.wav"
+ },
+ {
+  "midi": 53,
+  "file": "53.flac",
+  "centsOff": 4.0,
+  "loopStart": 2.481360544,
+  "loopEnd": 4.218027211,
+  "levelDbA": -21.4,
+  "source": "susvib_F2_v1_1.wav"
+ },
+ {
+  "midi": 57,
+  "file": "57.flac",
+  "centsOff": 1.8,
+  "loopStart": 1.908390023,
+  "loopEnd": 3.461723356,
+  "levelDbA": -23.2,
+  "source": "susvib_A2_v1_1.wav"
+ },
+ {
+  "midi": 60,
+  "file": "60.flac",
+  "centsOff": -0.9,
+  "loopStart": 3.192675737,
+  "loopEnd": 4.292675737,
+  "levelDbA": -23.3,
+  "source": "susvib_C3_v1_1.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.flac",
+  "centsOff": 0.9,
+  "loopStart": 1.441111111,
+  "loopEnd": 2.561111111,
+  "levelDbA": -20.8,
+  "source": "susvib_E3_v1_1.wav"
+ }
+]

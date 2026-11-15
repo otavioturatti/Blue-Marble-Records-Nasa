@@ -1,0 +1,704 @@
+[
+ {
+  "midi": 40,
+  "string": "E2",
+  "fret": 0,
+  "file": "E2-00-40.mp3",
+  "centsOff": -1.4,
+  "seconds": 1.85,
+  "noises": 2
+ },
+ {
+  "midi": 41,
+  "string": "E2",
+  "fret": 1,
+  "file": "E2-01-41.mp3",
+  "centsOff": 5.3,
+  "seconds": 1.7,
+  "noises": 0
+ },
+ {
+  "midi": 42,
+  "string": "E2",
+  "fret": 2,
+  "file": "E2-02-42.mp3",
+  "centsOff": 6.7,
+  "seconds": 1.65,
+  "noises": 0
+ },
+ {
+  "midi": 43,
+  "string": "E2",
+  "fret": 3,
+  "file": "E2-03-43.mp3",
+  "centsOff": 1.1,
+  "seconds": 1.64,
+  "noises": 0
+ },
+ {
+  "midi": 44,
+  "string": "E2",
+  "fret": 4,
+  "file": "E2-04-44.mp3",
+  "centsOff": -4.8,
+  "seconds": 1.64,
+  "noises": 1
+ },
+ {
+  "midi": 45,
+  "string": "A2",
+  "fret": 0,
+  "file": "A2-00-45.mp3",
+  "centsOff": 2.5,
+  "seconds": 1.39,
+  "noises": 2
+ },
+ {
+  "midi": 45,
+  "string": "E2",
+  "fret": 5,
+  "file": "E2-05-45.mp3",
+  "centsOff": -1.2,
+  "seconds": 1.51,
+  "noises": 0
+ },
+ {
+  "midi": 46,
+  "string": "A2",
+  "fret": 1,
+  "file": "A2-01-46.mp3",
+  "centsOff": 7.7,
+  "seconds": 1.27,
+  "noises": 0
+ },
+ {
+  "midi": 46,
+  "string": "E2",
+  "fret": 6,
+  "file": "E2-06-46.mp3",
+  "centsOff": 5.1,
+  "seconds": 1.6,
+  "noises": 1
+ },
+ {
+  "midi": 47,
+  "string": "A2",
+  "fret": 2,
+  "file": "A2-02-47.mp3",
+  "centsOff": 4.4,
+  "seconds": 1.2,
+  "noises": 0
+ },
+ {
+  "midi": 47,
+  "string": "E2",
+  "fret": 7,
+  "file": "E2-07-47.mp3",
+  "centsOff": -0.9,
+  "seconds": 1.67,
+  "noises": 0
+ },
+ {
+  "midi": 48,
+  "string": "A2",
+  "fret": 3,
+  "file": "A2-03-48.mp3",
+  "centsOff": 6.2,
+  "seconds": 1.16,
+  "noises": 0
+ },
+ {
+  "midi": 48,
+  "string": "E2",
+  "fret": 8,
+  "file": "E2-08-48.mp3",
+  "centsOff": 6.4,
+  "seconds": 1.66,
+  "noises": 0
+ },
+ {
+  "midi": 49,
+  "string": "A2",
+  "fret": 4,
+  "file": "A2-04-49.mp3",
+  "centsOff": 11.0,
+  "seconds": 1.21,
+  "noises": 0
+ },
+ {
+  "midi": 49,
+  "string": "E2",
+  "fret": 9,
+  "file": "E2-09-49.mp3",
+  "centsOff": -6.9,
+  "seconds": 1.53,
+  "noises": 0
+ },
+ {
+  "midi": 50,
+  "string": "D3",
+  "fret": 0,
+  "file": "D3-00-50.mp3",
+  "centsOff": -2.4,
+  "seconds": 1.3,
+  "noises": 0
+ },
+ {
+  "midi": 50,
+  "string": "A2",
+  "fret": 5,
+  "file": "A2-05-50.mp3",
+  "centsOff": 14.2,
+  "seconds": 1.15,
+  "noises": 0
+ },
+ {
+  "midi": 50,
+  "string": "E2",
+  "fret": 10,
+  "file": "E2-10-50.mp3",
+  "centsOff": 0.6,
+  "seconds": 1.46,
+  "noises": 0
+ },
+ {
+  "midi": 51,
+  "string": "D3",
+  "fret": 1,
+  "file": "D3-01-51.mp3",
+  "centsOff": 2.7,
+  "seconds": 1.17,
+  "noises": 0
+ },
+ {
+  "midi": 51,
+  "string": "A2",
+  "fret": 6,
+  "file": "A2-06-51.mp3",
+  "centsOff": 8.1,
+  "seconds": 1.07,
+  "noises": 0
+ },
+ {
+  "midi": 51,
+  "string": "E2",
+  "fret": 11,
+  "file": "E2-11-51.mp3",
+  "centsOff": -10.1,
+  "seconds": 1.51,
+  "noises": 0
+ },
+ {
+  "midi": 52,
+  "string": "D3",
+  "fret": 2,
+  "file": "D3-02-52.mp3",
+  "centsOff": 7.9,
+  "seconds": 1.04,
+  "noises": 0
+ },
+ {
+  "midi": 52,
+  "string": "A2",
+  "fret": 7,
+  "file": "A2-07-52.mp3",
+  "centsOff": 14.6,
+  "seconds": 0.97,
+  "noises": 0
+ },
+ {
+  "midi": 52,
+  "string": "E2",
+  "fret": 12,
+  "file": "E2-12-52.mp3",
+  "centsOff": 4.8,
+  "seconds": 1.91,
+  "noises": 15
+ },
+ {
+  "midi": 53,
+  "string": "D3",
+  "fret": 3,
+  "file": "D3-03-53.mp3",
+  "centsOff": 6.5,
+  "seconds": 0.94,
+  "noises": 0
+ },
+ {
+  "midi": 53,
+  "string": "A2",
+  "fret": 8,
+  "file": "A2-08-53.mp3",
+  "centsOff": 9.8,
+  "seconds": 0.95,
+  "noises": 0
+ },
+ {
+  "midi": 54,
+  "string": "D3",
+  "fret": 4,
+  "file": "D3-04-54.mp3",
+  "centsOff": 7.6,
+  "seconds": 1.03,
+  "noises": 0
+ },
+ {
+  "midi": 54,
+  "string": "A2",
+  "fret": 9,
+  "file": "A2-09-54.mp3",
+  "centsOff": 27.8,
+  "seconds": 0.91,
+  "noises": 0
+ },
+ {
+  "midi": 55,
+  "string": "G3",
+  "fret": 0,
+  "file": "G3-00-55.mp3",
+  "centsOff": -11.6,
+  "seconds": 1.1,
+  "noises": 0
+ },
+ {
+  "midi": 55,
+  "string": "D3",
+  "fret": 5,
+  "file": "D3-05-55.mp3",
+  "centsOff": 14.4,
+  "seconds": 0.99,
+  "noises": 1
+ },
+ {
+  "midi": 55,
+  "string": "A2",
+  "fret": 10,
+  "file": "A2-10-55.mp3",
+  "centsOff": 2.2,
+  "seconds": 0.98,
+  "noises": 0
+ },
+ {
+  "midi": 56,
+  "string": "G3",
+  "fret": 1,
+  "file": "G3-01-56.mp3",
+  "centsOff": -5.6,
+  "seconds": 0.72,
+  "noises": 0
+ },
+ {
+  "midi": 56,
+  "string": "D3",
+  "fret": 6,
+  "file": "D3-06-56.mp3",
+  "centsOff": 5.1,
+  "seconds": 0.94,
+  "noises": 0
+ },
+ {
+  "midi": 56,
+  "string": "A2",
+  "fret": 11,
+  "file": "A2-11-56.mp3",
+  "centsOff": 30.7,
+  "seconds": 0.94,
+  "noises": 0
+ },
+ {
+  "midi": 57,
+  "string": "G3",
+  "fret": 2,
+  "file": "G3-02-57.mp3",
+  "centsOff": -1.6,
+  "seconds": 1.19,
+  "noises": 1
+ },
+ {
+  "midi": 57,
+  "string": "D3",
+  "fret": 7,
+  "file": "D3-07-57.mp3",
+  "centsOff": 9.9,
+  "seconds": 0.96,
+  "noises": 0
+ },
+ {
+  "midi": 57,
+  "string": "A2",
+  "fret": 12,
+  "file": "A2-12-57.mp3",
+  "centsOff": 35.7,
+  "seconds": 0.96,
+  "noises": 5
+ },
+ {
+  "midi": 58,
+  "string": "G3",
+  "fret": 3,
+  "file": "G3-03-58.mp3",
+  "centsOff": -8.2,
+  "seconds": 0.85,
+  "noises": 0
+ },
+ {
+  "midi": 58,
+  "string": "D3",
+  "fret": 8,
+  "file": "D3-08-58.mp3",
+  "centsOff": 9.6,
+  "seconds": 0.97,
+  "noises": 0
+ },
+ {
+  "midi": 59,
+  "string": "B3",
+  "fret": 0,
+  "file": "B3-00-59.mp3",
+  "centsOff": 1.5,
+  "seconds": 0.84,
+  "noises": 0
+ },
+ {
+  "midi": 59,
+  "string": "G3",
+  "fret": 4,
+  "file": "G3-04-59.mp3",
+  "centsOff": -0.0,
+  "seconds": 0.87,
+  "noises": 0
+ },
+ {
+  "midi": 59,
+  "string": "D3",
+  "fret": 9,
+  "file": "D3-09-59.mp3",
+  "centsOff": 9.9,
+  "seconds": 0.86,
+  "noises": 0
+ },
+ {
+  "midi": 60,
+  "string": "B3",
+  "fret": 1,
+  "file": "B3-01-60.mp3",
+  "centsOff": 5.3,
+  "seconds": 0.7,
+  "noises": 0
+ },
+ {
+  "midi": 60,
+  "string": "G3",
+  "fret": 5,
+  "file": "G3-05-60.mp3",
+  "centsOff": -8.5,
+  "seconds": 0.95,
+  "noises": 2
+ },
+ {
+  "midi": 60,
+  "string": "D3",
+  "fret": 10,
+  "file": "D3-10-60.mp3",
+  "centsOff": 19.4,
+  "seconds": 0.78,
+  "noises": 0
+ },
+ {
+  "midi": 61,
+  "string": "B3",
+  "fret": 2,
+  "file": "B3-02-61.mp3",
+  "centsOff": 13.9,
+  "seconds": 0.69,
+  "noises": 0
+ },
+ {
+  "midi": 61,
+  "string": "G3",
+  "fret": 6,
+  "file": "G3-06-61.mp3",
+  "centsOff": -0.2,
+  "seconds": 0.77,
+  "noises": 0
+ },
+ {
+  "midi": 61,
+  "string": "D3",
+  "fret": 11,
+  "file": "D3-11-61.mp3",
+  "centsOff": 27.8,
+  "seconds": 0.74,
+  "noises": 0
+ },
+ {
+  "midi": 62,
+  "string": "B3",
+  "fret": 3,
+  "file": "B3-03-62.mp3",
+  "centsOff": 2.6,
+  "seconds": 0.99,
+  "noises": 1
+ },
+ {
+  "midi": 62,
+  "string": "G3",
+  "fret": 7,
+  "file": "G3-07-62.mp3",
+  "centsOff": 7.8,
+  "seconds": 0.79,
+  "noises": 0
+ },
+ {
+  "midi": 62,
+  "string": "D3",
+  "fret": 12,
+  "file": "D3-12-62.mp3",
+  "centsOff": 13.5,
+  "seconds": 1.56,
+  "noises": 9
+ },
+ {
+  "midi": 63,
+  "string": "B3",
+  "fret": 4,
+  "file": "B3-04-63.mp3",
+  "centsOff": 16.9,
+  "seconds": 0.64,
+  "noises": 0
+ },
+ {
+  "midi": 63,
+  "string": "G3",
+  "fret": 8,
+  "file": "G3-08-63.mp3",
+  "centsOff": 0.9,
+  "seconds": 0.78,
+  "noises": 0
+ },
+ {
+  "midi": 64,
+  "string": "E4",
+  "fret": 0,
+  "file": "E4-00-64.mp3",
+  "centsOff": -5.4,
+  "seconds": 0.86,
+  "noises": 0
+ },
+ {
+  "midi": 64,
+  "string": "B3",
+  "fret": 5,
+  "file": "B3-05-64.mp3",
+  "centsOff": 9.5,
+  "seconds": 0.55,
+  "noises": 0
+ },
+ {
+  "midi": 64,
+  "string": "G3",
+  "fret": 9,
+  "file": "G3-09-64.mp3",
+  "centsOff": 11.7,
+  "seconds": 0.97,
+  "noises": 0
+ },
+ {
+  "midi": 65,
+  "string": "E4",
+  "fret": 1,
+  "file": "E4-01-65.mp3",
+  "centsOff": -5.8,
+  "seconds": 0.66,
+  "noises": 0
+ },
+ {
+  "midi": 65,
+  "string": "B3",
+  "fret": 6,
+  "file": "B3-06-65.mp3",
+  "centsOff": -2.4,
+  "seconds": 0.6,
+  "noises": 0
+ },
+ {
+  "midi": 65,
+  "string": "G3",
+  "fret": 10,
+  "file": "G3-10-65.mp3",
+  "centsOff": 1.1,
+  "seconds": 0.74,
+  "noises": 0
+ },
+ {
+  "midi": 66,
+  "string": "E4",
+  "fret": 2,
+  "file": "E4-02-66.mp3",
+  "centsOff": -1.5,
+  "seconds": 1.01,
+  "noises": 0
+ },
+ {
+  "midi": 66,
+  "string": "B3",
+  "fret": 7,
+  "file": "B3-07-66.mp3",
+  "centsOff": -0.5,
+  "seconds": 0.59,
+  "noises": 0
+ },
+ {
+  "midi": 66,
+  "string": "G3",
+  "fret": 11,
+  "file": "G3-11-66.mp3",
+  "centsOff": -6.2,
+  "seconds": 0.67,
+  "noises": 0
+ },
+ {
+  "midi": 67,
+  "string": "E4",
+  "fret": 3,
+  "file": "E4-03-67.mp3",
+  "centsOff": 1.3,
+  "seconds": 1.11,
+  "noises": 0
+ },
+ {
+  "midi": 67,
+  "string": "B3",
+  "fret": 8,
+  "file": "B3-08-67.mp3",
+  "centsOff": 3.6,
+  "seconds": 1.0,
+  "noises": 0
+ },
+ {
+  "midi": 67,
+  "string": "G3",
+  "fret": 12,
+  "file": "G3-12-67.mp3",
+  "centsOff": -3.2,
+  "seconds": 0.82,
+  "noises": 0
+ },
+ {
+  "midi": 68,
+  "string": "E4",
+  "fret": 4,
+  "file": "E4-04-68.mp3",
+  "centsOff": 0.6,
+  "seconds": 0.97,
+  "noises": 0
+ },
+ {
+  "midi": 68,
+  "string": "B3",
+  "fret": 9,
+  "file": "B3-09-68.mp3",
+  "centsOff": 11.7,
+  "seconds": 0.96,
+  "noises": 0
+ },
+ {
+  "midi": 69,
+  "string": "E4",
+  "fret": 5,
+  "file": "E4-05-69.mp3",
+  "centsOff": -0.8,
+  "seconds": 0.59,
+  "noises": 0
+ },
+ {
+  "midi": 69,
+  "string": "B3",
+  "fret": 10,
+  "file": "B3-10-69.mp3",
+  "centsOff": 5.2,
+  "seconds": 0.98,
+  "noises": 0
+ },
+ {
+  "midi": 70,
+  "string": "E4",
+  "fret": 6,
+  "file": "E4-06-70.mp3",
+  "centsOff": -1.3,
+  "seconds": 1.07,
+  "noises": 1
+ },
+ {
+  "midi": 70,
+  "string": "B3",
+  "fret": 11,
+  "file": "B3-11-70.mp3",
+  "centsOff": -9.4,
+  "seconds": 0.97,
+  "noises": 0
+ },
+ {
+  "midi": 71,
+  "string": "E4",
+  "fret": 7,
+  "file": "E4-07-71.mp3",
+  "centsOff": -11.3,
+  "seconds": 1.05,
+  "noises": 0
+ },
+ {
+  "midi": 71,
+  "string": "B3",
+  "fret": 12,
+  "file": "B3-12-71.mp3",
+  "centsOff": -11.9,
+  "seconds": 0.82,
+  "noises": 0
+ },
+ {
+  "midi": 72,
+  "string": "E4",
+  "fret": 8,
+  "file": "E4-08-72.mp3",
+  "centsOff": -13.0,
+  "seconds": 0.99,
+  "noises": 0
+ },
+ {
+  "midi": 73,
+  "string": "E4",
+  "fret": 9,
+  "file": "E4-09-73.mp3",
+  "centsOff": -11.3,
+  "seconds": 1.01,
+  "noises": 0
+ },
+ {
+  "midi": 74,
+  "string": "E4",
+  "fret": 10,
+  "file": "E4-10-74.mp3",
+  "centsOff": -1.0,
+  "seconds": 0.61,
+  "noises": 0
+ },
+ {
+  "midi": 75,
+  "string": "E4",
+  "fret": 11,
+  "file": "E4-11-75.mp3",
+  "centsOff": -3.8,
+  "seconds": 0.71,
+  "noises": 0
+ },
+ {
+  "midi": 76,
+  "string": "E4",
+  "fret": 12,
+  "file": "E4-12-76.mp3",
+  "centsOff": -19.4,
+  "seconds": 0.75,
+  "noises": 0
+ }
+]

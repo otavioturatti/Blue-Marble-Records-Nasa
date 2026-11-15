@@ -1,0 +1,446 @@
+[
+ {
+  "inst": "triangle",
+  "stroke": "open",
+  "file": "triangle-open-01.mp3",
+  "peakDb": -20.27,
+  "attackMs": 2.0,
+  "pitchHz": 4020.0,
+  "source": "Triangle1_Hit_v1_rr1_Mid.wav"
+ },
+ {
+  "inst": "triangle",
+  "stroke": "open",
+  "file": "triangle-open-02.mp3",
+  "peakDb": -19.9,
+  "attackMs": 6.2,
+  "pitchHz": 4020.1,
+  "source": "Triangle1_Hit_v1_rr2_Mid.wav"
+ },
+ {
+  "inst": "triangle",
+  "stroke": "open",
+  "file": "triangle-open-03.mp3",
+  "peakDb": -8.07,
+  "attackMs": 1.5,
+  "pitchHz": 4020.1,
+  "source": "Triangle1_Hit_v2_rr1_Mid.wav"
+ },
+ {
+  "inst": "triangle",
+  "stroke": "open",
+  "file": "triangle-open-04.mp3",
+  "peakDb": -3.0,
+  "attackMs": 1.7,
+  "pitchHz": 4020.1,
+  "source": "Triangle1_Hit_v2_rr2_Mid.wav"
+ },
+ {
+  "inst": "claps",
+  "stroke": "claps",
+  "file": "claps-claps-01.mp3",
+  "peakDb": -3.03,
+  "attackMs": 45.9,
+  "source": "Clap_rr1.wav"
+ },
+ {
+  "inst": "claps",
+  "stroke": "claps",
+  "file": "claps-claps-02.mp3",
+  "peakDb": -3.13,
+  "attackMs": 23.2,
+  "source": "Clap_rr2.wav"
+ },
+ {
+  "inst": "claps",
+  "stroke": "claps",
+  "file": "claps-claps-03.mp3",
+  "peakDb": -3.12,
+  "attackMs": 19.5,
+  "source": "Clap_rr3.wav"
+ },
+ {
+  "inst": "claps",
+  "stroke": "claps",
+  "file": "claps-claps-04.mp3",
+  "peakDb": -3.0,
+  "attackMs": 30.2,
+  "source": "Clap_rr4.wav"
+ },
+ {
+  "inst": "claps",
+  "stroke": "claps",
+  "file": "claps-claps-05.mp3",
+  "peakDb": -3.53,
+  "attackMs": 27.2,
+  "source": "Clap_rr5.wav"
+ },
+ {
+  "inst": "claps",
+  "stroke": "claps",
+  "file": "claps-claps-06.mp3",
+  "peakDb": -4.99,
+  "attackMs": 17.5,
+  "source": "Clap_rr6.wav"
+ },
+ {
+  "inst": "bassdrum",
+  "stroke": "low",
+  "file": "bassdrum-low-01.mp3",
+  "peakDb": -15.55,
+  "pitchHz": 83.9,
+  "source": "BDrumNew_hit_v2_rr1_Sum.wav"
+ },
+ {
+  "inst": "bassdrum",
+  "stroke": "low",
+  "file": "bassdrum-low-02.mp3",
+  "peakDb": -17.15,
+  "pitchHz": 84.0,
+  "source": "BDrumNew_hit_v2_rr2_Sum.wav"
+ },
+ {
+  "inst": "bassdrum",
+  "stroke": "low",
+  "file": "bassdrum-low-03.mp3",
+  "peakDb": -10.37,
+  "pitchHz": 83.7,
+  "source": "BDrumNew_hit_v3_rr1_Sum.wav"
+ },
+ {
+  "inst": "bassdrum",
+  "stroke": "low",
+  "file": "bassdrum-low-04.mp3",
+  "peakDb": -11.91,
+  "pitchHz": 83.8,
+  "source": "BDrumNew_hit_v3_rr2_Sum.wav"
+ },
+ {
+  "inst": "bassdrum",
+  "stroke": "low",
+  "file": "bassdrum-low-05.mp3",
+  "peakDb": -3.0,
+  "pitchHz": 84.4,
+  "source": "BDrumNew_hit_v5_rr1_Sum.wav"
+ },
+ {
+  "inst": "bassdrum",
+  "stroke": "low",
+  "file": "bassdrum-low-06.mp3",
+  "peakDb": -3.74,
+  "pitchHz": 84.1,
+  "source": "BDrumNew_hit_v5_rr2_Sum.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "low",
+  "file": "cajon-low-01.mp3",
+  "peakDb": -17.79,
+  "pitchHz": 81.7,
+  "source": "Cajon_hit2_pp_rr1.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "low",
+  "file": "cajon-low-02.mp3",
+  "peakDb": -16.96,
+  "pitchHz": 81.6,
+  "source": "Cajon_hit2_pp_rr2.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "low",
+  "file": "cajon-low-03.mp3",
+  "peakDb": -9.36,
+  "pitchHz": 80.9,
+  "source": "Cajon_hit3_p_rr1.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "low",
+  "file": "cajon-low-04.mp3",
+  "peakDb": -10.25,
+  "pitchHz": 81.0,
+  "source": "Cajon_hit3_p_rr2.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "low",
+  "file": "cajon-low-05.mp3",
+  "peakDb": -4.73,
+  "pitchHz": 133.4,
+  "source": "Cajon_hit2_mp_rr1.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "low",
+  "file": "cajon-low-06.mp3",
+  "peakDb": -4.67,
+  "pitchHz": 80.7,
+  "source": "Cajon_hit2_mp_rr2.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "slap",
+  "file": "cajon-slap-01.mp3",
+  "peakDb": -10.88,
+  "pitchHz": 80.9,
+  "source": "Cajon_hit1_mp_rr1.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "slap",
+  "file": "cajon-slap-02.mp3",
+  "peakDb": -11.72,
+  "pitchHz": 80.8,
+  "source": "Cajon_hit1_mp_rr2.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "slap",
+  "file": "cajon-slap-03.mp3",
+  "peakDb": -3.93,
+  "pitchHz": 80.5,
+  "source": "Cajon_hit1_f_rr1.wav"
+ },
+ {
+  "inst": "cajon",
+  "stroke": "slap",
+  "file": "cajon-slap-04.mp3",
+  "peakDb": -3.0,
+  "pitchHz": 80.5,
+  "source": "Cajon_hit1_f_rr2.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "low",
+  "file": "frame-low-01.mp3",
+  "peakDb": -21.79,
+  "pitchHz": 81.3,
+  "source": "HDrumL_Hit_v2_rr1_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "low",
+  "file": "frame-low-02.mp3",
+  "peakDb": -18.76,
+  "pitchHz": 81.7,
+  "source": "HDrumL_Hit_v2_rr2_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "low",
+  "file": "frame-low-03.mp3",
+  "peakDb": -3.52,
+  "pitchHz": 88.0,
+  "source": "HDrumL_Hit_v3_rr1_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "low",
+  "file": "frame-low-04.mp3",
+  "peakDb": -3.0,
+  "pitchHz": 86.4,
+  "source": "HDrumL_Hit_v3_rr2_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "high",
+  "file": "frame-high-01.mp3",
+  "peakDb": -35.12,
+  "pitchHz": 325.5,
+  "source": "HDrumS_HitMuted_v2_rr1_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "high",
+  "file": "frame-high-02.mp3",
+  "peakDb": -31.85,
+  "pitchHz": 325.8,
+  "source": "HDrumS_HitMuted_v2_rr2_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "high",
+  "file": "frame-high-03.mp3",
+  "peakDb": -9.55,
+  "pitchHz": 326.4,
+  "source": "HDrumS_HitMuted_v3_rr1_Sum.wav"
+ },
+ {
+  "inst": "frame",
+  "stroke": "high",
+  "file": "frame-high-04.mp3",
+  "peakDb": -11.58,
+  "pitchHz": 325.6,
+  "source": "HDrumS_HitMuted_v3_rr2_Sum.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "low",
+  "file": "darbuka-low-01.mp3",
+  "peakDb": -16.52,
+  "pitchHz": 143.7,
+  "source": "Darbuka_1_hit_vl1_rr1.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "low",
+  "file": "darbuka-low-02.mp3",
+  "peakDb": -16.44,
+  "pitchHz": 143.7,
+  "source": "Darbuka_1_hit_vl1_rr2.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "low",
+  "file": "darbuka-low-03.mp3",
+  "peakDb": -3.47,
+  "pitchHz": 143.8,
+  "source": "Darbuka_1_hit_vl2_rr1.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "low",
+  "file": "darbuka-low-04.mp3",
+  "peakDb": -3.0,
+  "pitchHz": 143.7,
+  "source": "Darbuka_1_hit_vl2_rr2.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "rim",
+  "file": "darbuka-rim-01.mp3",
+  "peakDb": -14.53,
+  "pitchHz": 727.9,
+  "source": "Darbuka_2_hit_vl1_rr1.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "rim",
+  "file": "darbuka-rim-02.mp3",
+  "peakDb": -14.76,
+  "pitchHz": 727.9,
+  "source": "Darbuka_2_hit_vl1_rr2.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "rim",
+  "file": "darbuka-rim-03.mp3",
+  "peakDb": -5.72,
+  "pitchHz": 728.3,
+  "source": "Darbuka_2_hit_vl2_rr1.wav"
+ },
+ {
+  "inst": "darbuka",
+  "stroke": "rim",
+  "file": "darbuka-rim-04.mp3",
+  "peakDb": -8.29,
+  "pitchHz": 728.5,
+  "source": "Darbuka_2_hit_vl2_rr2.wav"
+ },
+ {
+  "inst": "cymbal",
+  "stroke": "swell",
+  "file": "cymbal-swell-01.mp3",
+  "peakDb": -3,
+  "peakAtSec": 1.6213,
+  "source": "susCymb1_cresc_2s.wav"
+ },
+ {
+  "inst": "cymbal",
+  "stroke": "swell",
+  "file": "cymbal-swell-02.mp3",
+  "peakDb": -3,
+  "peakAtSec": 3.8463,
+  "source": "susCymb1_cresc_4s.wav"
+ },
+ {
+  "inst": "timpani",
+  "stroke": "soft",
+  "file": "timpani-soft-01.mp3",
+  "peakDb": -3,
+  "pitchHz": 75.34,
+  "midi": 38,
+  "centsOff": 44.7,
+  "peakAtSec": 0.0499,
+  "source": "Timpani7G_hit_v2_rr1_main.wav"
+ },
+ {
+  "inst": "timpani",
+  "stroke": "soft",
+  "file": "timpani-soft-02.mp3",
+  "peakDb": -3,
+  "pitchHz": 83.64,
+  "midi": 40,
+  "centsOff": 25.7,
+  "peakAtSec": 0.0549,
+  "source": "Timpani7E_hit_v2_rr1_main.wav"
+ },
+ {
+  "inst": "timpani",
+  "stroke": "soft",
+  "file": "timpani-soft-03.mp3",
+  "peakDb": -3,
+  "pitchHz": 86.66,
+  "midi": 41,
+  "centsOff": -12.8,
+  "peakAtSec": 0.025,
+  "source": "Timpani7D_hit_v2_rr1_main.wav"
+ },
+ {
+  "inst": "timpani",
+  "stroke": "soft",
+  "file": "timpani-soft-04.mp3",
+  "peakDb": -3,
+  "pitchHz": 92.64,
+  "midi": 42,
+  "centsOff": 2.7,
+  "peakAtSec": 0.025,
+  "source": "Timpani7C_hit_v2_rr1_main.wav"
+ },
+ {
+  "inst": "timpani",
+  "stroke": "soft",
+  "file": "timpani-soft-05.mp3",
+  "peakDb": -3,
+  "pitchHz": 98.25,
+  "midi": 43,
+  "centsOff": 4.5,
+  "peakAtSec": 0.0749,
+  "source": "Timpani7B_hit_v2_rr1_main.wav"
+ },
+ {
+  "inst": "timpani",
+  "stroke": "soft",
+  "file": "timpani-soft-06.mp3",
+  "peakDb": -3,
+  "pitchHz": 109.57,
+  "midi": 45,
+  "centsOff": -6.8,
+  "peakAtSec": 0.0449,
+  "source": "Timpani6I_hit_v2_rr1_main.wav"
+ },
+ {
+  "inst": "bells",
+  "stroke": "soft",
+  "file": "bells-soft-01.mp3",
+  "peakDb": -3,
+  "pitchHz": 293.98,
+  "midi": 62,
+  "centsOff": 1.9,
+  "peakAtSec": 0.0399,
+  "source": "chimes_D3_pp_rr3.wav"
+ },
+ {
+  "inst": "bells",
+  "stroke": "soft",
+  "file": "bells-soft-02.mp3",
+  "peakDb": -3,
+  "pitchHz": 370.72,
+  "midi": 66,
+  "centsOff": 3.4,
+  "peakAtSec": 0.0699,
+  "source": "chimes_Fs3_p_rr1.wav"
+ }
+]

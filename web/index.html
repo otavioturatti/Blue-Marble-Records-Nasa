@@ -1,0 +1,381 @@
+<!doctype html>
+<!-- SI disclosure: parts of this file were drafted with an AI coding assistant and reviewed by Kristen and Arthur. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blue Marble Records: Hear the planet NASA sees</title>
+<meta name="description" content="Pick a place on Earth. A needle reads that point of a NASA Earth Information Center frame, decoded back into its value, and plays it as sound. Built for screen-reader users.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Blue Marble Records">
+<meta property="og:description" content="Hear the planet NASA sees.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23173aa6' stroke-width='.8'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%232f6bff'/%3E%3Ccircle cx='16' cy='16' r='1.2' fill='%23000'/%3E%3C/svg%3E">
+<link rel="preload" href="css/fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="css/fonts/cormorant-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="css/fonts/michroma-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/app.css">
+<!-- The opening plays once per browser session (or with ?intro=1), never with reduced motion. Set before the first paint. -->
+<!-- The entrance ("the gate") is up on every load until the visitor chooses how to start: CSS alone
+     shows it, so it does not depend on the opening's animation. -->
+<!-- The starting language, decided here before the first paint (screen readers pick their voice
+     from <html lang>). One place: startLang below. -->
+<script>
+/**
+ * The language the page starts in. In order: ?lang= in the address; the choice made earlier on the
+ * language switch in this browser (stored as "bmr-lang"); the device: when its first language is
+ * any Portuguese (pt-BR, pt-PT, pt), Brazilian Portuguese. Every other language starts in English,
+ * because the interface the judges open must be English; Portuguese is offered.
+ * To force one language for everyone, make this function return it.
+ */
+function startLang(search, stored, languages) {
+  var m = /[?&]lang=([^&#]*)/.exec(search || "");
+  var asked = m ? decodeURIComponent(m[1]).toLowerCase() : "";
+  if (/^pt/.test(asked)) return "pt-BR";
+  if (/^en/.test(asked)) return "en";
+  if (stored === "en" || stored === "pt-BR") return stored;
+  var first = String((languages && languages[0]) || "").toLowerCase();
+  return /^pt(-|$)/.test(first) ? "pt-BR" : "en";
+}
+(function () {
+  var r = document.documentElement, stored = null, langs = [];
+  try { stored = localStorage.getItem("bmr-lang"); } catch (e) { /* storage blocked */ }
+  try { langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language]; } catch (e) { /* none */ }
+  r.lang = startLang(location.search, stored, langs);
+  // A Portuguese start: the gate's English words stay invisible until the script after the gate
+  // has put the Portuguese ones in (the same parse, before the first paint).
+  if (r.lang === "pt-BR") { r.classList.add("lang-pending"); document.title = "Blue Marble Records: Ouça o planeta que a NASA vê"; }
+})();
+</script>
+<script>document.documentElement.classList.add("gate-on");try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(/[?&]intro=1(&|$)/.test(location.search)||!sessionStorage.getItem("bmr-intro")))document.documentElement.classList.add("intro-on")}catch(e){}</script>
+<script type="module" src="js/ui/splash.js"></script>
+<script type="importmap">{ "imports": { "three": "./js/ui/vendor/three.module.min.js" } }</script>
+<!-- Load order: the modules and files on the critical path start at once instead of one import
+     level at a time (the globe and the simulators are imported dynamically, found late otherwise). -->
+<link rel="modulepreload" href="js/data.js">
+<link rel="modulepreload" href="js/ui/view.js">
+<link rel="modulepreload" href="js/ui/liner.js">
+<link rel="modulepreload" href="js/ui/geometry.js">
+<link rel="modulepreload" href="js/ui/sim-engine.js">
+<link rel="modulepreload" href="js/ui/sim-dj.js">
+<link rel="modulepreload" href="js/ui/vendor/three.module.min.js">
+<link rel="modulepreload" href="js/ui/globe3d.js">
+<link rel="modulepreload" href="js/ui/sky.js">
+<link rel="modulepreload" href="js/ui/ephemeris.js">
+<link rel="modulepreload" href="js/ui/record3d.js">
+<link rel="preload" href="data/records.json" as="fetch" crossorigin>
+<link rel="preload" href="data/places.json" as="fetch" crossorigin>
+<link rel="preload" href="data/sst-anomaly/meta.json" as="fetch" crossorigin>
+<link rel="preload" href="data/fire/meta.json" as="fetch" crossorigin>
+<!-- The globe fetches its Earth texture (fetch, then createImageBitmap off the main thread): a fetch preload, same URL and mode, is reused. -->
+<link rel="preload" href="css/img/earth-blue-marble-2048.jpg" as="fetch" crossorigin>
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<!-- The opening: a record turns alone, becomes the "O" of RECORDS, and the wordmark flies to the header
+     (js/ui/splash.js). Decorative and silent; any key or press skips it. -->
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="splash__veil"></div>
+  <div class="splash__hero"><div class="splash__rise">
+    <svg class="splash__vinyl" viewBox="0 0 200 200" focusable="false">
+      <defs><path id="splash-arc" d="M73 100a27 27 0 1 1 54 0a27 27 0 1 1-54 0"/></defs>
+      <circle class="sv-body" cx="100" cy="100" r="99"/>
+      <g class="sv-grooves">
+        <circle cx="100" cy="100" r="94"/><circle cx="100" cy="100" r="90.5"/><circle cx="100" cy="100" r="87"/><circle cx="100" cy="100" r="83.5"/>
+        <circle cx="100" cy="100" r="80"/><circle cx="100" cy="100" r="74"/><circle cx="100" cy="100" r="70.5"/><circle cx="100" cy="100" r="67"/>
+        <circle cx="100" cy="100" r="63.5"/><circle cx="100" cy="100" r="60"/><circle cx="100" cy="100" r="54"/><circle cx="100" cy="100" r="50.5"/>
+        <circle cx="100" cy="100" r="47"/><circle cx="100" cy="100" r="43.5"/>
+      </g>
+      <circle class="sv-label" cx="100" cy="100" r="36"/>
+      <circle class="sv-ring" cx="100" cy="100" r="32.5"/>
+      <text class="sv-text"><textPath href="#splash-arc" startOffset="25%" text-anchor="middle">BLUE MARBLE</textPath></text>
+      <text class="sv-text"><textPath href="#splash-arc" startOffset="75%" text-anchor="middle">RECORDS</textPath></text>
+      <circle class="sv-hole" cx="100" cy="100" r="3.4"/>
+    </svg>
+    <span class="splash__sheen"></span>
+  </div></div>
+</div>
+
+<!-- The gate: a full black screen right after the opening (which settles its wordmark here). The
+     statement of purpose, one question, three buttons, the language. Everything behind it is inert
+     until the choice (js/app.js leaveGate); the choice is the cue for the app to appear. -->
+<div class="gate" id="gate">
+  <div class="gate__inner">
+    <div class="mark gate__mark" id="gate-mark" aria-hidden="true"><span class="mark__name">Blue Marble</span> <span class="mark__sub"><span class="mark__word">Rec<span class="mark__o">o<svg class="mark__disc" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle class="md-body" cx="16" cy="16" r="14.4"/><circle class="md-groove" cx="16" cy="16" r="9.7"/><path class="md-sheen" d="M16 16L22.06 4.61A12.9 12.9 0 0 1 26.17 8.06ZM16 16L9.94 27.39A12.9 12.9 0 0 1 5.83 23.94Z"/><circle class="md-label" cx="16" cy="16" r="5.6"/><circle class="md-hole" cx="16" cy="16" r="1.5"/></svg></span>rds</span></span></div>
+    <hr class="gate__rule" aria-hidden="true">
+<!-- The statement of purpose (text only: no NASA logo or mark anywhere near it). -->
+<p class="gate__tap" aria-hidden="true" data-i18n="gateTap">Tap the screen or press any key to hear the instructions.</p>
+<p class="remote__purpose" id="purpose" data-i18n="purpose">Built for the NASA Space Apps Challenge 2026, a NASA hackathon. Made for blind and low-vision people, and for anyone who wants to listen.</p>
+<div class="remote__entry" id="remote-entry" role="group" aria-labelledby="entry-q">
+  <h2 class="remote__q" id="entry-q" data-i18n="entryQuestion">How do you want to start?</h2>
+  <button type="button" class="power" id="tour-start" aria-describedby="hint-sr"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico--play" d="M8 5.5v13l11-6.5z"/><path class="ico--pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><span data-i18n="tourSr">Guided tour, with my screen reader</span></button>
+  <p class="remote__hint" id="hint-sr" aria-hidden="true" data-i18n="hintSr">Your screen reader speaks; the app stays quiet between songs.</p>
+  <button type="button" class="key" id="tour-voice" aria-describedby="hint-voice"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico--play" d="M8 5.5v13l11-6.5z"/><path class="ico--pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><span data-i18n="tourVoice">Guided tour, with the app's voice</span></button>
+  <p class="remote__hint" id="hint-voice" aria-hidden="true" data-i18n="hintVoice">A synthetic voice speaks; for visitors without a screen reader.</p>
+  <button type="button" class="key remote__explore" id="start"><span data-i18n="explore">Explore on my own</span></button>
+  <!-- For the eye only: the arrows also move among the three buttons (js/app.js, the gate's keys). -->
+  <p class="gate__keys" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd> <span data-i18n="gateChoose">choose</span>, <kbd>Enter</kbd> <span data-i18n="gateConfirm">confirms</span></p>
+</div>
+    <div class="lang gate__lang" role="group" aria-labelledby="gate-lang-label">
+      <span class="lang__label" id="gate-lang-label" aria-hidden="true" data-i18n="language">Language</span>
+      <button type="button" class="lang__btn" data-lang="en" lang="en" aria-pressed="true">English</button>
+      <button type="button" class="lang__btn" data-lang="pt-BR" lang="pt-BR" aria-pressed="false">Português</button>
+    </div>
+  </div>
+</div>
+
+<!-- A Portuguese start: the gate's words in Portuguese before the first paint (equal to js/ui/i18n.js),
+     then the gate shows. -->
+<script>
+(function () {
+  var r = document.documentElement;
+  if (r.lang === "pt-BR") {
+    var T = {"purpose": "Desenvolvido para o NASA Space Apps Challenge 2026, um hackathon da NASA. Feito para pessoas cegas e com baixa visão, e para quem quiser ouvir.", "entryQuestion": "Como você quer começar?", "tourSr": "Passeio guiado, com o meu leitor de tela", "hintSr": "O seu leitor de tela fala; o aplicativo fica quieto entre as músicas.", "tourVoice": "Passeio guiado, com a voz do aplicativo", "hintVoice": "Uma voz sintética fala; para quem não usa leitor de tela.", "explore": "Explorar por conta própria", "language": "Idioma", "gateChoose": "escolher", "gateConfirm": "confirma", "gateTap": "Toque na tela ou aperte qualquer tecla para ouvir as instruções."};
+    var els = document.querySelectorAll("#gate [data-i18n]");
+    for (var i = 0; i < els.length; i++) { var k = els[i].getAttribute("data-i18n"); if (T[k]) els[i].textContent = T[k]; }
+    var b = document.querySelectorAll("#gate .lang__btn");
+    for (var j = 0; j < b.length; j++) b[j].setAttribute("aria-pressed", String(b[j].getAttribute("data-lang") === "pt-BR"));
+  }
+  r.classList.remove("lang-pending");
+})();
+</script>
+
+<a class="skip" href="#remote" id="skip-start" data-i18n="skipPlayer">Skip to the player</a>
+
+
+
+<header class="bar">
+  <!-- The wordmark is the way home: the first record, its default place, the whole Earth in view.
+       The "O" of RECORDS is a record (the letter stays in the text; the drawing covers it). -->
+  <a class="mark" id="home" href="./" translate="no" aria-label="Blue Marble Records: back to the start" data-i18n-attr="aria-label:homeLabel"><span class="mark__name">Blue Marble</span> <span class="mark__sub"><span class="mark__word">Rec<span class="mark__o">o<svg class="mark__disc" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle class="md-body" cx="16" cy="16" r="14.4"/><circle class="md-groove" cx="16" cy="16" r="9.7"/><path class="md-sheen" d="M16 16L22.06 4.61A12.9 12.9 0 0 1 26.17 8.06ZM16 16L9.94 27.39A12.9 12.9 0 0 1 5.83 23.94Z"/><circle class="md-label" cx="16" cy="16" r="5.6"/><circle class="md-hole" cx="16" cy="16" r="1.5"/></svg></span>rds</span></span></a>
+  <!-- One cluster, its right edge on the console's: the two dialogs, then the language switch. -->
+  <div class="bar__tools">
+    <button type="button" class="bar__btn" id="about-open" aria-haspopup="dialog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.2v.1"/></svg><span data-i18n="aboutOpen">Data and method</span></button>
+    <button type="button" class="bar__btn" id="guide-open" aria-haspopup="dialog" aria-keyshortcuts="H"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.5" y="6" width="19" height="12" rx="1.5"/><path d="M6 9.5h.1M9.4 9.5h.1M12.8 9.5h.1M16.2 9.5h.1M18 9.5h.1M6 12.5h.1M18 12.5h.1M9 15h6"/></svg><span data-i18n="guideTitle">Keyboard guide</span></button>
+    <div class="lang" role="group" aria-labelledby="lang-label">
+      <span class="lang__label" id="lang-label" aria-hidden="true" data-i18n="language">Language</span>
+      <button type="button" class="lang__btn" data-lang="en" lang="en" aria-pressed="true">English</button>
+      <button type="button" class="lang__btn" data-lang="pt-BR" lang="pt-BR" aria-pressed="false">Português</button>
+    </div>
+  </div>
+</header>
+
+<div class="synthetic" id="synthetic" hidden>
+  <p><strong data-i18n="synthetic">Synthetic data</strong> <span data-i18n="syntheticNote">Development placeholder. These are not NASA values.</span></p>
+</div>
+
+<main id="player" tabindex="-1">
+  <div class="intro">
+    <h1 id="title" data-i18n="tagline">Hear the planet NASA sees.</h1>
+    <p class="intro__lede" aria-hidden="true" data-i18n="turntableNote">The record turns once per date. Your place passes under the needle and sounds.</p>
+  </div>
+
+  <!-- The entrance and the remote, right after the wordmark and the tagline in the reading order (on a
+       phone its buttons are pinned to the bottom of the screen). Before the sound: a statement of
+       purpose, one question, three buttons (the guided tour with the visitor's screen reader, what
+       Space does; the tour with the app's voice; Explore on my own). After it: Pause or Play, Next
+       place, Previous place, Switch to fire or sea, Stop or Start the tour. Every button is native;
+       the status line under them is for the eye only. -->
+  <section class="remote" id="remote" aria-label="Player" data-i18n-attr="aria-label:player">
+    <div class="remote__keys" id="remote-keys" hidden>
+      <button type="button" class="key remote__play" id="r-play"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico--play" d="M8 5.5v13l11-6.5z"/><path class="ico--pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><span id="r-play-label" data-i18n="rPause">Pause</span></button>
+      <button type="button" class="key" id="r-next"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6.5v11l8.5-5.5zM16 6h2.5v12H16z"/></svg><span data-i18n="rNext">Next place</span></button>
+      <button type="button" class="key" id="r-prev"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6.5v11l-8.5-5.5zM5.5 6H8v12H5.5z"/></svg><span data-i18n="rPrev">Previous place</span></button>
+      <button type="button" class="key" id="r-record"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3.5-3.5M20 15H7l3.5 3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="r-record-label" data-i18n="rToFire">Switch to fire</span></button>
+      <button type="button" class="key" id="r-tour"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.2"/></svg><span id="r-tour-label" data-i18n="rTourStop">Stop the tour</span></button>
+    </div>
+    <p class="remote__status" id="r-status" aria-hidden="true"></p>
+  </section>
+
+  <!-- The stage: the WebGL globe (the Earth in space, the record's disc around it), or the flat
+       record when WebGL is missing. It mirrors the state the native controls carry; it is never the
+       only way to do anything. -->
+  <section class="stage" id="stage" aria-labelledby="stage-title">
+    <h2 class="visually-hidden" id="stage-title" data-i18n="stageTitle">Now under the needle</h2>
+    <!-- One sentence a screen reader can read at any time: place, date and value. -->
+    <p class="visually-hidden" id="readout-text"></p>
+    <div class="stage__view stage__view--globe" id="globe-host" aria-hidden="true"></div>
+    <div class="stage__view stage__view--deck" id="deck-host" aria-hidden="true" hidden>
+      <div class="flat" id="flat" hidden>
+        <div class="flat__vinyl" id="vinyl"><img id="disc-img" alt="" width="1024" height="1024"><span class="flat__label"></span></div>
+      </div>
+    </div>
+    <!-- The part of the stage free of overlapping controls: the 3D pictures center their subject here. -->
+    <div class="stage__safe" id="stage-safe" aria-hidden="true"></div>
+    <!-- Source of the frame on the picture (the linked credit is under the NASA frame below). -->
+    <p class="stage__credit" id="stage-credit" aria-hidden="true"></p>
+    <!-- Name of the place dot under the pointer. -->
+    <p class="stage__tip" id="stage-tip" aria-hidden="true" hidden></p>
+    <!-- Now playing (desktop, while Play runs and the console steps aside): the date being played and
+         a time line from the first to the last date. Only its Pause button is for assistive
+         technology: the live region already speaks the dates. -->
+    <div class="nowplaying" id="nowplaying">
+      <p class="nowplaying__date" id="np-date" aria-hidden="true"></p>
+      <p class="nowplaying__line" aria-hidden="true"><span class="nowplaying__end" id="np-first"></span><span class="nowplaying__track"><span class="score score--mini" id="np-score"></span><span class="nowplaying__marker" id="np-marker"></span></span><span class="nowplaying__end" id="np-last"></span></p>
+      <button type="button" class="key nowplaying__pause" id="np-pause"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><span data-i18n="pause">Pause</span></button>
+    </div>
+    <!-- The value being read, set in type over the stage. -->
+    <div class="readout" id="readout" aria-hidden="true">
+      <p class="readout__place" id="ro-place"></p>
+      <p class="readout__date" id="ro-date"></p>
+      <p class="readout__record" id="ro-record"></p>
+      <!-- The record's picture disc (south polar view of the frame), turning while Play is on. Decorative. -->
+      <p class="readout__value"><span class="readout__prefix" id="ro-prefix"></span><span class="readout__num" id="ro-num"></span><span class="readout__unit" id="ro-unit"></span><span class="readout__disc" id="ro-disc"><span class="readout__spin"><img alt="" width="1024" height="1024"><img alt="" width="1024" height="1024"></span></span></p>
+      <p class="readout__note" id="ro-note"></p>
+      <div class="scale" id="scale">
+        <span class="scale__end" id="scale-min"></span>
+        <span class="scale__track" id="scale-track"><span class="scale__marker" id="scale-marker"></span></span>
+        <span class="scale__end" id="scale-max"></span>
+        <span class="scale__legend" id="scale-legend" hidden></span>
+      </div>
+      <!-- While a Compare runs: both dates and values, and the beat between them (its legend under it). -->
+      <div class="readout__compare" id="ro-compare" hidden>
+        <p class="readout__pair"><b class="readout__letter">A</b><span id="ro-a-date"></span><span class="readout__pairval" id="ro-a-val"></span></p>
+        <p class="readout__pair"><b class="readout__letter">B</b><span id="ro-b-date"></span><span class="readout__pairval" id="ro-b-val"></span></p>
+        <svg class="readout__beat" viewBox="0 0 400 40" preserveAspectRatio="none"><path id="ro-beat-path" d=""/></svg>
+        <p class="readout__beatcap" data-i18n="beatLegend">The wave pulses faster the more the two values differ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- The console: every control is native. Its hide/show toggle follows it in the tab order. -->
+  <section class="console" id="console" aria-labelledby="console-title">
+    <h2 class="visually-hidden" id="console-title" data-i18n="controls">Controls</h2>
+
+    <!-- One quiet status row: the sound (Start sound until it is on) and, where it exists, vibration. -->
+    <div class="status">
+      <div class="power-slot">
+        <p class="sound-on" id="sound-on" hidden><span class="sound-on__lamp" aria-hidden="true"></span><span data-i18n="soundOn">Sound is on</span></p>
+        <p class="sound-failed" id="sound-failed" hidden data-i18n="soundFailed">The sound could not start. Check that the device is not muted, then press Start sound again.</p>
+      </div>
+      <!-- Shown while a Play waits for the fire record's instruments (the live region says it too). -->
+      <p class="sound-wait" id="sound-wait" hidden aria-hidden="true" data-i18n="instrumentsLoading">Loading the instruments, the record starts in a moment.</p>
+      <!-- The voice guide: an SI-generated voice, labelled as such. -->
+      <label class="opt remote__voice" id="voice-row"><input type="checkbox" id="voice-on" aria-describedby="voice-help" aria-keyshortcuts="G"><span data-i18n="voice">Voice guide (synthetic voice)</span></label>
+      <label class="opt" id="haptics-row" hidden><input type="checkbox" id="haptics-on" aria-describedby="haptics-help"><span data-i18n="haptics">Vibrate with the sound</span></label>
+    </div>
+    <p class="group__help opt__help" id="voice-help" aria-hidden="true" data-i18n="voiceHelp">A synthetic voice welcomes you and says where the needle goes. It never reads the values: your screen reader does. Key G.</p>
+    <p class="group__help opt__help" id="haptics-help" hidden aria-hidden="true" data-i18n="hapticsHelp">More pulses mean higher. A rough buzz means no data. Android phones only.</p>
+
+    <!-- The two records side by side, like the two sides of a jukebox's selection panel. -->
+    <fieldset class="group records" id="records" disabled>
+      <legend data-i18n="records">Record</legend>
+      <div class="records__list" id="records-list"><p class="muted" data-i18n="loading">Loading records…</p></div>
+    </fieldset>
+
+    <!-- The places as the numbered selections of the record that is on, each with its value on the
+         date shown (the codes and values are decorative: the live region speaks the value). -->
+    <fieldset class="group places" id="places" aria-describedby="places-help" disabled>
+      <legend data-i18n="places">Place</legend>
+      <p class="hint" id="places-hint" aria-hidden="true"></p>
+      <p class="group__help" id="places-help" aria-hidden="true" data-i18n="placesHelp">Arrow keys choose a place and sound it. Enter plays it through time.</p>
+      <div class="places__list" id="places-list"></div>
+    </fieldset>
+
+    <div class="group time">
+      <div class="fader">
+        <div class="fader__top"><label for="date" aria-hidden="true" data-i18n="date">Date</label><output id="date-out" for="date" aria-hidden="true"></output></div>
+        <!-- The score: one bar per date for the place being read, behind the native slider. -->
+        <div class="fader__track">
+          <div class="score" id="score" aria-hidden="true"></div>
+          <input type="range" id="date" min="0" max="0" step="1" value="0" disabled aria-label="Date" data-i18n-attr="aria-label:date">
+        </div>
+        <div class="fader__scale" aria-hidden="true"><span id="date-first"></span><span id="date-last"></span></div>
+        <p class="fader__legend" aria-hidden="true" data-i18n="scoreLegend">One bar per date; height and color follow the value.</p>
+      </div>
+      <button type="button" class="key key--play" id="play" aria-pressed="false" aria-keyshortcuts="Space Enter" disabled><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico--play" d="M8 5.5v13l11-6.5z"/><path class="ico--pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><span data-i18n="play" id="play-label">Play through time</span><kbd aria-hidden="true" data-i18n="keySpace">Space</kbd></button>
+    </div>
+
+    <div class="group compare">
+      <label for="compare-with" aria-hidden="true" data-i18n="compareWith">Compare with</label>
+      <div class="compare__row">
+        <select id="compare-with" disabled aria-label="Compare with" data-i18n-attr="aria-label:compareWith"></select>
+        <button type="button" class="key key--compare" id="compare" aria-keyshortcuts="C" disabled><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c2.2-5 3.8-5 6 0s3.8 5 6 0 3.8-5 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="compare">Compare</span><kbd aria-hidden="true">C</kbd></button>
+      </div>
+      <!-- What Compare plays: A, the date shown; B, the date chosen above; their values while it sounds. -->
+      <p class="cpair" aria-hidden="true">
+        <span class="cpair__item"><b class="cpair__letter">A</b><span class="cpair__date" id="cp-a-date"></span><span class="cpair__val" id="cp-a-val"></span></span>
+        <span class="cpair__item"><b class="cpair__letter">B</b><span class="cpair__date" id="cp-b-date"></span><span class="cpair__val" id="cp-b-val"></span></span>
+      </p>
+    </div>
+
+    <div class="group keys" role="group" aria-label="Playback" data-i18n-attr="aria-label:transport">
+      <button type="button" class="key" id="legend" aria-keyshortcuts="L" disabled><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19v-4M12 19V10M19 19V5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="legend">Sound legend</span><kbd aria-hidden="true">L</kbd></button>
+      <button type="button" class="key key--stop" id="stop" aria-keyshortcuts="Escape S"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span data-i18n="stop">Stop all sound</span><kbd aria-hidden="true">Esc</kbd></button>
+    </div>
+  </section>
+  <button type="button" class="console-toggle" id="console-toggle" aria-expanded="true" aria-controls="console"><span class="visually-hidden" data-i18n="consoleHide">Hide controls</span></button>
+
+  <section class="sleeve" aria-labelledby="frame-title">
+    <div class="sleeve__head">
+      <h2 id="frame-title" data-i18n="frame">The NASA frame under the needle</h2>
+      <p class="sleeve__aside" id="compare-caption" hidden data-i18n="compareView">Same place, two dates</p>
+    </div>
+    <p class="sleeve__note" id="compare-note" hidden></p>
+    <div class="plates" id="frames-grid">
+      <figure class="plate" id="frame-a">
+        <div class="plate__img">
+          <img id="frame-img" alt="" width="2048" height="1024" loading="lazy">
+          <span class="graticule" aria-hidden="true"></span>
+          <!-- Every saved place as a dot: a pointer shortcut to the place list (a click picks it, like a dot on the globe). -->
+          <span class="plate__dots" id="frame-dots" aria-hidden="true"></span>
+          <span class="crosshair" id="crosshair" aria-hidden="true"><i></i></span>
+        </div>
+        <p class="stage__tip plate__tip" id="frame-tip" aria-hidden="true" hidden></p>
+        <figcaption class="plate__tag" aria-hidden="true"><b class="plate__letter">A</b><time id="frame-a-date"></time></figcaption>
+      </figure>
+      <figure class="plate" id="frame-b" hidden>
+        <div class="plate__img">
+          <img id="frame-img-b" alt="" width="2048" height="1024" loading="lazy">
+          <span class="graticule" aria-hidden="true"></span>
+          <span class="crosshair" id="crosshair-b" aria-hidden="true"><i></i></span>
+        </div>
+        <figcaption class="plate__tag" aria-hidden="true"><b class="plate__letter">B</b><time id="frame-b-date"></time></figcaption>
+      </figure>
+      <div class="beat" id="beat" hidden aria-hidden="true"><svg viewBox="0 0 400 40" preserveAspectRatio="none"><path id="beat-path" d=""/></svg></div>
+      <p class="beat__cap" id="beat-cap" hidden aria-hidden="true" data-i18n="beatLegend">The wave pulses faster the more the two values differ.</p>
+    </div>
+    <p class="sleeve__credit" id="frame-credit"></p>
+    <figure class="colorbar" id="colorbar" hidden aria-hidden="true"><img id="colorbar-img" alt="" loading="lazy"><figcaption id="colorbar-cap"></figcaption></figure>
+  </section>
+</main>
+
+<footer class="foot">
+  <p data-i18n="credits">Frames: NASA Scientific Visualization Studio, Earth Information Center. Globe: NASA Earth Observatory, Blue Marble Next Generation. Sky and Moon: NASA Scientific Visualization Studio, Deep Star Maps 2020 and CGI Moon Kit. Sun, Moon and planet positions: low-precision formulas from the Astronomical Almanac and JPL (E. M. Standish). The Sun and the Moon are drawn 4.5 times their true size; their positions, the Moon's phase and the planets' positions are computed for the date shown. Sound synthesized live in your browser. Fonts: Cormorant, Michroma, Schibsted Grotesk, Martian Mono (SIL Open Font License). 3D: three.js (MIT).</p>
+  <p data-i18n="siNote">SI disclosure: parts of this interface's code were drafted with an AI coding assistant and reviewed by the team.</p>
+</footer>
+
+<!-- Cloned by the script for each record and each place. Keep the data-slot hooks. -->
+<template id="tpl-record">
+  <label class="record"><input type="radio" name="record"><span class="record__disc" aria-hidden="true"><img data-slot="img" alt="" width="56" height="56" loading="lazy"></span><span class="record__text" aria-hidden="true"><span class="record__title" data-slot="title"></span><span class="record__short" data-slot="short"></span></span><span class="record__side" aria-hidden="true" data-slot="side"></span></label>
+</template>
+<!-- The mark is the place's dot (amber when it is the one being read; three bars while it sounds);
+     the selection code and the value are decorative, so a row is still named by its place alone. -->
+<template id="tpl-place">
+  <label class="place"><input type="radio" name="place"><span class="place__mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="place__code" aria-hidden="true" data-slot="code"></span><span class="place__name" aria-hidden="true" data-slot="name"></span><span class="place__meta" data-slot="meta"></span><span class="place__val" aria-hidden="true" data-slot="val"></span></label>
+</template>
+
+<!-- Data and method: every fact the record's meta.json publishes (source, scale, validation, method). -->
+<dialog id="about" class="sheet" aria-labelledby="about-title">
+  <div class="sheet__head">
+    <h2 id="about-title" tabindex="-1"><span data-i18n="aboutTitle">Data and method</span>: <span id="liner-record"></span></h2>
+    <button type="button" class="sheet__close" id="about-close" data-i18n="aboutClose">Close</button>
+  </div>
+  <dl class="liner__list" id="liner-list"></dl>
+</dialog>
+
+<!-- Keyboard guide: every shortcut, as headings and lists a screen reader can read at its own pace. -->
+<dialog id="guide" class="sheet guide" aria-labelledby="guide-title">
+  <div class="sheet__head">
+    <h2 id="guide-title" tabindex="-1" data-i18n="guideTitle">Keyboard guide</h2>
+    <button type="button" class="sheet__close" id="guide-close" data-i18n="guideClose">Close guide</button>
+  </div>
+  <p data-i18n="guideIntro">Read this guide with your screen reader's reading keys, or jump between its sections by heading. Press Esc or the Close guide button to go back to where you were.</p>
+  <p data-i18n="guideNote">With a screen reader, the letter keys work while the focus is on a place, a record or a slider. Every action also has a button on the page.</p>
+  <div id="guide-body" class="guide__body"></div>
+  <label class="guide__opt"><input type="checkbox" id="letters-on" checked><span data-i18n="guideLetters">Letter keys work everywhere in the player. Turn this off to keep them on the place list only.</span></label>
+</dialog>
+
+<div id="live" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

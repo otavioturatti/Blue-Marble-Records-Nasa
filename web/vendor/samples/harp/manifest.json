@@ -1,0 +1,176 @@
+[
+ {
+  "midi": 36,
+  "file": "36.mp3",
+  "centsOff": 25.5,
+  "source": "EWHarp_Normal_C1_v3_RR1.wav"
+ },
+ {
+  "midi": 38,
+  "file": "38.mp3",
+  "centsOff": 6.0,
+  "source": "EWHarp_Normal_D1_v3_RR1.wav"
+ },
+ {
+  "midi": 40,
+  "file": "40.mp3",
+  "centsOff": 6.2,
+  "source": "EWHarp_Normal_E1_v3_RR1.wav"
+ },
+ {
+  "midi": 42,
+  "file": "42.mp3",
+  "centsOff": 6.0,
+  "source": "EWHarp_Normal_F#1_v3_RR1.wav"
+ },
+ {
+  "midi": 44,
+  "file": "44.mp3",
+  "centsOff": 6.6,
+  "source": "EWHarp_Normal_G#1_v3_RR1.wav"
+ },
+ {
+  "midi": 46,
+  "file": "46.mp3",
+  "centsOff": 1.2,
+  "source": "EWHarp_Normal_A#1_v3_RR1.wav"
+ },
+ {
+  "midi": 48,
+  "file": "48.mp3",
+  "centsOff": -5.4,
+  "source": "EWHarp_Normal_C2_v3_RR1.wav"
+ },
+ {
+  "midi": 50,
+  "file": "50.mp3",
+  "centsOff": 2.6,
+  "source": "EWHarp_Normal_D2_v3_RR1.wav"
+ },
+ {
+  "midi": 52,
+  "file": "52.mp3",
+  "centsOff": 0.0,
+  "source": "EWHarp_Normal_E2_v3_RR1.wav"
+ },
+ {
+  "midi": 54,
+  "file": "54.mp3",
+  "centsOff": 0.8,
+  "source": "EWHarp_Normal_F#2_v3_RR1.wav"
+ },
+ {
+  "midi": 56,
+  "file": "56.mp3",
+  "centsOff": -2.3,
+  "source": "EWHarp_Normal_G#2_v3_RR1.wav"
+ },
+ {
+  "midi": 58,
+  "file": "58.mp3",
+  "centsOff": -0.6,
+  "source": "EWHarp_Normal_A#2_v3_RR1.wav"
+ },
+ {
+  "midi": 60,
+  "file": "60.mp3",
+  "centsOff": -2.0,
+  "source": "EWHarp_Normal_C3_v3_RR1.wav"
+ },
+ {
+  "midi": 62,
+  "file": "62.mp3",
+  "centsOff": 0.9,
+  "source": "EWHarp_Normal_D3_v3_RR1.wav"
+ },
+ {
+  "midi": 64,
+  "file": "64.mp3",
+  "centsOff": 1.2,
+  "source": "EWHarp_Normal_E3_v3_RR1.wav"
+ },
+ {
+  "midi": 66,
+  "file": "66.mp3",
+  "centsOff": -2.0,
+  "source": "EWHarp_Normal_F#3_v3_RR1.wav"
+ },
+ {
+  "midi": 68,
+  "file": "68.mp3",
+  "centsOff": -2.1,
+  "source": "EWHarp_Normal_G#3_v3_RR1.wav"
+ },
+ {
+  "midi": 70,
+  "file": "70.mp3",
+  "centsOff": -0.3,
+  "source": "EWHarp_Normal_A#3_v3_RR1.wav"
+ },
+ {
+  "midi": 72,
+  "file": "72.mp3",
+  "centsOff": -1.7,
+  "source": "EWHarp_Normal_C4_v3_RR1.wav"
+ },
+ {
+  "midi": 74,
+  "file": "74.mp3",
+  "centsOff": -1.8,
+  "source": "EWHarp_Normal_D4_v3_RR1.wav"
+ },
+ {
+  "midi": 76,
+  "file": "76.mp3",
+  "centsOff": -2.0,
+  "source": "EWHarp_Normal_E4_v3_RR1.wav"
+ },
+ {
+  "midi": 78,
+  "file": "78.mp3",
+  "centsOff": 4.2,
+  "source": "EWHarp_Normal_F#4_v3_RR1.wav"
+ },
+ {
+  "midi": 80,
+  "file": "80.mp3",
+  "centsOff": 1.7,
+  "source": "EWHarp_Normal_G#4_v3_RR1.wav"
+ },
+ {
+  "midi": 82,
+  "file": "82.mp3",
+  "centsOff": -0.1,
+  "source": "EWHarp_Normal_A#4_v3_RR1.wav"
+ },
+ {
+  "midi": 84,
+  "file": "84.mp3",
+  "centsOff": -3.2,
+  "source": "EWHarp_Normal_C5_v3_RR1.wav"
+ },
+ {
+  "midi": 86,
+  "file": "86.mp3",
+  "centsOff": -4.9,
+  "source": "EWHarp_Normal_D5_v3_RR1.wav"
+ },
+ {
+  "midi": 88,
+  "file": "88.mp3",
+  "centsOff": -0.8,
+  "source": "EWHarp_Normal_E5_v3_RR1.wav"
+ },
+ {
+  "midi": 90,
+  "file": "90.mp3",
+  "centsOff": -2.2,
+  "source": "EWHarp_Normal_F#5_v3_RR1.wav"
+ },
+ {
+  "midi": 92,
+  "file": "92.mp3",
+  "centsOff": -4.1,
+  "source": "EWHarp_Normal_G#5_v3_RR1.wav"
+ }
+]

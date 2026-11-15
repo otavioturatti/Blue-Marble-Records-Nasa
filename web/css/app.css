@@ -1,0 +1,1157 @@
+/* SI disclosure: parts of this file were drafted with an AI coding assistant and reviewed by Kristen and Arthur. */
+/* Blue Marble Records. The planet is the record: one full-bleed stage of real space, the value being read
+   set in type over it, and a docked console of quiet ink on black with hairlines. Light belongs to the
+   WebGL scene; the chrome stays flat. Amber marks only the point being read. */
+
+@font-face { font-family: "Cormorant"; src: url("fonts/cormorant-latin-wght-normal.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("fonts/schibsted-grotesk-latin-wght-normal.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Michroma"; src: url("fonts/michroma-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Martian Mono"; src: url("fonts/martian-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+
+:root {
+  color-scheme: dark;
+
+  /* Ground and ink: true black space, ice-white chrome, blue-tinted grays */
+  --space: #000;
+  --ink: #e8f0ff;          /* 18.3:1 on black */
+  --ink-2: #aab8d6;        /* 10.5:1 */
+  --ink-3: #8494b8;        /* 6.9:1, 5.5:1 on --sel */
+  --line: #5d6d93;         /* control boundaries, 4.1:1 */
+  --hair: #161e33;         /* decorative hairlines between groups */
+  --hair-2: #253150;       /* stronger hairline: console edge, dialog edge */
+
+  /* Identity: cobalt to electric blue */
+  --cobalt: #2f6bff;       /* selected frame, rules of the wordmark, 4.7:1 */
+  --cobalt-deep: #1d47c8;  /* the start button; ice text on it 6.6:1 */
+  --cobalt-press: #173aa6;
+  --cobalt-hi: #6aa5ff;    /* links, 8.4:1 */
+  --focus: #8fb8ff;        /* focus ring, 10.5:1 */
+  --sel: #0a1a4a;          /* selected row ground */
+  --hover: #08102a;        /* row hover ground */
+  --sheet: #050a18;        /* dialog surface */
+  --veil: rgb(0 0 0 / 0.78);
+  --shade: rgb(0 0 0 / 0.9);
+  --shade-edge: rgb(0 0 0 / 0.8);
+  --grat: rgb(232 240 255 / 0.1);
+  --keyline: rgb(0 0 0 / 0.85);
+
+  /* The one signal color: the point being read */
+  --amber: #ffb547;
+  --dot-key: #02050c;      /* the keyline and the dark center of the place dots (globe and frame alike) */
+
+  /* One drawn chevron (2 px stroke, like the other icons), used as a mask */
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  --font-display: "Cormorant", "Cormorant Garamond", Garamond, serif;
+  --font-panel: "Michroma", "Eurostile", sans-serif;
+  --font-ui: "Schibsted Grotesk", system-ui, sans-serif;
+  --font-num: "Martian Mono", ui-monospace, monospace;
+
+  /* Type scale (rem): 13, 15, 16, 20, 26 for the interface; display sizes are set where used */
+  --t-xs: 0.8125rem;
+  --t-sm: 0.9375rem;
+  --t-md: 1rem;
+  --t-lg: 1.25rem;
+  --t-xl: 1.625rem;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: clamp(16px, 2.8vw, 44px);
+  --bar-h: 76px;
+  --radius: 2px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; background: var(--space); scrollbar-color: var(--hair-2) var(--space); }
+body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  color: var(--ink);
+  background: var(--space);
+  font: 400 var(--t-md)/1.5 var(--font-ui);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+::selection { background: var(--cobalt-deep); color: var(--ink); }
+[hidden] { display: none !important; }
+img { max-width: 100%; display: block; }
+button, input, select { font: inherit; color: inherit; }
+button { touch-action: manipulation; }
+a { color: var(--cobalt-hi); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--ink); }
+kbd { font: 500 0.75rem/1.4 var(--font-num); padding: 1px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; border: 1px solid var(--line); border-radius: 3px; color: var(--ink); }
+.visually-hidden,
+.lang__label { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.muted { margin: 0; color: var(--ink-3); font-size: var(--t-sm); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--hair-2); border: 3px solid var(--space); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--line); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.skip { position: absolute; left: 16px; top: 0; z-index: 100; padding: 12px 16px; border-radius: var(--radius); background: var(--ink); color: var(--space); font-weight: 600; text-decoration: none; transform: translateY(-200%); }
+.skip:focus-visible { transform: none; top: 12px; }
+.skip:hover { color: var(--space); }
+main { outline: none; }
+
+/* ---------- Header: the wordmark, two dialogs, the language ---------- */
+.bar {
+  position: relative; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px;
+  padding: 12px var(--gutter);
+}
+/* Stacked like the team logo: serif capitals, then RECORDS between two cobalt hairlines. */
+/* Every size is in em of .mark, so the opening can set the same mark larger (font-size and --hl). */
+.mark { display: inline-flex; flex-direction: column; gap: 0.3125em; margin: 0; font-size: 1rem; text-decoration: none; border-radius: var(--radius); }
+.mark:focus-visible { outline-offset: 6px; }
+.mark__name { font: 600 1.375em/1 var(--font-display); letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+.mark__sub {
+  display: flex; align-items: center; gap: 0.7em;
+  font: 400 0.6875em/1 var(--font-panel); letter-spacing: 0.4em; text-transform: uppercase; color: var(--ink-2);
+}
+.mark__sub::before, .mark__sub::after { content: ""; flex: 1; min-width: 0.9em; height: var(--hl, 1px); background: var(--cobalt); }
+.mark__sub::after { margin-left: -0.4em; }
+.mark__word { white-space: nowrap; }
+/* The "O" of RECORDS is a record: the letter keeps its place in the text and the drawing covers it
+   (centered on the capital: the box also holds the 0.4em of tracking after it, and the middle of
+   Michroma's capitals sits 0.065em below the middle of the line). */
+.mark__o { position: relative; display: inline-block; color: transparent; }
+.mark__disc {
+  position: absolute; left: calc(50% - 0.2em); top: calc(50% + 0.065em); width: 0.98em; height: 0.98em; translate: -50% -50%;
+  overflow: visible; color: var(--ink-2); transition: rotate 700ms var(--ease);
+}
+.md-body { fill: #04060b; stroke: currentColor; stroke-width: 3; }
+.md-groove { fill: none; stroke: currentColor; stroke-width: 0.9; opacity: 0.4; }
+.md-sheen { fill: var(--ink); opacity: 0.22; }
+.md-label { fill: var(--cobalt); }
+.md-hole { fill: var(--space); }
+/* It turns once under the pointer or the focus: the mark is a link. */
+.mark:hover .mark__disc, .mark:focus-visible .mark__disc { rotate: 360deg; }
+
+/* The cluster: two quiet dialog keys with a drawn icon each, a hairline, the language switch. */
+.bar__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.bar__btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px;
+  border: 1px solid transparent; border-radius: var(--radius); background: transparent; cursor: pointer;
+  font: 500 var(--t-sm)/1 var(--font-ui); color: var(--ink-2); white-space: nowrap;
+  transition: color 150ms var(--ease), background-color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.bar__btn .ico { flex: none; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.bar__btn:active { background: var(--sel); border-color: var(--cobalt); color: var(--ink); }
+/* The language: a two-position switch (two native buttons, the pressed one is the language). */
+.lang { position: relative; display: inline-flex; align-items: center; margin-left: 8px; padding-left: 13px; }
+.lang::before { content: ""; position: absolute; left: 0; top: 50%; height: 20px; margin-top: -10px; width: 1px; background: var(--hair-2); }
+.lang__btn {
+  position: relative; min-height: 36px; padding: 0 11px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--space);
+  font: 500 var(--t-xs)/1 var(--font-ui); color: var(--ink-3); white-space: nowrap;
+  transition: color 150ms var(--ease), background-color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.lang__btn:first-of-type { border-radius: var(--radius) 0 0 var(--radius); }
+.lang__btn:last-of-type { margin-left: -1px; border-radius: 0 var(--radius) var(--radius) 0; }
+/* Taller hit area than the drawn box (44 px), without a taller switch. */
+.lang__btn::after { content: ""; position: absolute; inset: -5px 0; }
+.lang__btn[aria-pressed="true"] { z-index: 1; background: var(--sel); border-color: var(--cobalt); color: var(--ink); font-weight: 600; }
+.lang__btn:focus-visible { z-index: 2; }
+
+.synthetic { position: relative; z-index: 10; padding: 0 var(--gutter); }
+.synthetic p { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0; padding: 8px 12px; border: 1px solid var(--ink); border-radius: var(--radius); background: var(--space); font-size: var(--t-xs); color: var(--ink-2); }
+.synthetic strong { color: var(--ink); font-weight: 700; }
+
+/* ---------- Intro: the thesis in one line and one sentence ---------- */
+.intro { position: relative; z-index: 3; padding: 4px var(--gutter) 20px; pointer-events: none; }
+.intro h1 {
+  margin: 0; max-width: 14ch;
+  font: 600 clamp(2.25rem, 1.4rem + 2.1vw, 3.25rem)/1.02 var(--font-display);
+  letter-spacing: -0.012em; text-wrap: balance; color: var(--ink);
+}
+.intro__lede { margin: 14px 0 0; max-width: 34ch; color: var(--ink-2); font-size: var(--t-md); line-height: 1.5; text-wrap: pretty; }
+
+/* ---------- Stage: one WebGL picture at a time ---------- */
+.stage {
+  --band: clamp(20rem, 60svh, 44rem);
+  position: relative; isolation: isolate;
+  padding-top: var(--band); /* the picture band; the readout follows it below on small screens */
+  background: var(--space);
+}
+.stage__view { position: absolute; inset: 0 0 auto 0; height: var(--band); overflow: hidden; }
+.stage__view canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+/* The free part of the stage: the globe centers the Earth in this box. */
+.stage__safe { position: absolute; left: 0; right: 0; top: 0; height: var(--band); pointer-events: none; visibility: hidden; }
+
+.stage__tip {
+  position: absolute; z-index: 4; margin: 0; padding: 5px 9px;
+  transform: translate(-50%, calc(-100% - 14px));
+  background: var(--space); border: 1px solid var(--line); border-radius: var(--radius);
+  font: 500 var(--t-xs)/1.2 var(--font-ui); color: var(--ink); white-space: nowrap; pointer-events: none;
+}
+
+/* No WebGL: a flat record in the same free box. */
+.flat { position: absolute; inset: 0; display: grid; place-items: center; container-type: size; }
+.flat__vinyl {
+  position: relative; width: min(86cqw, 86cqh); aspect-ratio: 1; border-radius: 50%;
+  background: var(--space); outline: 1px solid var(--hair-2); outline-offset: 0;
+  transform: rotate(var(--rot, 0deg)); transition: transform var(--turn, 0.7s) linear;
+}
+.flat__vinyl img { position: absolute; inset: 3%; width: 94%; height: 94%; border-radius: 50%; object-fit: cover; }
+.flat__label { position: absolute; inset: 40%; border-radius: 50%; background: radial-gradient(circle, var(--space) 0 8%, var(--cobalt-deep) 9%); }
+
+/* ---------- Readout: the value being read, set in type ---------- */
+.readout { position: relative; padding: calc(1rem + 8px) var(--gutter) 4px; pointer-events: none; } /* clears the credit line above it at any text size */
+.readout p { margin: 0; }
+.readout__place { font: 600 var(--t-xl)/1.1 var(--font-display); color: var(--ink); text-wrap: balance; }
+.readout__date { margin-top: 4px !important; font-size: var(--t-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.readout__record { margin-top: 2px !important; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); }
+.readout__value {
+  display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 0.04em;
+  margin-top: 10px !important;
+  font-family: var(--font-display); font-weight: 600; color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+/* Signs from the UI face: its plus and minus sit on the numerals' math axis, which Cormorant's do not. */
+/* The reading takes the record's colour at the value (--reading, set by the script; ice white near
+   normal and with no data), the scale's needle too, so the bar under it is its legend. */
+.readout__prefix, .readout__num { color: var(--reading, var(--ink)); transition: color 400ms var(--ease); }
+.readout__prefix { margin-right: 0.06em; font-family: var(--font-ui); font-size: clamp(2.75rem, 1.6rem + 2.9vw, 4.5rem); font-weight: 300; line-height: 0.9; }
+.readout__num { font-size: clamp(3.5rem, 2rem + 3.6vw, 5.5rem); line-height: 0.9; letter-spacing: -0.02em; }
+.readout__unit { margin-left: 0.3em; font-size: var(--t-xl); font-weight: 500; color: var(--ink-2); }
+.readout__note { min-height: 1.45em; margin-top: 8px !important; font-size: var(--t-sm); color: var(--ink-2); text-wrap: pretty; }
+/* The record's picture disc at the right end of the value row: the frame's south polar view printed
+   on the vinyl, a black lacquer edge inside a hairline rim, the spindle hole. The row reserves its
+   width and it overhangs the row's margins, so the readout is no taller; the script turns it while
+   Play is on (clockwise, one turn per date) and lets it come to rest where it is. */
+.readout { --disc: 56px; }
+.readout__value { position: relative; max-width: 22rem; min-height: calc(var(--disc) - 16px); padding-right: calc(var(--disc) + 12px); }
+.readout__value:has(.readout__disc[hidden]) { min-height: 0; padding-right: 0; }
+.readout__disc {
+  position: absolute; right: 0; top: 50%; width: var(--disc); height: var(--disc); margin-top: calc(var(--disc) / -2);
+  border-radius: 50%; background: var(--space); border: 1px solid var(--hair-2);
+}
+.readout__spin { position: absolute; inset: 5%; border-radius: 50%; overflow: hidden; }
+/* The new date fades in on top; the old one stays fully under it until then, so the disc never dims. */
+.readout__spin img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0s linear 250ms; }
+.readout__spin img.is-front { z-index: 1; opacity: 1; transition: opacity 250ms var(--ease); }
+.readout__disc::after { content: ""; position: absolute; z-index: 1; left: 50%; top: 50%; width: 7%; aspect-ratio: 1; min-width: 4px; translate: -50% -50%; border-radius: 50%; background: var(--space); outline: 1px solid var(--hair-2); }
+.readout.is-nodata .readout__num { font-size: clamp(2rem, 1.5rem + 1.4vw, 2.75rem); letter-spacing: 0; line-height: 1.1; }
+.readout.is-nodata .readout__prefix,
+.readout.is-nodata .readout__unit { display: none; }
+/* Compare on the stage: date A and B with their values, and the beat between them. */
+.readout__compare { max-width: 22rem; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hair-2); }
+.readout__pair { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; margin-top: 4px !important; font-size: var(--t-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.readout__letter { display: grid; place-items: center; width: 20px; height: 20px; border: 1px solid var(--ink-2); border-radius: var(--radius); font: 600 var(--t-sm)/1 var(--font-display); color: var(--ink); }
+.readout__pairval { justify-self: end; color: var(--ink); font-weight: 600; white-space: nowrap; }
+.readout__beat { display: block; width: 100%; height: 28px; margin-top: 6px; }
+.readout__beatcap { margin-top: 2px !important; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); }
+.beat__cap { grid-column: 1 / -1; margin: -16px 0 0; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); }
+.readout__beat path { fill: none; stroke: var(--cobalt-hi); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+/* The frame's source, small on the picture (the linked credit is under the NASA frame). */
+/* The frame's source, a caption on always-dark ground: just under the picture band on phones and
+   tablets (black page), inside the desktop rail's 0.9 shade (see the desktop block). Dusk Ink keeps
+   at least 5.8:1 there; the lit Earth never passes under it. */
+.stage__credit { position: absolute; z-index: 2; right: var(--gutter); top: calc(var(--band) + 2px); margin: 0; font: 400 var(--t-xs)/1.2 var(--font-ui); color: var(--ink-3); pointer-events: none; }
+
+/* Scale: a hairline with the zero tick (diverging) or none (sequential), a fill from zero to the
+   value, and the needle tick at --p (0 to 1, set on #scale-marker). The fill and the needle move by
+   transform (scaleX, and translateX in container units of the track), never by left or width, so
+   a moving value costs no layout. */
+.scale { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; max-width: 22rem; margin-top: 14px; }
+.scale__end { font-size: var(--t-xs); color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scale__track { position: relative; height: 16px; container-type: inline-size; }
+.scale__track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+.scale__track::after { content: ""; position: absolute; left: 50%; top: 3px; bottom: 3px; width: 1px; background: var(--ink-3); }
+.scale__track.is-sequential::after { display: none; }
+.scale__marker { position: absolute; inset: 0; transition: opacity 200ms var(--ease); }
+.scale__marker::before {
+  content: ""; position: absolute; top: 50%; height: 3px; margin-top: -1px;
+  left: 50%; width: 50%; transform-origin: 0 50%; transform: scaleX(calc((var(--p, 0.5) - 0.5) * 2));
+  background: var(--ink-2);
+  transition: transform 300ms var(--ease);
+}
+.scale__track.is-sequential .scale__marker::before { left: 0; width: 100%; transform: scaleX(var(--p, 0)); }
+/* With the record's colour strip (--scale-image, set by the script): a thin band of the real colours
+   in a hairline, the zero shown as notches above and below the band, the needle tick on top. */
+.scale__track[style*="--scale-image"]::before {
+  height: 7px; margin-top: -3.5px;
+  background: var(--scale-image) center / 100% 100% no-repeat;
+  outline: 1px solid var(--line); outline-offset: 0;
+}
+.scale__track[style*="--scale-image"]::after { top: 0; bottom: 0; background: linear-gradient(var(--ink-2) 0 3px, transparent 3px 13px, var(--ink-2) 13px); }
+.scale__track[style*="--scale-image"] .scale__marker::before { display: none; }
+.scale__marker::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px;
+  left: 0; transform: translateX(calc(var(--p, 0.5) * 100cqw)); background: var(--reading, var(--ink)); box-shadow: 0 0 0 1px var(--keyline);
+  transition: transform 300ms var(--ease), background-color 400ms var(--ease);
+}
+/* A square-root scale (fire): marks at their true places, their values under the bar. */
+.scale.has-ticks { padding-bottom: 0; }
+.scale__legend { grid-column: 1 / -1; margin-top: 2px; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); text-wrap: pretty; }
+.scale.has-ticks .scale__legend { margin-top: 20px; }
+.scale__tick { position: absolute; top: calc(50% + 5px); transform: translateX(-50%); padding-top: 5px; font: 400 var(--t-xs)/1 var(--font-ui); color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
+.scale__tick::before { content: ""; position: absolute; top: 0; left: 50%; width: 1px; height: 4px; background: var(--ink-3); }
+.scale__marker.is-hidden,
+.readout.is-nodata .scale__marker { opacity: 0; }
+
+/* ---------- Console: the jukebox's selection panel, every control native ----------
+   Top to bottom: one quiet status row, the two records as two sides, the places as the numbered
+   selections of the record that is on (each with its value on the date shown), the date control
+   drawn as the score of the place, Play through time as the one primary key, Compare as A and B,
+   then the secondary keys. Flat and typographic: the metaphor is in the structure and the codes. */
+.console { position: relative; z-index: 2; padding: 8px var(--gutter) 40px; background: var(--space); border-top: 1px solid var(--hair-2); }
+.console > .group { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--hair); }
+.group { min-width: 0; margin-inline: 0; margin-bottom: 0; padding-inline: 0; padding-bottom: 0; border-inline: 0; border-bottom: 0; }
+.group > legend { float: left; width: 100%; padding: 0; }
+.group > legend + * { clear: both; }
+.group > legend,
+.compare > label,
+.fader__top label { display: block; margin: 0 0 10px; font: 600 var(--t-sm)/1.2 var(--font-ui); color: var(--ink); }
+.group__help { margin: 0 0 10px; max-width: 46ch; font-size: var(--t-xs); line-height: 1.45; color: var(--ink-3); }
+/* Key caps on keys and in hints: the keyboard guide's Martian Mono cap, smaller. A keyboard thing,
+   so touch screens without a keyboard never see them. */
+.key kbd, .hint kbd { flex: none; font-size: 0.6875rem; line-height: 1.3; padding: 1px 5px; color: var(--ink-2); border-color: var(--line); }
+body.touch-ui .key kbd, body.touch-ui .hint { display: none; }
+
+/* Status: the sound line (Start sound until it is on) and the vibration option side by side. */
+.status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 16px; padding-top: 16px; }
+.power-slot { display: grid; flex: 1 1 14rem; min-width: 0; }
+.power {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 10px 16px;
+  border: 0; border-radius: var(--radius); cursor: pointer; text-align: left;
+  background: var(--cobalt-deep); color: var(--ink); font: 600 var(--t-md)/1.25 var(--font-ui);
+  transition: background-color 150ms var(--ease);
+}
+.power .ico { flex: none; width: 20px; height: 20px; }
+.power:active, .power.is-starting { background: var(--cobalt-press); }
+.power.is-starting { cursor: progress; }
+.power:focus-visible { outline-offset: 3px; }
+/* The second way to start, with the voice guide: a quiet key under the one filled button. */
+.start-voice { width: 100%; margin-top: 8px; min-height: 40px; justify-content: flex-start; font-size: var(--t-xs); color: var(--ink-2); }
+/* Before the sound starts the choice is made with the two Start buttons; the voice guide's
+   checkbox (and G) is for later. */
+body:not(.sound-started) #voice-row, body:not(.sound-started) #voice-help { display: none; }
+/* Once the sound is on, "Sound is on" and the voice guide's checkbox share one row where they fit. */
+body.sound-started .power-slot { flex: 0 1 auto; }
+.status { column-gap: 12px; }
+@media (min-width: 1100px) and (min-width: 52em) and (max-height: 859.98px) {
+  .start-voice { min-height: 32px; margin-top: 6px; padding-block: 4px; }
+  /* Before the sound starts the place list may be shorter (the two Start buttons take its room). */
+  body:not(.sound-started) .console > .places { min-height: 5.5rem; }
+}
+.sound-on { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; font: 500 var(--t-xs)/1.25 var(--font-ui); color: var(--ink-2); }
+.sound-wait { flex: 1 0 100%; margin: 0 0 6px; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-2); }
+.sound-failed { margin: 8px 0 0; max-width: 46ch; font-size: var(--t-sm); line-height: 1.4; color: var(--ink); }
+/* A native option row (vibration): in the status row once the sound is on. */
+.opt { display: flex; align-items: center; gap: 10px; min-height: 44px; color: var(--ink-2); font-size: var(--t-xs); cursor: pointer; }
+.opt input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--cobalt); cursor: pointer; }
+.opt__help { margin-top: 0; }
+/* The voice guide's help: shown on phones and tablets; on desktop it stays the checkbox's description. */
+@media (min-width: 1100px) and (min-width: 52em) {
+  #voice-help { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .status .opt { min-height: 36px; }
+}
+/* Three still bars: a drawn sound mark, not a pilot lamp. */
+.sound-on__lamp {
+  flex: none; width: 14px; height: 14px;
+  background:
+    linear-gradient(var(--cobalt-hi), var(--cobalt-hi)) 0 100% / 2px 45% no-repeat,
+    linear-gradient(var(--cobalt-hi), var(--cobalt-hi)) 50% 100% / 2px 100% no-repeat,
+    linear-gradient(var(--cobalt-hi), var(--cobalt-hi)) 100% 100% / 2px 70% no-repeat;
+}
+
+/* Records: the two sides, side by side. A round picture of each record, its title set like an
+   album, its letter (the first letter of its places' codes) at the top right. */
+.records__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: 8px; }
+.record {
+  position: relative; display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; column-gap: 10px;
+  min-height: 56px; padding: 8px 14px 8px 8px; cursor: pointer;
+  border: 1px solid var(--hair-2); border-radius: var(--radius);
+  transition: background-color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.record input, .place input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: inherit; }
+.record__disc { position: relative; align-self: center; width: 36px; height: 36px; border-radius: 50%; outline: 1px solid transparent; outline-offset: 3px; transition: outline-color 150ms var(--ease); }
+.record__disc img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: var(--hair); }
+/* The spindle hole: the thumbnail reads as a record, not a planet. */
+.record__disc::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--space); }
+.record__text { display: grid; gap: 2px; min-width: 0; overflow-wrap: break-word; hyphens: auto; }
+.record__title { font: 600 var(--t-md)/1.08 var(--font-display); color: var(--ink-2); text-wrap: balance; }
+.record__short { font-size: var(--t-xs); line-height: 1.3; color: var(--ink-3); }
+.record__side { position: absolute; top: 6px; right: 6px; font: 500 0.6875rem/1 var(--font-ui); color: var(--ink-3); }
+.record:has(input:checked) { background: var(--sel); border-color: var(--cobalt); }
+.record:has(input:checked) .record__disc { outline-color: var(--ink); }
+.record:has(input:checked) .record__title { color: var(--ink); }
+.record:has(input:checked) .record__side { color: var(--ink-2); }
+.record:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* The record that is on turns once per date while Play runs (never with reduced motion). */
+body.is-playing .record:has(input:checked) .record__disc img { animation: turn var(--turn, 1429ms) linear infinite; }
+
+/* Places: the numbered selections. Mark, code, name, value. The checked row carries the console's
+   one amber: its mark, a dot for a land place and a ring for an ocean place, as on the globe. */
+.places { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; column-gap: 12px; }
+/* The legend stays floated: a floated legend is a grid item (an unfloated one is drawn apart). */
+.places > legend { grid-column: 1; grid-row: 1; width: auto; margin-bottom: 8px; }
+.places > .hint { grid-column: 2; grid-row: 1; justify-self: end; }
+.places > .group__help { grid-column: 1 / -1; grid-row: 2; }
+.places > .places__list { grid-column: 1 / -1; grid-row: 3; align-self: stretch; }
+.hint { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px 12px; margin: 0 0 8px; font-size: var(--t-xs); line-height: 1.3; color: var(--ink-3); }
+.hint__item { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.kbd-arrows { display: inline-flex; gap: 1px; padding-inline: 3px !important; }
+.kbd-arrows svg { width: 10px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+/* With a keyboard the key-cap hint stands for the help sentence (still the list's description). */
+body:not(.touch-ui) #places-help { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.places__list { display: grid; grid-auto-rows: max-content; align-content: start; gap: 1px; padding: 3px; margin: -3px; scroll-padding-block: 3px; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--hair-2) transparent; }
+.place {
+  position: relative; display: grid; grid-template-columns: 10px 1.9rem minmax(0, 1fr) auto auto; align-items: center; column-gap: 10px;
+  min-height: 44px; padding: 6px 12px; cursor: pointer;
+  border: 1px solid transparent; border-radius: var(--radius);
+  transition: background-color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.place:has(.place__meta[hidden]) { grid-template-columns: 10px 1.9rem minmax(0, 1fr) auto; }
+.place__mark { position: relative; display: flex; align-items: flex-end; justify-content: space-between; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--line); }
+.place__mark i { display: none; width: 2px; height: 100%; background: var(--amber); transform-origin: 50% 100%; }
+.place__code { font: 500 var(--t-xs)/1 var(--font-ui); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; color: var(--ink-3); }
+.place__name { font: 500 var(--t-sm)/1.25 var(--font-ui); color: var(--ink-2); text-wrap: pretty; }
+.place__meta { font-size: var(--t-xs); color: var(--ink-3); }
+/* The value on the date shown, in the reading's colour (ice near normal); "no data" quieter; a
+   short hairline while it loads. Text and colour only change, so a Play step does no layout. */
+.place__val {
+  justify-self: end; font: 500 var(--t-sm)/1.25 var(--font-ui); white-space: nowrap;
+  color: var(--val, var(--ink-2)); transition: color 200ms var(--ease);
+}
+.place__val.is-nodata { font-size: var(--t-xs); color: var(--ink-3); }
+.place__val:empty::before { content: ""; display: block; width: 24px; height: 1px; background: var(--hair-2); }
+.place:has(input:checked) { background: var(--sel); border-color: var(--cobalt); }
+.place:has(input:checked) .place__mark { background: var(--amber); border-color: var(--amber); }
+.place[data-surface="ocean"]:has(input:checked) .place__mark { background: var(--dot-key); border: 2.5px solid var(--amber); }
+.place:has(input:checked) .place__name { color: var(--ink); font-weight: 600; }
+.place:has(input:checked) .place__code { color: var(--ink-2); }
+.place:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: -2px; }
+/* Pointed at on the globe: the row lights like a hover. */
+.place.is-lit:not(:has(input:checked)) { background: var(--hover); border-color: var(--hair-2); }
+.place.is-lit .place__name { color: var(--ink); }
+.place.is-lit .place__mark { border-color: var(--ink-2); }
+/* Sounding: while the place's sound plays, its mark becomes three amber bars (still bars with
+   reduced motion). */
+:is(.places__list.is-sounding, body.is-playing .places__list, body.is-comparing .places__list) .place:has(input:checked) .place__mark { width: 10px; border: 0; border-radius: 0; background: none; }
+:is(.places__list.is-sounding, body.is-playing .places__list, body.is-comparing .places__list) .place:has(input:checked) .place__mark i { display: block; animation: sounding 900ms var(--ease) infinite alternate; }
+.place__mark i:nth-child(1) { height: 55%; animation-delay: -300ms !important; }
+.place__mark i:nth-child(3) { height: 75%; animation-delay: -600ms !important; }
+.group:disabled .record, .group:disabled .place { cursor: not-allowed; opacity: 0.5; }
+
+/* Date: the score. One bar per date for the place being read (decorative), behind the native
+   slider, the zero of a diverging record on the track, the thumb riding on it. */
+.time { display: grid; gap: 12px; }
+.fader { display: grid; min-width: 0; }
+.fader__top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 12px; } /* wraps at 200% text instead of widening the page */
+.fader__top label { margin-bottom: 0; }
+.fader__top output { font: 500 var(--t-sm)/1 var(--font-ui); font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; }
+.fader__track { position: relative; height: 48px; }
+.fader__track input[type="range"] { position: relative; z-index: 1; display: block; height: 100%; }
+.fader__scale { display: flex; justify-content: space-between; font-size: var(--t-xs); line-height: 1; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.fader__legend { margin: 6px 0 0; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); }
+/* The bars sit on the thumb's travel: half a thumb (8 px) in from each end, centred on each step. */
+.score { position: absolute; top: 0; bottom: 0; left: calc(8px - var(--bw, 3px) / 2); right: calc(8px - var(--bw, 3px) / 2); display: flex; justify-content: space-between; pointer-events: none; }
+.score i { position: relative; flex: none; width: var(--bw, 3px); height: 100%; }
+.score i::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 50%; height: calc(50% - 2px);
+  background: var(--c, var(--ink-2)); opacity: 0.62; border-radius: 1px 1px 0 0;
+  transform-origin: 50% 100%; transform: scaleY(var(--k, 0));
+  transition: transform 220ms var(--ease), background-color 200ms var(--ease), opacity 200ms var(--ease);
+}
+.score i.is-down::before { bottom: auto; top: 50%; border-radius: 0 0 1px 1px; transform-origin: 50% 0; }
+/* A sequential record grows up from the track only. */
+.score.is-sequential i::before { height: calc(50% - 2px); }
+/* No data: a dead groove, a small hollow ring on the track, never a short bar. */
+.score i.is-nodata::before { left: 50%; right: auto; bottom: 50%; width: 5px; height: 5px; margin: 0 0 -2.5px -2.5px; border-radius: 50%; background: var(--space); border: 1px solid var(--ink-3); transform: none; opacity: 1; }
+.score.is-loading i::before { transform: scaleY(0); }
+.score i.is-now::before { opacity: 1; }
+/* During Play the dates already played are stronger than the ones to come. */
+body.is-playing .score i::before { opacity: 0.34; }
+body.is-playing .score i.is-past::before, body.is-playing .score i.is-now::before { opacity: 1; }
+body.is-playing .score i.is-nodata::before { opacity: 1; }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 40px; margin: 0; background: transparent; cursor: pointer; touch-action: manipulation; }
+input[type="range"]::-webkit-slider-runnable-track { height: 1px; background: var(--line); }
+input[type="range"]::-moz-range-track { height: 1px; background: var(--line); }
+input[type="range"]::-moz-range-progress { height: 1px; background: var(--ink-2); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -7.5px; border: 0; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px var(--space); transition: transform 150ms var(--ease); }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px var(--space); }
+input[type="range"]:focus-visible { outline-offset: 0; border-radius: var(--radius); }
+input[type="range"]:disabled { opacity: 0.45; cursor: not-allowed; }
+.fader__track:has(input:disabled) .score { opacity: 0.45; }
+
+/* Buttons: hairline keys; a pressed key is inverted, so the state never rests on color alone */
+.key, .sheet__close {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 44px; padding: 8px 14px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--radius); background: transparent;
+  font: 500 var(--t-sm)/1.2 var(--font-ui); color: var(--ink); text-align: center;
+  transition: background-color 150ms var(--ease), border-color 150ms var(--ease), color 150ms var(--ease);
+}
+.key .ico { flex: none; width: 18px; height: 18px; fill: currentColor; }
+.key:active:not(:disabled), .sheet__close:active { background: var(--sel); }
+.key:disabled { opacity: 0.45; cursor: not-allowed; }
+.key[aria-pressed="true"],
+body.is-comparing .key--compare { background: var(--ink); border-color: var(--ink); color: var(--space); }
+.key[aria-pressed="true"] kbd, body.is-comparing .key--compare kbd { color: var(--space); border-color: rgb(0 0 0 / 0.45); }
+.ico--pause { display: none; }
+body.is-playing .key--play .ico--play, .key--play[aria-pressed="true"] .ico--play { display: none; }
+body.is-playing .key--play .ico--pause, .key--play[aria-pressed="true"] .ico--pause { display: inline; }
+/* Play through time: the panel's primary key. Full width, taller, a stronger edge and label, its
+   shortcut as a key cap, and while it runs a thin line along its lower edge: how far it has gone. */
+.key--play {
+  position: relative; overflow: hidden; width: 100%; min-height: 52px; justify-content: flex-start; gap: 12px; padding-inline: 16px 12px;
+  border-color: var(--ink-2); font: 600 var(--t-md)/1.2 var(--font-ui);
+}
+.key--play .ico { width: 20px; height: 20px; }
+.key--play kbd { margin-left: auto; }
+.key--play::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cobalt-deep);
+  transform-origin: 0 50%; transform: scaleX(var(--progress, 0)); opacity: 0; transition: transform var(--turn, 1429ms) linear, opacity 150ms var(--ease);
+}
+body.is-playing .key--play::after { opacity: 1; }
+/* During Play the values change every step: no colour transition on them (style work per frame). */
+body.is-playing .place__val { transition: none; }
+/* Compare: the select (date B) and its key, then what it plays: A and B, and their values. */
+.compare__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.key--compare kbd { margin-left: 2px; }
+.cpair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin: 8px 0 0; font-size: var(--t-xs); line-height: 20px; color: var(--ink-2); }
+.cpair__item { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cpair__letter { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border: 1px solid var(--line); border-radius: var(--radius); font: 600 var(--t-sm)/1 var(--font-display); color: var(--ink); }
+.cpair__date { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cpair__val { margin-left: auto; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.cpair__val:empty { display: none; }
+body.is-comparing .cpair__letter { border-color: var(--ink-2); }
+/* Sound legend and Stop: secondary, one row, their key caps at the right. */
+.keys { display: flex; flex-wrap: wrap; gap: 8px; }
+.keys .key { flex: 1 1 auto; justify-content: flex-start; }
+.keys .key kbd { margin-left: auto; }
+#legend { color: var(--ink-2); }
+
+select {
+  width: 100%; min-height: 44px; padding: 8px 38px 8px 12px; cursor: pointer; touch-action: manipulation;
+  -webkit-appearance: none; appearance: none;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  font: 500 var(--t-sm)/1.3 var(--font-ui); color: var(--ink);
+  background-color: var(--space);
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: calc(100% - 19px) 52%, calc(100% - 14px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+select:disabled { opacity: 0.45; cursor: not-allowed; }
+option { background: var(--sheet); color: var(--ink); }
+
+@media (hover: hover) and (pointer: fine) {
+  .bar__btn:hover:not(:active) { color: var(--ink); background: var(--hover); border-color: var(--hair-2); }
+  .lang__btn:hover:not([aria-pressed="true"]) { color: var(--ink); background: var(--hover); border-color: var(--ink-2); z-index: 1; }
+  .power:hover { background: var(--cobalt-press); }
+  .console-toggle:hover { color: var(--ink); }
+  .console-toggle:hover::before { border-color: var(--ink-2); }
+  .record:hover:not(:has(input:checked)), .place:hover:not(:has(input:checked)) { background: var(--hover); }
+  .record:hover:not(:has(input:checked)) { border-color: var(--line); }
+  .record:hover .record__title, .place:hover .place__name { color: var(--ink); }
+  .place:hover .place__mark { border-color: var(--ink-2); }
+  .place:hover .place__code { color: var(--ink-2); }
+  .group:disabled .record:hover, .group:disabled .place:hover { background: transparent; }
+  .key:hover:not(:disabled):not([aria-pressed="true"]), .sheet__close:hover { border-color: var(--ink-2); background: var(--hover); }
+  body.is-comparing .key.key--compare:hover:not(:disabled) { background: var(--ink-2); border-color: var(--ink-2); color: var(--space); }
+  select:hover:not(:disabled) { border-color: var(--ink-2); }
+}
+
+/* ---------- The NASA frame under the needle ---------- */
+.sleeve { padding: clamp(56px, 8vw, 120px) var(--gutter) clamp(40px, 5vw, 72px); border-top: 1px solid var(--hair); }
+.sleeve__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; margin-bottom: 28px; }
+.sleeve h2 { margin: 0; font: 600 clamp(2rem, 1.3rem + 2vw, 3rem)/1.05 var(--font-display); letter-spacing: -0.01em; text-wrap: balance; }
+.sleeve__aside { margin: 0; font-size: var(--t-sm); color: var(--ink-2); }
+.sleeve__note { margin: -12px 0 28px; max-width: 68ch; color: var(--ink-2); text-wrap: pretty; }
+.plates { display: grid; gap: 24px; }
+.plates.is-compare { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.plate { position: relative; margin: 0; min-width: 0; }
+.plate__img { position: relative; aspect-ratio: 2 / 1; overflow: hidden; background: var(--space); outline: 1px solid var(--hair-2); }
+.plate__img img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 500ms var(--ease); }
+.plate__img img.is-loaded { opacity: 1; }
+.graticule { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(to right, var(--grat) 1px, transparent 1px), linear-gradient(to bottom, var(--grat) 1px, transparent 1px); background-size: calc(100% / 12) calc(100% / 6); }
+.crosshair { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transition: left 600ms var(--ease), top 600ms var(--ease); }
+/* A dot clicked on the frame: the crosshair glides to it in about a second before the page goes up to the globe. */
+.crosshair.is-gliding { transition-duration: 1000ms; }
+/* A dark keyline keeps the amber crosshair readable on the warm end of the SST colorbar. */
+.crosshair::before, .crosshair::after { content: ""; position: absolute; background: var(--amber); box-shadow: 0 0 0 1.5px var(--keyline); }
+.crosshair::before { width: 48px; height: 1.5px; left: -24px; top: -0.75px; }
+.crosshair::after { width: 1.5px; height: 48px; left: -0.75px; top: -24px; }
+.crosshair i { position: absolute; width: 26px; height: 26px; left: -13px; top: -13px; border-radius: 50%; border: 1.5px solid var(--amber); box-shadow: 0 0 0 1.5px var(--keyline), inset 0 0 0 1.5px var(--keyline); }
+body.is-playing .crosshair i { animation: ping 1.4s var(--ease) infinite; }
+/* Place dots on plate A, the globe's convention: land a solid ice-white dot, ocean an ice-white ring
+   with a dark center (its own contrast on any temperature colour), both inside a dark keyline that
+   also keeps them apart from the fire frame's own specks; amber is only the crosshair. The other
+   record's places a little smaller. Under the crosshair in paint order; pointer targets are 24 px
+   squares measured by the script, however small the dot is drawn. */
+.plate__dots { position: absolute; inset: 0; pointer-events: none; }
+.pdot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 1.5px var(--dot-key); }
+.pdot--ocean { background: var(--dot-key); border: 2.5px solid var(--ink); }
+.pdot--off { width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; }
+.pdot--off.pdot--ocean { border-width: 2px; }
+.plate__tip { z-index: 3; }
+.plate__tag {
+  position: absolute; left: 12px; top: 12px; display: flex; align-items: center; gap: 10px;
+  padding: 4px 10px 4px 4px; border: 1px solid var(--hair-2); border-radius: var(--radius); background: var(--veil);
+  font: 500 var(--t-xs)/1 var(--font-ui); color: var(--ink); font-variant-numeric: tabular-nums;
+  pointer-events: none; /* a press on it reaches the place dots under it */
+}
+.plate__letter { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--ink); border-radius: var(--radius); font: 600 var(--t-md)/1 var(--font-display); }
+#frame-a .plate__letter { display: none; }
+#frame-a .plate__tag { padding-left: 10px; }
+.plates.is-compare #frame-a .plate__letter { display: grid; }
+.plates.is-compare #frame-a .plate__tag { padding-left: 4px; }
+.beat { grid-column: 1 / -1; height: 48px; overflow: hidden; border-block: 1px solid var(--hair); }
+.beat svg { display: block; width: 200%; height: 100%; animation: drift 2.4s linear 2; }
+.beat path { fill: none; stroke: var(--cobalt-hi); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+/* NASA's published colour scale: subordinate to the frame, at its own proportions, framed by a hairline. */
+.colorbar { margin: 24px 0 0; max-width: 100%; }
+.colorbar img { display: block; width: min(100%, 36rem); height: auto; outline: 1px solid var(--hair-2); background: var(--sheet); }
+.sleeve__credit { margin: 14px 0 0; max-width: 80ch; font-size: var(--t-xs); line-height: 1.5; color: var(--ink-3); text-wrap: pretty; }
+.colorbar figcaption { margin-top: 10px; max-width: 68ch; font-size: var(--t-xs); line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
+
+.foot { display: grid; gap: 6px; padding: 28px var(--gutter) 44px; border-top: 1px solid var(--hair); font-size: var(--t-xs); color: var(--ink-3); }
+.foot p { margin: 0; max-width: 80ch; text-wrap: pretty; }
+
+/* ---------- Dialogs: one calm reading surface each ---------- */
+.sheet {
+  --pad: clamp(20px, 4vw, 40px);
+  width: min(46rem, calc(100% - 32px)); /* % of the viewport without a classic scrollbar, not 100vw */ max-height: min(88svh, 60rem); padding: 0 var(--pad) 32px; overflow: auto;
+  border: 1px solid var(--hair-2); border-radius: 4px; background: var(--sheet); color: var(--ink);
+  scrollbar-color: var(--hair-2) var(--sheet);
+}
+.sheet::backdrop { background: rgb(0 3 12 / 0.8); }
+.sheet__head {
+  position: sticky; top: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 22px var(--pad) 18px; margin: 0 calc(-1 * var(--pad)) 8px;
+  background: var(--sheet); border-bottom: 1px solid var(--hair);
+}
+.sheet h2 { margin: 0; font: 600 clamp(1.5rem, 1.2rem + 1vw, 1.875rem)/1.15 var(--font-display); text-wrap: balance; outline: none; }
+.sheet__close { flex: none; }
+.sheet p { max-width: 64ch; margin-top: 16px; margin-bottom: 0; color: var(--ink-2); text-wrap: pretty; }
+
+.liner__list { margin-block: 8px 0; }
+.liner__list > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 4px 24px; padding: 16px 0; border-top: 1px solid var(--hair); }
+.liner__list > div:first-child { border-top: 0; }
+.liner__list dt { font: 600 var(--t-sm)/1.5 var(--font-ui); color: var(--ink-2); }
+.liner__list dd { margin: 0; max-width: 60ch; line-height: 1.6; overflow-wrap: anywhere; text-wrap: pretty; }
+
+.guide__body h3 { margin: 32px 0 6px; font: 600 var(--t-lg)/1.2 var(--font-display); color: var(--ink); }
+.guide__body ul { margin: 0; padding: 0; list-style: none; }
+.guide__body li { display: grid; grid-template-columns: minmax(7rem, 10rem) minmax(0, 1fr); gap: 4px 20px; align-items: baseline; padding: 10px 0; border-top: 1px solid var(--hair); }
+.guide__body li:first-child { border-top: 0; }
+.guide__body li kbd { justify-self: start; font-size: var(--t-xs); line-height: 1.5; padding: 2px 7px; }
+/* Gestures are not keys: plain text in the key column. */
+.guide__gesture { justify-self: start; font: 500 var(--t-sm)/1.5 var(--font-ui); color: var(--ink); }
+.guide__opt { display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--hair-2); color: var(--ink-2); cursor: pointer; }
+.guide__opt input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--cobalt); cursor: pointer; }
+
+/* Cormorant defaults to old-style figures; coordinates and dates read better lining.
+   Declared after the font shorthands above, which would reset it. */
+.mark__name, .intro h1, .readout__place, .record__title, .sleeve h2, .sheet h2, .guide__body h3, .plate__letter { font-variant-numeric: lining-nums; }
+
+/* ---------- Motion ---------- */
+@keyframes ping { 0% { transform: scale(0.7); opacity: 1; } 100% { transform: scale(1.7); opacity: 0; } }
+@keyframes drift { to { transform: translateX(-50%); } }
+@keyframes turn { to { transform: rotate(360deg); } }
+@keyframes sounding { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+
+/* ---------- Tablet ---------- */
+@media (min-width: 640px) and (max-width: 1099.98px), (min-width: 640px) and (max-width: 51.99em) {
+  .places__list { grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+  .readout { --disc: 64px; }
+  .time { grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 20px; }
+  .key--play { width: auto; min-width: 16rem; }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 639.98px) {
+  .plates.is-compare { grid-template-columns: minmax(0, 1fr); }
+  .plates.is-compare #frame-a { order: 1; }
+  .plates.is-compare .beat, .plates.is-compare .beat__cap { order: 2; }
+  .plates.is-compare #frame-b { order: 3; }
+  /* A phone's plate is small: the date tag goes under the frame instead of over its top left dots. */
+  .plate__tag { position: static; display: inline-flex; margin-top: 8px; }
+  .liner__list > div, .guide__body li { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1099.98px), (max-width: 51.99em) {
+  .bar { gap: 2px 14px; padding-block: 10px 6px; }
+  .bar__tools { margin-left: auto; }
+  .bar__btn { padding-inline: 8px; }
+}
+/* Phone header: the wordmark and the dialogs set smaller, wrapping as they fit; the bar's inset
+   takes back the buttons' 6 px padding, so their text lines up with the gutter on every row; the
+   tagline on one line, so the planet band starts high. */
+@media (max-width: 639.98px) {
+  .bar { column-gap: 0; padding-block: 8px 2px; padding-inline: calc(var(--gutter) - 6px); }
+  .mark { margin-right: auto; margin-left: 6px; }
+  /* The cluster's items wrap with the wordmark as before (same order), text only, a compact switch. */
+  .bar__tools { display: contents; }
+  .bar__btn { padding-inline: 6px; font-size: var(--t-xs); }
+  .bar__btn .ico { display: none; }
+  .lang { margin-left: 6px; padding-left: 0; }
+  .lang::before { display: none; }
+  .lang__btn { min-height: 32px; padding-inline: 9px; }
+  .lang__btn::after { inset: -6px 0; }
+  .intro { padding-top: 6px; padding-bottom: 14px; }
+  .intro h1 { max-width: none; font-size: 1.625rem; line-height: 1.1; }
+  .intro__lede { max-width: 40ch; margin-top: 6px; font-size: var(--t-xs); }
+}
+
+/* ---------- Desktop: a full-bleed stage, the console docked on the right ----------
+   Only when the window is also at least 52em wide (832 px at the default text size): with a large
+   text size the page falls back to the stacked layout instead of overflowing (WCAG reflow). */
+@media (min-width: 1100px) and (min-width: 52em) {
+  /* Capped by the viewport as well: with a large text size the rem widths would overflow it. */
+  :root { --console: min(22.5rem, 36vw); --rail: min(17rem, 26vw); --row: max(100svh, 32rem); }
+  .bar { position: absolute; top: 0; left: 0; right: 0; height: var(--bar-h); flex-wrap: nowrap; padding-block: 0; pointer-events: none; }
+  .bar > * { pointer-events: auto; }
+  /* The cluster's right edge sits on the console's content edge (the console's own padding). */
+  :root { --cpad: 28px; }
+  .bar { padding-right: var(--cpad); }
+  .bar__tools { margin-left: auto; flex-wrap: nowrap; }
+  .synthetic { position: absolute; top: var(--bar-h); left: 0; }
+  body:has(#synthetic:not([hidden])) .intro { padding-top: calc(var(--bar-h) + 4.5rem); }
+
+  /* First row: exactly one viewport. Nothing sticks; a console taller than the viewport scrolls
+     inside itself, and the NASA frame and the footer follow below at full width. */
+  main { display: grid; grid-template-columns: minmax(0, 1fr) var(--console); grid-template-rows: var(--row) auto; }
+  .intro, .stage { grid-column: 1; grid-row: 1; }
+  .intro { align-self: start; }
+  .intro { width: calc(var(--gutter) + var(--rail)); padding: calc(var(--bar-h) + 2.25rem) 24px 0 var(--gutter); }
+  .stage {
+    --safe-l: calc(var(--gutter) + var(--rail));
+    height: 100%; padding-top: 0; z-index: 1;
+  }
+  .stage__view { inset: 0; height: auto; }
+  /* The free box: right of the text rail (intro above, readout below), under the header, up to the console. */
+  .stage__safe { left: var(--safe-l); top: var(--bar-h); right: 0; bottom: 0; height: auto; }
+  .flat { left: var(--safe-l); top: var(--bar-h); }
+  /* Shadow, not panels: above the canvases and below the type, black at the left edge fading out past
+     the text rail, and black under the header fading out below it. At 0.9 black even white data
+     under the words stays darker than #222, so --ink-3 keeps 4.5:1. */
+  .stage::before, .stage::after { content: ""; position: absolute; z-index: 1; pointer-events: none; }
+  .stage::before { left: 0; right: 0; top: 0; height: calc(var(--bar-h) + 96px); background: linear-gradient(180deg, var(--shade) 0, var(--shade) calc(var(--bar-h) - 4px), transparent); }
+  .stage::after {
+    inset: 0;
+    background:
+      linear-gradient(90deg, var(--shade) 0, var(--shade) calc(var(--safe-l) - 16px), transparent calc(var(--safe-l) + 180px)),
+      var(--edge-shade, linear-gradient(270deg, var(--space) 0, var(--shade-edge) 28px, transparent 170px));
+  }
+  .readout { --disc: 72px; position: absolute; z-index: 2; left: var(--gutter); bottom: max(clamp(24px, 5svh, 52px), calc(0.8125rem * 1.2 + 12px)); width: calc(var(--rail) - 24px); margin: 0; padding: 0; text-shadow: 0 1px 3px var(--space); }
+  /* The rail is too narrow to share the value row (a saturated "≥+4.0 °C" would wrap): the disc
+     stands above the place name instead, in the rail's free height, without moving the type. */
+  .readout__value { position: static; min-height: 0; padding-right: 0; }
+  .readout__disc { left: 0; right: auto; top: calc(-1 * var(--disc) - 20px); margin-top: 0; }
+  .stage__tip { z-index: 4; }
+
+  .console {
+    /* The scroll box starts under the header: content scrolled up inside the console is clipped by
+       its own box and never drawn over the header's keys. */
+    grid-column: 2; grid-row: 1; align-self: start; margin-top: calc(var(--bar-h) + var(--remote-h, 0px)); height: calc(var(--row) - var(--bar-h) - var(--remote-h, 0px)); overflow-y: auto; scrollbar-width: thin;
+    display: flex; flex-direction: column;
+    padding: 4px 28px 0; border-top: 0; border-left: 1px solid var(--hair-2);
+    scroll-padding-bottom: 5rem; /* a focused control never hides under the pinned keys (WCAG 2.4.11) */
+  }
+  .console > * { flex: none; }
+  .console > .group { margin-top: 10px; padding-top: 11px; }
+  .group > legend, .compare > label { margin-bottom: 6px; }
+  .group__help { margin-bottom: 6px; line-height: 1.35; }
+  .status { padding-top: 0; min-height: 44px; }
+  .power { min-height: 44px; padding-block: 6px; }
+  .records__list { gap: 6px; }
+  /* Side by side the sleeves are narrow: the record's description steps out of sight but stays in
+     the radio's accessible name. */
+  .record__short { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  /* The place list takes the height that is left (it is the only part that flexes), so the whole
+     console fits the window: every key, Stop included, stays in view without scrolling. */
+  /* Stop is the safety control: the playback keys stay pinned to the console's bottom edge. */
+  .console > .keys { position: sticky; bottom: 0; z-index: 1; margin-top: 10px; padding-bottom: 12px; background: var(--space); flex-wrap: nowrap; }
+  .keys .key { min-width: 0; padding-inline: 8px; gap: 6px; font-size: var(--t-xs); white-space: nowrap; }
+  .keys .key .ico { width: 16px; height: 16px; }
+  .console > .places { flex: 1 1 0; min-height: 8.5rem; grid-template-rows: auto auto minmax(0, 1fr); }
+  .places__list { min-height: 0; overflow-y: auto; margin-inline: -3px; margin-block: 0; padding-block: 3px; scroll-padding-block: 6px; border-block: 1px solid var(--hair); }
+  .time { gap: 10px; }
+  .fader__track { height: 40px; }
+  .fader__scale { margin-top: 2px; }
+  .compare select { padding-inline: 10px 28px; background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%; }
+
+  /* The console's tab: sits on the hairline (the place to grab), 44 x 60 px hit area. Collapsed, the
+     stage takes the whole width and the tab waits at the viewport's right edge. No slide: the change is a cut. */
+  main { position: relative; }
+  .console-toggle {
+    position: absolute; z-index: 6; top: calc(var(--row) / 2 - 30px); left: calc(100% - var(--console) - 22px);
+    display: block; width: 44px; height: 60px; padding: 0; border: 0; background: transparent; cursor: pointer; color: var(--ink-2);
+  }
+  .console-toggle::before { content: ""; position: absolute; left: 11px; top: 4px; width: 22px; height: 52px; border: 1px solid var(--line); border-radius: 3px; background: var(--space); }
+  .console-toggle::after {
+    content: ""; position: absolute; left: 14px; top: 22px; width: 16px; height: 16px; background: currentColor;
+    -webkit-mask: var(--chevron) center / contain no-repeat; mask: var(--chevron) center / contain no-repeat;
+  }
+  .console-toggle > * { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .console-toggle:focus-visible { outline: none; }
+  .console-toggle:focus-visible::before { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .console-toggle[aria-expanded="false"]::after { transform: scaleX(-1); }
+  body.console-collapsed main { grid-template-columns: minmax(0, 1fr); }
+  body.console-collapsed .console-toggle { left: auto; right: 0; }
+  body.console-collapsed .console-toggle::before { left: auto; right: 0; border-right: 0; border-radius: 3px 0 0 3px; }
+  body.console-collapsed .console-toggle::after { left: auto; right: 4px; }
+  body.console-collapsed .stage { --edge-shade: linear-gradient(transparent, transparent); }
+  .power-slot { padding-top: 0; }
+  .sleeve { grid-column: 1 / -1; grid-row: 2; }
+}
+/* Up to a wide console, the caps of Sound legend and Compare step aside, so the two secondary keys
+   fit one row and the Compare select keeps its words (L and C are in the keyboard guide and in
+   aria-keyshortcuts); Play keeps its P and Stop its Esc. */
+@media (min-width: 1100px) and (min-width: 52em) and (max-width: 1599.98px) {
+  #legend kbd, #compare kbd { display: none; }
+}
+@media (min-width: 1280px) {
+  :root { --console: min(clamp(24rem, 27vw, 28rem), 38vw); --rail: min(clamp(18rem, 22vw, 24rem), 28vw); }
+  .readout { --disc: 84px; }
+  :root { --cpad: 32px; }
+  .console { padding-inline: 32px; }
+  .console { scroll-padding-bottom: 5rem; }
+}
+/* A short desktop window has no free height above the readout: the disc, a little smaller, moves
+   beside the date and record lines with its foot on the value row (so it adds no height and never
+   depends on how the intro or the place name wrap), and those two lines make room for it. */
+@media (min-width: 1100px) and (min-width: 52em) and (max-height: 759.98px) {
+  .readout { --disc: 52px; }
+  .readout__value { position: relative; }
+  .readout__disc { left: auto; right: 0; top: auto; bottom: calc(100% + 2px); }
+  .readout__date, .readout__record { padding-right: calc(var(--disc) + 12px); }
+}
+
+/* A short desktop window (1280 x 720, 1100 x 800): the console must fit without hiding Compare under
+   the pinned keys, and the place list must keep more than two rows. The record's one-line
+   description and the place list's help step out of sight but stay in the accessibility tree (the
+   description is part of the radio's name, the help is the list's aria-describedby). */
+@media (min-width: 1100px) and (min-width: 52em) and (max-height: 859.98px) {
+  .record__short, #places-help { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .record { min-height: 44px; padding-block: 4px; }
+  .console > .places { min-height: 7.5rem; } /* it grows into whatever height is left (flex) */
+  .console > .group { margin-top: 5px; padding-top: 6px; }
+  .status { min-height: 0; }
+  .sound-on { min-height: 34px; }
+  .cpair { margin-top: 5px; }
+  .key--play { min-height: 46px; }
+  .fader__track { height: 36px; }
+  .fader__legend { margin-top: 3px; }
+}
+
+/* A very short desktop window (a notebook at 125 to 150% display scaling, 587 to 680 px tall): the
+   console compresses further; the place list keeps at least two rows. Below that the console
+   scrolls inside itself, its playback keys (Stop) pinned to its bottom edge, always in view. */
+@media (min-width: 1100px) and (min-width: 52em) and (max-height: 679.98px) {
+  .console { padding-top: 0; }
+  .console > .places { min-height: 6.5rem; }
+  /* The key-cap hint steps aside (the list's description still says it; the guide lists the keys). */
+  .places > .hint { display: none; }
+  .console > .group { margin-top: 4px; padding-top: 5px; }
+  .group > legend, .compare > label { margin-bottom: 4px; }
+  .sound-on { min-height: 30px; }
+  .record { min-height: 40px; padding-block: 3px; }
+  .record__title { font-size: var(--t-sm); }
+  .record__disc { width: 30px; height: 30px; }
+  .record { grid-template-columns: 30px minmax(0, 1fr); }
+  .key--play { min-height: 44px; }
+  .fader__track { height: 32px; }
+  .fader__legend { margin-top: 2px; }
+  .cpair { margin-top: 4px; }
+  .console > .keys { margin-top: 6px; padding-bottom: 8px; }
+}
+
+/* ---------- The rail fitter (view.js fitRail) ----------
+   The readout stands at the bottom of the left rail and grows upward; the intro stands at the top.
+   When they would meet, these steps are taken in order until they do not: the intro gives way first
+   (the lede, then a smaller headline, then the headline), then the readout's optional parts (the
+   record line, the picture disc, the note, the Compare legend, the scale, the wave). The value and
+   the A and B rows always stay. Text of the page leaves the screen but not the accessibility tree. */
+@media (min-width: 1100px) and (min-width: 52em) {
+  main.fit-1 .intro__lede,
+  main.fit-3 .intro h1 { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  main.fit-2 .intro h1 { font-size: 1.75rem; line-height: 1.08; max-width: 18ch; }
+  main.fit-4 .readout__record,
+  main.fit-5 .readout__disc,
+  main.fit-6 .readout__note,
+  main.fit-7 .readout__beatcap,
+  main.fit-8 .scale,
+  main.fit-9 .readout__beat { display: none; }
+  main.fit-5 .readout__date, main.fit-5 .readout__record { padding-right: 0; }
+}
+
+/* Now playing: desktop only, while Play runs. A quiet corner of the stage, top right under the
+   header (in its shade), away from the place at the center and from the readout in the rail. */
+.nowplaying { display: none; }
+@media (min-width: 1100px) and (min-width: 52em) {
+  body.is-playing .nowplaying { display: grid; }
+  /* Sized by its content (never wider than the stage's free part), its right edge on the page
+     gutter: a fixed width let a long pt-BR date widen the grid track past the stage's edge. */
+  .nowplaying { position: absolute; z-index: 3; top: calc(var(--bar-h) + 8px); right: var(--gutter); width: max-content; max-width: calc(100% - var(--safe-l) - 2 * var(--gutter)); grid-template-columns: minmax(0, 1fr); gap: 6px; justify-items: end; text-shadow: 0 1px 3px var(--space); }
+  .nowplaying p { margin: 0; }
+  /* Steps down from 26 px toward 20 px on narrower windows instead of overflowing. */
+  .nowplaying__date { max-width: 100%; font: 600 clamp(var(--t-lg), 0.6rem + 1.1vw, var(--t-xl))/1.1 var(--font-ui); font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; }
+  .nowplaying__line { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; min-width: 15rem; font-size: var(--t-xs); line-height: 1.2; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  /* The strip's time line is the score again, smaller: the same bars for the same place. */
+  .nowplaying__track { position: relative; height: 28px; container-type: inline-size; }
+  .score--mini { left: calc(var(--bw, 3px) / -2); right: calc(var(--bw, 3px) / -2); }
+  .score--mini i::before { height: calc(50% - 1px); }
+  .nowplaying__track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+  /* Moved by transform in the track's container units (a left transition would lay out every frame). */
+  .nowplaying__marker { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; margin-left: -1px; background: var(--ink); box-shadow: 0 0 0 1px var(--keyline); transform: translateX(calc(var(--p, 0) * 100cqw)); transition: transform 400ms var(--ease); }
+  .nowplaying__pause { min-height: 36px; padding: 4px 12px; background: var(--space); font-size: var(--t-xs); text-shadow: none; }
+}
+
+/* ---------- Phones and touch (round 7) ---------- */
+/* Desktop: the credit sits at the stage's bottom right, left of the console. */
+@media (min-width: 1100px) and (min-width: 52em) {
+  /* Bottom of the text rail, under the readout, in the stage shade; the readout's own lift. */
+  .stage__credit { top: auto; right: auto; left: var(--gutter); bottom: 4px; text-shadow: 0 1px 3px var(--space); }
+}
+/* A finger needs 44 px: the date slider too. */
+@media (pointer: coarse) {
+  input[type="range"] { height: 44px; }
+}
+/* Start sound is the first thing to do, and on a phone it sat a page below the fold: until the
+   sound starts it waits pinned to the bottom of the screen. (Its place in the reading order is
+   unchanged.) */
+@media (max-width: 1099.98px) and (pointer: coarse), (max-width: 51.99em) and (pointer: coarse) {
+  /* (Start sound used to be pinned here; the remote's bar is pinned at the bottom now.) */
+}
+/* While sound plays (Play through time, a Compare) Stop stays on screen: a phone has no Esc key.
+   A small key at the bottom right, its focus ring kept. */
+@media (max-width: 1099.98px), (max-width: 51.99em) {
+  /* (Stop used to be pinned here while sound played; the remote's Pause is at the bottom now.) */
+}
+/* Phone: the picture band is shorter, so the globe and the value share one screen. */
+@media (max-width: 639.98px) {
+  .stage { --band: clamp(18rem, 52svh, 30rem); }
+}
+/* A phone held sideways: the phone header, and the picture fills the screen's height. */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 1099.98px) {
+  .bar { column-gap: 0; padding-block: 6px 2px; padding-inline: calc(var(--gutter) - 6px); }
+  .mark { margin-right: auto; margin-left: 6px; }
+  .bar__btn { padding-inline: 6px; font-size: var(--t-xs); }
+  .intro { padding-top: 4px; padding-bottom: 10px; }
+  .intro h1 { max-width: none; font-size: 1.5rem; line-height: 1.1; }
+  .intro__lede { max-width: 60ch; margin-top: 4px; font-size: var(--t-xs); }
+  .stage { --band: calc(100svh - 16px); }
+}
+/* ---------- The opening: a record turns alone, becomes the "O", the wordmark flies to the header ----------
+   Shown only when <html> has .intro-on (set in the head before the first paint: once per browser
+   session, never with reduced motion). js/ui/splash.js runs it and removes it; if that script never
+   runs, the last two animations below lift the veil by themselves. */
+.splash { display: none; }
+.intro-on .splash {
+  --d: clamp(150px, 36vmin, 290px);
+  display: block; position: fixed; inset: 0; z-index: 200; overflow: hidden;
+  animation: splash-out 500ms 9s forwards;
+}
+.intro-on .bar .mark { opacity: 0; animation: splash-mark 1ms 9.4s forwards; }
+.splash__veil { position: absolute; inset: 0; background: var(--space); }
+.splash__hero { position: absolute; left: 50%; top: 50%; width: var(--d); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); }
+.splash__rise { position: relative; width: 100%; height: 100%; animation: splash-rise 1000ms var(--ease) both; }
+.splash__vinyl { display: block; width: 100%; height: 100%; animation: splash-spin 1800ms linear infinite; }
+.sv-body { fill: #04060b; stroke: var(--line); stroke-width: 1; }
+.sv-grooves { fill: none; stroke: var(--ink-2); stroke-width: 0.55; opacity: 0.2; }
+.sv-label { fill: var(--cobalt); }
+.sv-ring { fill: none; stroke: var(--ink); stroke-width: 0.5; opacity: 0.55; }
+.sv-text { font: 400 5.6px var(--font-panel); letter-spacing: 1.5px; fill: var(--ink); }
+.sv-hole { fill: var(--space); }
+/* The light on the grooves stays still while the record turns under it. */
+.splash__sheen {
+  position: absolute; inset: 1.5%; border-radius: 50%; pointer-events: none;
+  background: conic-gradient(from 28deg, transparent 0 5%, rgb(232 240 255 / 0.2) 10%, transparent 16% 52%, rgb(106 165 255 / 0.2) 59%, transparent 66%);
+  -webkit-mask: radial-gradient(closest-side, transparent 38%, #000 40%, #000 97%, transparent 99%);
+  mask: radial-gradient(closest-side, transparent 38%, #000 40%, #000 97%, transparent 99%);
+}
+/* The same mark as the header, set larger in the middle of the screen. */
+.splash .splash__mark { position: absolute; left: 50%; top: 50%; margin: 0; translate: -50% -50%; transform-origin: 50% 50%; white-space: nowrap; }
+.splash__mark .mark__name, .splash__mark .mark__disc { opacity: 0; }
+.splash__mark .mark__disc { transition: none; }
+.splash__mark .mark__sub::before, .splash__mark .mark__sub::after { transform: scaleX(0); transition: transform 750ms var(--ease); }
+.splash__mark .mark__sub::before { transform-origin: 100% 50%; }
+.splash__mark .mark__sub::after { transform-origin: 0 50%; }
+.splash__mark.is-ruled .mark__sub::before, .splash__mark.is-ruled .mark__sub::after { transform: scaleX(1); }
+@keyframes splash-rise { from { opacity: 0; transform: scale(0.8); } }
+@keyframes splash-spin { to { transform: rotate(360deg); } }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+@keyframes splash-mark { to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Windows high contrast: shadows and fills are dropped, so every control gets a real border and the
+   selected record, place, view, language or pressed key a thick Highlight border. */
+/* The console is in the page flow below 1100 px: no tab there. */
+@media (max-width: 1099.98px), (max-width: 51.99em) { .console-toggle { display: none; } }
+
+@media (forced-colors: active) {
+  .console-toggle::before { border-color: ButtonText; }
+  .console-toggle::after { forced-color-adjust: none; background: ButtonText; }
+  .bar__btn, .lang__btn, .power, .record, .place { border: 1px solid ButtonText; }
+  .record:has(input:checked), .place:has(input:checked),
+  .lang__btn[aria-pressed="true"],
+  .key[aria-pressed="true"], body.is-comparing .key--compare { border: 3px solid Highlight; }
+  .place:has(input:checked) .place__mark { forced-color-adjust: none; background: Highlight; border-color: Highlight; }
+  .place__mark i { forced-color-adjust: none; background: Highlight; }
+  .score i::before { forced-color-adjust: none; background: CanvasText; }
+  .key--play::after { forced-color-adjust: none; background: Highlight; }
+  .scale__track::before, .scale__track::after, .scale__marker::before, .scale__marker::after { forced-color-adjust: none; background: CanvasText; }
+  .mark__sub::before, .mark__sub::after { forced-color-adjust: none; background: CanvasText; }
+  /* The plain letter "O" comes back in place of the drawn record. */
+  .mark__o { color: inherit; }
+  .mark__disc { display: none; }
+  .crosshair, .crosshair i, .pdot { forced-color-adjust: none; }
+  .sheet { border: 2px solid CanvasText; }
+}
+
+
+/* ---------- The remote: the tour and five plain buttons (first in the reading order) ----------
+   Native keys in the console's own vocabulary: the one filled button (Start the guided tour) before
+   the sound, then a quiet grid of hairline keys, Pause first. On a phone or a tablet the buttons
+   are pinned to the bottom of the screen, 56 px tall; on the desktop they are the console's top row,
+   under the header. The voice guide's box sits with them; the status line is for the eye only. */
+.remote { position: relative; z-index: 12; padding: 10px var(--gutter) 6px; background: var(--space); }
+.remote__keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.remote__keys .key { min-width: 0; justify-content: flex-start; gap: 8px; padding-inline: 10px; font-size: var(--t-sm); line-height: 1.15; text-align: left; }
+.remote__keys .key .ico { width: 16px; height: 16px; }
+.remote__play { border-color: var(--ink-2); font-weight: 600; }
+.remote__play.is-going .ico--play { display: none; }
+.remote__play.is-going .ico--pause { display: inline; }
+.remote__voice { margin-top: 2px; min-height: 36px; }
+.remote__status { margin: 0; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); }
+.remote__status:empty { display: none; }
+#r-tour, #r-record { color: var(--ink-2); }
+/* A keyboard user's skip link, never shown on a touch screen; no keyboard guide there either. */
+body.touch-ui .skip, body.touch-ui #guide-open { display: none; }
+
+/* Phones and tablets: the buttons pinned to the bottom of the screen, large; the voice guide's box
+   stays at the top of the page, in the reading order right after them. */
+@media (max-width: 1099.98px), (max-width: 51.99em) {
+  .remote__keys {
+    position: fixed; z-index: 30; left: 0; right: 0; bottom: 0;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: var(--space); border-top: 1px solid var(--hair-2);
+  }
+  .remote__keys .key { min-height: 56px; padding-inline: 8px; gap: 6px; font-size: var(--t-sm); }
+  body { padding-bottom: var(--remote-bar, 0px); }
+}
+
+/* Desktop: the console's top row, under the header, in the console's column. */
+@media (min-width: 1100px) and (min-width: 52em) {
+  .remote { position: absolute; top: var(--bar-h); right: 0; width: var(--console); padding: 6px var(--cpad) 8px; border-left: 1px solid var(--hair-2); border-bottom: 1px solid var(--hair); }
+  .remote__keys .key { min-height: 38px; padding-block: 4px; font-size: var(--t-xs); }
+  body.console-collapsed .nowplaying { top: calc(var(--bar-h) + var(--remote-h, 0px) + 12px); }
+  /* The console's own status row no longer holds Start: the remote does. */
+  .console .status { min-height: 0; }
+}
+
+/* ---------- The gate: the entrance, a full black screen before the app ----------
+   Up from the first paint on every load (<html class="gate-on">, set in the head), so it never
+   depends on the opening. The opening settles its wordmark here; the rows then come in one by one
+   (html.gate-enter, set by js/ui/splash.js when the opening played). The choice: the chosen row
+   holds, the rest fades, the wordmark flies to the header and the black lifts off the Earth
+   (js/app.js leaveGate). Without the opening (a second visit, reduced motion) it is a still page and
+   the choice is a cut. Either way the gate stays until the focus has somewhere to go (at most
+   about 4 s), so the focus never rests on the page's body. Everything behind is inert until the choice. */
+.gate { display: none; }
+html.gate-on { overflow: hidden; }
+html.gate-on .gate {
+  display: block; position: fixed; inset: 0; z-index: 150; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--space);
+}
+/* While the gate is up, nothing of the app is pinned over it (the phone's bar comes with the remote). */
+.gate__inner {
+  display: flex; flex-direction: column; justify-content: center; gap: 0;
+  box-sizing: border-box; min-height: 100%; width: 100%; max-width: 38rem; margin: 0 auto;
+  padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+}
+.gate__mark { align-self: flex-start; font-size: min(clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem), 6.6vw); --hl: 1.5px; transform-origin: 0 0; }
+.gate__mark .mark__disc { animation: gate-disc 9s linear infinite; }
+.gate__rule { width: 100%; height: 0; margin: clamp(16px, 3.2vh, 28px) 0; border: 0; border-top: 1px solid var(--hair-2); }
+/* For the eye only: how to wake the gate's voice (a visitor who cannot see it hears the voice). */
+.gate__tap { margin: 0 0 12px; font-size: var(--t-sm); line-height: 1.4; color: var(--ink-2); }
+@media (max-height: 700px) and (max-width: 600px) { .gate__tap { margin-bottom: 8px; font-size: var(--t-xs); } }
+.gate .remote__purpose {
+  margin: 0; max-width: 34em; font: 400 var(--t-md)/1.5 var(--font-ui); color: var(--ink); text-wrap: balance;
+}
+.gate .remote__entry { position: static; display: grid; gap: 8px; margin-top: clamp(20px, 4vh, 36px); padding: 0; border: 0; background: none; }
+.gate .remote__q { margin: 0 0 6px; font: 600 clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem)/1.1 var(--font-display); color: var(--ink); text-wrap: balance; }
+.gate .remote__entry .power, .gate .remote__entry .key {
+  width: 100%; min-height: 56px; padding: 10px 16px; justify-content: flex-start; gap: 12px;
+  font: 600 var(--t-md)/1.25 var(--font-ui); text-align: left;
+}
+.gate .remote__entry .key { border-color: var(--line); font-weight: 500; color: var(--ink); }
+.gate .remote__entry .key:hover { border-color: var(--ink-2); }
+.gate .remote__entry .ico { width: 20px; height: 20px; fill: currentColor; }
+.gate .remote__explore { color: var(--ink-2); }
+.gate .remote__hint { margin: -2px 0 6px; padding-left: 2px; font-size: var(--t-xs); line-height: 1.35; color: var(--ink-3); }
+/* The arrows' legend, for the eye (a keyboard thing: never on a touch screen). */
+.gate__keys { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 4px 0 0; font-size: var(--t-xs); line-height: 1.3; color: var(--ink-3); }
+.gate__keys kbd { font-size: 0.6875rem; line-height: 1.3; padding: 1px 5px; color: var(--ink-2); border-color: var(--line); }
+.gate__keys span { margin-left: 2px; }
+body.touch-ui .gate__keys { display: none; }
+@media (hover: none) and (pointer: coarse) { .gate__keys { display: none; } }
+/* A Portuguese start, for the length of one parse: the gate's English words are never seen or read. */
+html.lang-pending .gate__inner { visibility: hidden; }
+.gate__lang { align-self: flex-start; flex-wrap: wrap; margin: clamp(16px, 3vh, 28px) 0 0; padding: 0; }
+.gate__lang::before { display: none; }
+.gate__lang .lang__btn { min-height: 36px; padding-inline: 14px; }
+/* Desktop: the statement keeps to two lines. */
+@media (min-width: 1100px) and (min-width: 52em) {
+  .gate__inner { max-width: 44rem; }
+  .gate .remote__purpose { max-width: none; font-size: 1.125rem; line-height: 1.5; }
+}
+/* A short desktop window: tighter spacing, everything still on one screen. */
+@media (max-height: 660px) and (min-width: 601px) {
+  .gate__mark { font-size: min(1.625rem, 6.6vw); }
+  .gate__rule { margin: 14px 0; }
+  .gate .remote__entry { margin-top: 16px; }
+  .gate .remote__q { font-size: 1.75rem; }
+  .gate__lang { margin-top: 14px; }
+}
+/* A short phone screen keeps the whole gate on one screen (it scrolls, never clips, past that). */
+@media (max-height: 700px) and (max-width: 600px) {
+  .gate__mark { font-size: min(1.375rem, 6.6vw); }
+  .gate__rule { margin: 14px 0; }
+  .gate .remote__purpose { font-size: var(--t-sm); line-height: 1.45; }
+  .gate .remote__entry { margin-top: 16px; gap: 6px; }
+  .gate .remote__q { font-size: 1.5rem; }
+  .gate .remote__hint { display: none; }
+  .gate__lang { margin-top: 14px; }
+}
+
+/* Under the opening the gate waits unseen (its buttons already work); if js/ui/splash.js never
+   runs, it shows by itself with the opening's own fallback (9.4 s). */
+.intro-on .gate__inner > * { opacity: 0; animation: splash-mark 1ms 9.4s forwards; }
+/* After the opening: the rows come in, about 70 ms apart, about half a second in all. */
+html.gate-enter .gate__inner > :not(.gate__mark),
+html.gate-enter .gate .remote__entry > * { animation: gate-row 420ms var(--ease) backwards; }
+html.gate-enter .gate__rule { animation-delay: 0ms; }
+html.gate-enter .gate .remote__purpose { animation-delay: 70ms; }
+html.gate-enter .gate .remote__entry { animation: none; }
+html.gate-enter .gate .remote__q { animation-delay: 140ms; }
+html.gate-enter .gate .remote__entry > :nth-child(2), html.gate-enter .gate .remote__entry > :nth-child(3) { animation-delay: 210ms; }
+html.gate-enter .gate .remote__entry > :nth-child(4), html.gate-enter .gate .remote__entry > :nth-child(5) { animation-delay: 280ms; }
+html.gate-enter .gate .remote__entry > :nth-child(6), html.gate-enter .gate .remote__entry > :nth-child(7) { animation-delay: 350ms; }
+html.gate-enter .gate__lang { animation-delay: 420ms; }
+@keyframes gate-row { from { opacity: 0; transform: translateY(8px); } }
+@keyframes gate-disc { to { rotate: 360deg; } }
+
+/* The choice. Full: the other rows fade, the chosen one holds a beat, the black lifts while the
+   wordmark flies to the header (the header's own mark waits for it). Short: one quick fade. */
+html.gate-on .gate.is-leaving { pointer-events: none; background-color: transparent; transition: background-color 600ms 260ms ease-in-out; }
+.gate.is-leaving .gate__inner > :not(.gate__mark):not(.remote__entry),
+.gate.is-leaving .remote__entry > :not(.is-chosen) { opacity: 0; transition: opacity 220ms var(--ease); }
+.gate.is-leaving .is-chosen { opacity: 0; transition: opacity 260ms 360ms var(--ease); }
+html.gate-leaving .bar .mark { opacity: 0; }
+
+/* The voice tour on a touch screen (a visitor who cannot find buttons): the whole screen takes taps
+   and swipes, nothing scrolls or zooms under the finger. Guided modes on a touch layout: the page is
+   the picture and the remote (no console, no flat frame below). */
+html.voice-touch, html.voice-touch body { touch-action: none; overscroll-behavior: none; overflow: hidden; }
+body.guided-touch #console, body.guided-touch .sleeve, body.guided-touch .console-toggle { display: none; }

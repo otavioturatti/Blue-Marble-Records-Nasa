@@ -1,0 +1,150 @@
+[
+ {
+  "inst": "oceandrum",
+  "gesture": "wash",
+  "file": "oceandrum-wash-1.flac",
+  "seconds": 7.23,
+  "peakAtSec": 2.18,
+  "loopStart": 0.094444444,
+  "loopEnd": 7.007777778,
+  "source": "OceanDrum_Sus_1_Mid.wav"
+ },
+ {
+  "inst": "oceandrum",
+  "gesture": "wash",
+  "file": "oceandrum-wash-2.flac",
+  "seconds": 8.8,
+  "peakAtSec": 1.38,
+  "loopStart": 0.336825397,
+  "loopEnd": 8.42015873,
+  "source": "OceanDrum_Sus_2_Mid.wav"
+ },
+ {
+  "inst": "oceandrum",
+  "gesture": "wash",
+  "file": "oceandrum-wash-3.mp3",
+  "seconds": 8.97,
+  "peakAtSec": 8.49,
+  "source": "OceanDrum_Sus_3_Mid.wav"
+ },
+ {
+  "inst": "cabasa",
+  "gesture": "rub",
+  "file": "cabasa-rub-soft-1.mp3",
+  "seconds": 0.8,
+  "peakAtSec": 0.025,
+  "source": "Cabasa1_Rub_v1_rr1_Mid.wav"
+ },
+ {
+  "inst": "cabasa",
+  "gesture": "rub",
+  "file": "cabasa-rub-soft-2.mp3",
+  "seconds": 0.6,
+  "peakAtSec": 0.02,
+  "source": "Cabasa1_Rub_v1_rr2_Mid.wav"
+ },
+ {
+  "inst": "cabasa",
+  "gesture": "rub",
+  "file": "cabasa-rub-1.mp3",
+  "seconds": 0.59,
+  "peakAtSec": 0.035,
+  "source": "Cabasa1_Rub_v2_rr1_Mid.wav"
+ },
+ {
+  "inst": "cabasa",
+  "gesture": "rub",
+  "file": "cabasa-rub-2.mp3",
+  "seconds": 0.562,
+  "peakAtSec": 0.03,
+  "source": "Cabasa1_Rub_v2_rr2_Mid.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal1-swell-1.5s.mp3",
+  "seconds": 4.09,
+  "peakAtSec": 1.195,
+  "source": "susCymb1_cresc_1.5s.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal1-swell-2s.mp3",
+  "seconds": 4.58,
+  "peakAtSec": 1.735,
+  "source": "susCymb1_cresc_2s.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal1-swell-4s.mp3",
+  "seconds": 6.819,
+  "peakAtSec": 3.71,
+  "source": "susCymb1_cresc_4s.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal1-swell-7.5s.mp3",
+  "seconds": 8.0,
+  "peakAtSec": 4.755,
+  "source": "susCymb1_cresc_7.5s.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal2-swell-2.5s.mp3",
+  "seconds": 4.704,
+  "peakAtSec": 1.945,
+  "source": "susCymb2_cresc_2.5s2.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal2-swell-4s.mp3",
+  "seconds": 5.665,
+  "peakAtSec": 3.065,
+  "source": "susCymb2_cresc_4s.wav"
+ },
+ {
+  "inst": "cymbal",
+  "gesture": "swell",
+  "file": "cymbal2-swell-7s.mp3",
+  "seconds": 8.0,
+  "peakAtSec": 5.16,
+  "source": "susCymb2_cresc_7s.wav"
+ },
+ {
+  "inst": "chimes",
+  "gesture": "up",
+  "file": "chimes-up-slow.mp3",
+  "seconds": 5.0,
+  "peakAtSec": 4.62,
+  "source": "windchimes_slowAsc1.wav"
+ },
+ {
+  "inst": "chimes",
+  "gesture": "up",
+  "file": "chimes-up.mp3",
+  "seconds": 5.0,
+  "peakAtSec": 1.22,
+  "source": "windchimes_asc1.wav"
+ },
+ {
+  "inst": "chimes",
+  "gesture": "down",
+  "file": "chimes-down-slow.mp3",
+  "seconds": 5.0,
+  "peakAtSec": 3.01,
+  "source": "windchimes_slowDesc1.wav"
+ },
+ {
+  "inst": "chimes",
+  "gesture": "down",
+  "file": "chimes-down.mp3",
+  "seconds": 5.0,
+  "peakAtSec": 2.48,
+  "source": "windchimes_desc1.wav"
+ }
+]

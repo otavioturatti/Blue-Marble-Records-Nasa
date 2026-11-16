@@ -91,6 +91,6 @@ Our own work in this repository is offered under the Apache License 2.0 (see [`L
 
 ## Team
 
-- João Otávio Turatti ([LinkedIn](https://www.linkedin.com/in/otavioturatti/), [@otavioturatti](https://github.com/otavioturatti)): sound and text
-- Arthur Flávio ([LinkedIn](https://www.linkedin.com/in/arthurr-arauj/), [@arthurr-arauj](https://github.com/arthurr-arauj)): data
-- Kristen Pavarine ([LinkedIn](https://www.linkedin.com/in/kristen-pavarine-7b6a14328/), [@pavarinekristen](https://github.com/pavarinekristen)): interface
+- João Otávio Turatti ([LinkedIn](https://www.linkedin.com/in/otavioturatti/), [@otavioturatti](https://github.com/otavioturatti))
+- Arthur Flávio ([LinkedIn](https://www.linkedin.com/in/arthurr-arauj/), [@arthurr-arauj](https://github.com/arthurr-arauj))
+- Kristen Pavarine ([LinkedIn](https://www.linkedin.com/in/kristen-pavarine-7b6a14328/), [@pavarinekristen](https://github.com/pavarinekristen))

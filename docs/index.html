@@ -1,0 +1,576 @@
+<!doctype html>
+<!-- SI disclosure: this page was drafted with an AI assistant and reviewed by the team. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blue Marble Records: Hear the planet NASA sees</title>
+<meta name="description" content="Blue Marble Records turns NASA Earth Information Center frames into music composed live in the browser, made for blind and low-vision people. Project page for the NASA Space Apps Challenge 2026.">
+<meta name="generator" content="Drafted with an AI assistant and reviewed by the team (SI disclosure)">
+<meta name="color-scheme" content="light dark">
+<style>
+/* One self-contained page: no scripts, no web fonts, no outside requests. */
+:root {
+  color-scheme: light dark;
+  --bg: #f4f6fb;
+  --ink: #0b1430;
+  --ink-2: #414d6b;
+  --line: #c5cee0;
+  --link: #1a43c0;
+  --mark: #1a43c0;
+  --code: #e4e9f5;
+  --vinyl: #0a0d16;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #050a18;
+    --ink: #e8f0ff;
+    --ink-2: #aab8d6;
+    --line: #2a3760;
+    --link: #8fb8ff;
+    --mark: #ffb547;
+    --code: #0f1b3a;
+    --vinyl: #000;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 1.0625rem/1.65 var(--sans);
+  overflow-wrap: break-word;
+}
+[id] { scroll-margin-top: 1.5rem; }
+
+.wrap { max-width: 40rem; margin-inline: auto; padding-inline: 1rem; }
+@media (min-width: 40rem) { .wrap { padding-inline: 1.5rem; } }
+
+a { color: var(--link); text-decoration-thickness: 0.07em; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 0.14em; }
+:focus-visible { outline: 3px solid var(--mark); outline-offset: 3px; border-radius: 2px; }
+main:focus { outline: none; }
+
+.skip {
+  position: absolute; left: 1rem; top: -5rem; z-index: 2;
+  padding: 0.6rem 1rem; background: var(--ink); color: var(--bg); font-weight: 600;
+}
+.skip:focus { top: 1rem; }
+
+/* The hero: the name set large, and one record in the margin. */
+.hero { padding-block: 3rem 2.5rem; }
+.hero .wrap { position: relative; }
+.disc {
+  --groove: 10%; --ring: 2.4%;
+  display: block; font-size: 4rem; width: 1em; height: 1em; margin-bottom: 1.5rem; border-radius: 50%;
+  background:
+    radial-gradient(circle 0.03em at 73% 29%, #ffb547 92%, transparent),
+    radial-gradient(circle closest-side, var(--bg) 0 3.4%, transparent 4.4%),
+    radial-gradient(circle closest-side, #2f6bff 0 27%, transparent 28%),
+    repeating-radial-gradient(circle closest-side, rgb(255 255 255 / 0.11) 0 var(--ring), transparent var(--ring) var(--groove)),
+    var(--vinyl);
+  box-shadow: 0 0 0 1px var(--line);
+}
+@media (min-width: 74rem) {
+  .disc { --groove: 3%; --ring: 0.7%; position: absolute; left: calc(100% + 3rem); top: 0.4rem; margin: 0; font-size: 13rem; }
+}
+h1 {
+  margin: 0;
+  font: 500 clamp(2.4rem, 1.2rem + 6vw, 4.25rem)/1.02 var(--serif);
+  letter-spacing: -0.01em;
+}
+.tagline { margin: 0.7rem 0 0; font: italic 400 clamp(1.3rem, 1rem + 1.4vw, 1.7rem)/1.3 var(--serif); }
+.lede { margin: 1.5rem 0 0; font-size: 1.1875rem; line-height: 1.55; }
+.hero-links { margin: 1.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; font-weight: 600; }
+.facts { margin: 2.25rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: 0.9375rem; line-height: 1.5; }
+.facts div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 1rem; padding-block: 0.3rem; }
+.facts dt { color: var(--ink-2); }
+.facts dd { margin: 0; }
+.facts ul { margin: 0; padding: 0; list-style: none; }
+
+.toc { padding-block: 0 2.5rem; }
+.toc h2 { margin: 0 0 0.4rem; font: 700 1rem/1.4 var(--sans); }
+.toc p { margin: 0 0 0.75rem; color: var(--ink-2); font-size: 0.9375rem; }
+.toc ol { margin: 0; padding-left: 1.4rem; font-size: 0.9375rem; }
+.toc li { padding-block: 0.2rem; }
+@media (min-width: 40rem) { .toc ol { columns: 2; column-gap: 2.5rem; } .toc li { break-inside: avoid; } }
+
+main section { padding-block: 2.75rem; border-top: 1px solid var(--line); }
+main h2 { margin: 0 0 1.1rem; font: 500 clamp(1.6rem, 1.3rem + 1.2vw, 2rem)/1.15 var(--serif); }
+h3 { margin: 2.1rem 0 0.5rem; font: 700 1.0625rem/1.35 var(--sans); }
+p { margin: 0 0 1rem; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+li { margin-bottom: 0.45rem; }
+li:last-child { margin-bottom: 0; }
+.name { font: 500 1.5rem/1.3 var(--serif); }
+
+.links { margin: 0 0 1.25rem; }
+.links dt { color: var(--ink-2); font-size: 0.9375rem; }
+.links dd { margin: 0 0 1rem; font-size: 1.125rem; font-weight: 600; overflow-wrap: anywhere; }
+
+code { font: 0.95em/1.4 var(--mono); background: var(--code); padding: 0.05em 0.2em; border-radius: 3px; overflow-wrap: anywhere; }
+pre { margin: 0 0 1rem; padding: 0.9rem 1rem; background: var(--code); border-radius: 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { padding: 0; background: none; font-size: 0.9375rem; line-height: 1.7; }
+
+/* Tables keep their shape and scroll sideways inside their own box on a narrow screen. */
+.scroll { margin: 1.25rem 0 1.5rem; overflow-x: auto; }
+table { width: 100%; min-width: 34rem; table-layout: fixed; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.5; }
+thead th:nth-child(1) { width: 22%; }
+.t-si thead th:nth-child(2) { width: 42%; }
+.t-inst thead th:nth-child(1) { width: 45%; }
+.t-inst thead th:last-child { width: 15%; }
+.hint { display: none; margin: 1.25rem 0 -0.75rem; color: var(--ink-2); font-size: 0.875rem; }
+@media (max-width: 35.99rem) { .hint { display: block; } }
+caption { caption-side: top; padding-bottom: 0.6rem; text-align: left; font-weight: 700; }
+th, td { padding: 0.6rem 0.9rem 0.6rem 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th:last-child, td:last-child { padding-right: 0; }
+thead th { border-bottom: 2px solid var(--ink-2); font-weight: 700; }
+tbody th { font-weight: 600; }
+
+footer { padding-block: 2rem 3.5rem; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 0.9375rem; }
+footer p { margin: 0 0 0.5rem; }
+video { display: block; width: 100%; height: auto; margin-block: 1rem; border-radius: 6px; background: #000; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="disc" aria-hidden="true"></span>
+    <h1>Blue Marble Records</h1>
+    <p class="tagline">Hear the planet NASA sees.</p>
+    <p class="lede">A web app, made for blind and low-vision people and for anyone who wants to listen, that reads NASA Earth Information Center frames and plays them as music composed live in the browser.</p>
+    <!-- These two links jump to "Link to Final Project", the only place where each address is written. -->
+    <p class="hero-links"><a href="https://blue.oantitrend.com/">Open the live app</a> <a href="https://github.com/otavioturatti/Blue-Marble-Records-Nasa">Source code</a></p>
+    <dl class="facts">
+      <div><dt>Challenge</dt><dd>The Earth Information Jukebox, NASA Space Apps Challenge 2026</dd></div>
+      <div><dt>Local event</dt><dd>Uberlândia, Brazil</dd></div>
+      <div><dt>Built</dt><dd>14 and 15 November 2026</dd></div>
+      <div><dt>Team</dt><dd>
+        <ul>
+          <li>Otávio (otavioturatti on GitHub): sound and text</li>
+          <li>Arthur (arthurr-arauj): data</li>
+          <li>Kristen (pavarinekristen): interface</li>
+        </ul>
+      </dd></div>
+    </dl>
+  </div>
+</header>
+
+<nav class="toc" aria-labelledby="toc-title">
+  <div class="wrap">
+    <h2 id="toc-title">On this page</h2>
+    <p>The sections follow the fields of the Space Apps project form, in the same order.</p>
+    <ol>
+      <li><a href="#project-name">Project Name</a></li>
+      <li><a href="#summary">High-Level Project Summary</a></li>
+      <li><a href="#demo">Link to Project Demo</a></li>
+      <li><a href="#final-project">Link to Final Project</a></li>
+      <li><a href="#description">Detailed Project Description</a></li>
+      <li><a href="#si">Use of Super Intelligence (SI)</a></li>
+      <li><a href="#nasa-data">NASA Data</a></li>
+      <li><a href="#references">Space Agency Partner Data and Other References</a></li>
+      <li><a href="#run">How to run it</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<section id="project-name" aria-labelledby="h-project-name">
+  <div class="wrap">
+    <h2 id="h-project-name">Project Name</h2>
+    <p class="name">Blue Marble Records</p>
+  </div>
+</section>
+
+<section id="summary" aria-labelledby="h-summary">
+  <div class="wrap">
+    <h2 id="h-summary">High-Level Project Summary</h2>
+    <p>Blue Marble Records is a web app that turns NASA Earth Information Center (EIC) frames into music, made for blind and low-vision people. The visitor picks one of 30 places on Earth. A needle reads that point of the NASA frame, decoded back into its physical value, and the browser composes music from the values live, date after date, like a record turning. It has two records: sea surface temperature anomaly (NASA SVS 5176) and active fires seen by VIIRS (NASA SVS 5113).</p>
+    <p>It answers The Earth Information Jukebox by pairing EIC frames with sonification generated in real time from the picture itself: we read each number back from the frame's own pixels, and we checked that decoding against a separate NASA rendering (NASA GIBS). Every control works from the keyboard, and every value is also a sentence for a screen reader.</p>
+    <p>It matters because Earth data is published mostly as pictures. Here a person who cannot see the map can follow, by ear, how the sea warmed or cooled at one place and when fire came and went.</p>
+  </div>
+</section>
+
+<section id="demo" aria-labelledby="h-demo">
+  <div class="wrap">
+    <h2 id="h-demo">Link to Project Demo</h2>
+    <video controls preload="metadata" width="1920" height="1080" aria-label="Blue Marble Records demo video, 29 seconds, with English subtitles">
+      <source src="demo.mp4" type="video/mp4">
+    </video>
+    <p><a href="https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4">https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4</a></p>
+    <p>29 seconds, in English, with English subtitles. The pictures are screen captures of the app and the music is the app's own sound, composed live from NASA data. The narration is an SI-generated voice (ElevenLabs text to speech) reading a script written by the team.</p>
+  </div>
+</section>
+
+<section id="final-project" aria-labelledby="h-final-project">
+  <div class="wrap">
+    <h2 id="h-final-project">Link to Final Project</h2>
+    <!-- LINKS: each address is written here and nowhere else on this page.
+         To change one, edit the single line that holds it (the href and the visible text). -->
+    <dl class="links">
+      <dt id="live-app">Live app</dt>
+      <dd><a href="https://blue.oantitrend.com/">https://blue.oantitrend.com/</a></dd>
+      <dt id="source-code">Code repository</dt>
+      <dd><a href="https://github.com/otavioturatti/Blue-Marble-Records-Nasa">https://github.com/otavioturatti/Blue-Marble-Records-Nasa</a></dd>
+    </dl>
+    <p>The repository holds the app (<code>web/</code>), the Python scripts that decode and validate the NASA frames (<code>pipeline/</code>), the validation report (<code>docs/VALIDATION.md</code>) and the licence (<code>LICENSE</code>).</p>
+  </div>
+</section>
+
+<section id="description" aria-labelledby="h-description">
+  <div class="wrap">
+    <h2 id="h-description">Detailed Project Description</h2>
+
+    <h3>What it does</h3>
+    <p>The page opens on one question, "How do you want to start?", and three choices: a guided tour with the visitor's own screen reader, a guided tour with the app's voice, or "Explore on my own". The interface comes in English and Brazilian Portuguese.</p>
+    <p>The guided tour visits four places: the North Atlantic south of Greenland and the equatorial Pacific on the sea record, then Uberlândia (Brazil) and the miombo woodlands of Angola on the fire record, playing each record from start to end.</p>
+    <p>Exploring freely, the visitor chooses a record and one of its saved places (17 on the ocean, 13 on land), and can:</p>
+    <ul>
+      <li><strong>Play through time</strong>: the values of that place become music, one date after another.</li>
+      <li><strong>Compare</strong>: hear the same place on two dates together. One note means little change; two notes beating against each other mean it changed.</li>
+      <li><strong>Hear the sound legend</strong>: low, middle, high, and the crackle that means no data.</li>
+      <li><strong>Ask in words</strong>: keys that say the value under the needle, the place with its latitude and longitude, and the highest and lowest places on that date.</li>
+      <li><strong>Open "Data and method"</strong>: the source, scale, validation numbers and method of each record.</li>
+    </ul>
+    <p>For sighted visitors the same state is drawn as a picture: the Earth in space with the NASA frame of the date laid over it, and a vinyl record around it whose grooves are the dates.</p>
+
+    <h3>How it works</h3>
+    <ol>
+      <li><strong>Decoding, done ahead of time in Python.</strong> EIC frames are pictures, not data files. On the sea record, each pixel takes the value of the nearest color of the colorbar NASA publishes with the visualization, measured in the CIELAB color space; pixels far from every colorbar color (land, sea ice, coasts) are "no data". On the fire record, a pixel is fire when it differs clearly from the same pixel of an empty frame, the base map. Both are reduced to a 1 degree grid, one small image per date.</li>
+      <li><strong>Reading, in the browser.</strong> The needle reads the cell that contains the chosen place and turns the pixel back into a value on the record's fixed scale.</li>
+      <li><strong>Music, composed live.</strong> Nothing is a recorded song. The only recordings are single notes and single gestures of real instruments: our own guitar and CC0 sample libraries. Every chord, pattern and melody is decided while it plays, by rules we wrote. On the sea record the distance from normal sets the tension, warmer water sounds bright and colder water dark, and each date lasts one bar; when the temperature moves by three quarters of a degree or more, a harp runs up (warmer) or down (colder). On the fire record, more fire activity means more tension and a heavier, louder band, and the harp runs up for more fire, down for less. The place sets the key and the tempo, and the same data always gives the same music.</li>
+      <li><strong>Words.</strong> Each reading is also one short sentence (place, date, value, unit), built from a template and sent to a single live region for the visitor's own screen reader. No language model runs in the app, and there is no backend.</li>
+    </ol>
+
+    <h3>Built for the ear</h3>
+    <ul>
+      <li>Every control is a native HTML control. The 3D picture is hidden from assistive technology, and every choice it offers is also a button, a list or a slider.</li>
+      <li>One key map holds everywhere: up and down change the place, left and right switch between sea and fire, Space or Enter plays and pauses, Esc or S stops all sound. A keyboard guide lists every key.</li>
+      <li>Nothing sounds until the visitor acts, and the music lowers while a sentence is announced.</li>
+      <li>No data is never silence and never a low note: it is a soft vinyl crackle, the "dead groove".</li>
+      <li>The optional voice guide is a synthetic voice, labelled as one. It never reads the values and never speaks over the music.</li>
+      <li>On Android phones that can vibrate, the value is also given as 1 to 5 pulses, and no data as a rough buzz.</li>
+    </ul>
+
+    <h3>Benefits</h3>
+    <ul>
+      <li>A person who cannot see the map has a way to follow one place through time, by ear and in words, without asking anyone to describe a picture.</li>
+      <li>The mapping is fixed and written down, so a listener can learn it once and compare places and dates.</li>
+      <li>It says what the data cannot say: a value at the end of a scale is announced as such, and fire is given as fire activity (hot-pixel density), a relative number.</li>
+      <li>It runs in a browser, with no install and no account.</li>
+    </ul>
+
+    <h3>What we hope to achieve</h3>
+    <p>We hope to put more EIC records under the same needle, to hold listening sessions with blind and low-vision people and publish what we learn, and to show that a picture of Earth data can be published with a sound and a sentence that carry the same number.</p>
+
+    <h3>Tools, languages and software</h3>
+    <ul>
+      <li>HTML, CSS and JavaScript (ES modules): no framework, no build step, no backend.</li>
+      <li>Tone.js for sound (Web Audio) and three.js for the globe (WebGL).</li>
+      <li>Python with NumPy, Pillow and OpenEXR to decode and validate the NASA frames.</li>
+      <li>An acoustic guitar recorded by the team during the hackathon, CC0 sample libraries for the other instruments, and ElevenLabs text to speech for the optional voice guide.</li>
+      <li>nginx in a Docker container to serve the app; Git and GitHub.</li>
+      <li>AI coding assistants (large language models): see Use of Super Intelligence (SI).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="si" aria-labelledby="h-si">
+  <div class="wrap">
+    <h2 id="h-si">Use of Super Intelligence (SI)</h2>
+    <p>Yes, we used SI tools. Each use is marked where it happens, in descriptive text and in metadata.</p>
+
+    <p class="hint">This table scrolls sideways.</p>
+    <div class="scroll" role="region" aria-labelledby="cap-si" tabindex="0">
+      <table class="t-si">
+        <caption id="cap-si">What SI did, and where it is marked</caption>
+        <thead>
+          <tr><th scope="col">What</th><th scope="col">How SI was used</th><th scope="col">Where it is marked</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Code of the app and of the data pipeline</th>
+            <td>Parts were drafted with AI coding assistants (large language models) and reviewed by a team member.</td>
+            <td>An "SI disclosure" line at the top of each file names the member who reviewed it.</td>
+          </tr>
+          <tr>
+            <th scope="row">Data files</th>
+            <td>The values are computed from the NASA frames by that pipeline, whose code was SI-assisted.</td>
+            <td>The <code>provenance</code> entry of each record's <code>meta.json</code> (<code>"si_assisted_<wbr>code": true</code>).</td>
+          </tr>
+          <tr>
+            <th scope="row">Validation scripts and report</th>
+            <td>Drafted with AI coding assistants and reviewed by Arthur. The numbers come from running the scripts.</td>
+            <td>The SI disclosure note at the top of <code>docs/<wbr>VALIDATION.md</code>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Voice guide (optional)</th>
+            <td>An SI-generated voice: ElevenLabs text to speech, from lines written and reviewed by the team. It is not a recording of a person. A speech recognition model run on our own computer (faster-whisper) transcribed each clip, so it could be compared word by word with its line. If a clip cannot load, the browser's own speech synthesis says the same line.</td>
+            <td>Labelled "synthetic voice" in the interface, described in <code>web/voice/<wbr>README.md</code>, and stated in the comment tag of each audio file.</td>
+          </tr>
+          <tr>
+            <th scope="row">Preparation of the recorded notes</th>
+            <td>The scripts that cut the notes, measured their tuning and found their loop points were drafted with an AI coding assistant and reviewed by Otávio.</td>
+            <td><code>web/vendor/<wbr>samples/<wbr>README.md</code>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Narration of the demo video</th>
+            <td>An SI-generated voice: ElevenLabs text to speech, reading a script written by the team. The pictures and the music of the video are not SI-generated.</td>
+            <td>The line "Narration: SI-generated voice" on screen for the whole video, and the comment tag of the video file.</td>
+          </tr>
+          <tr>
+            <th scope="row">This page and the README</th>
+            <td>Drafted with an AI assistant and reviewed by the team.</td>
+            <td>The footer of this page and its <code>generator</code> metadata; the SI section of <code>README.md</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What is not SI-generated</h3>
+    <ul>
+      <li><strong>The music.</strong> Recorded notes of real instruments, composed live in the browser from the data by rules the team wrote. No file among the recorded notes was made by a generative model. The reference sounds (the needle drop, the crackle of no data, single tones) are synthesized in the browser by our own code.</li>
+      <li><strong>The images.</strong> NASA frames and NASA imagery, credited under References. The record, the icons and the opening animation are drawn in code. No image was made with an image generator.</li>
+      <li><strong>The data values.</strong> Every value is computed from a NASA frame by the pipeline. None was written by hand or produced by a model.</li>
+      <li><strong>The app while it runs.</strong> No language model runs in the app. Its sentences are templates filled with the decoded values.</li>
+    </ul>
+    <p>The decisions about the concept, the mapping from data to sound and what ships were made by the team. Nothing we generated uses, contains or modifies NASA logos, flags or mission identifiers.</p>
+  </div>
+</section>
+
+<section id="nasa-data" aria-labelledby="h-nasa-data">
+  <div class="wrap">
+    <h2 id="h-nasa-data">NASA Data</h2>
+    <p>NASA data is the core of the project: the music is composed from values decoded from NASA Earth Information Center frames.</p>
+
+    <p class="hint">This table scrolls sideways.</p>
+    <div class="scroll" role="region" aria-labelledby="cap-records" tabindex="0">
+      <table>
+        <caption id="cap-records">The two records and their NASA sources</caption>
+        <thead>
+          <tr><th scope="col">Aspect</th><th scope="col">Sea record</th><th scope="col">Fire record</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Title in the app</th>
+            <td>Sea Surface Temperature Anomaly</td>
+            <td>Active Fires</td>
+          </tr>
+          <tr>
+            <th scope="row">NASA visualization</th>
+            <td><a href="https://svs.gsfc.nasa.gov/5176/">NASA SVS 5176</a>, sea surface temperature anomaly, near real time</td>
+            <td><a href="https://svs.gsfc.nasa.gov/5113/">NASA SVS 5113</a>, active fires as observed by VIIRS</td>
+          </tr>
+          <tr>
+            <th scope="row">Data behind it</th>
+            <td>MUR SST v4.1 anomaly (JPL)</td>
+            <td>VIIRS active fires (Suomi NPP and NOAA-21), 5-day moving window</td>
+          </tr>
+          <tr>
+            <th scope="row">Dates in the app</th>
+            <td>30 monthly snapshots, the 10th of each month, 10 June 2024 to 10 November 2026</td>
+            <td>23 monthly snapshots, the 10th of each month, 10 December 2024 to 10 October 2026</td>
+          </tr>
+          <tr>
+            <th scope="row">What is played</th>
+            <td>Sea surface temperature anomaly, −4 to +4 °C. A value at or beyond either end reads as the end of the scale.</td>
+            <td>Fire activity (hot-pixel density), 0 to 50% of land pixels with fire dots. Anything above reads as the top of the scale.</td>
+          </tr>
+          <tr>
+            <th scope="row">How a value is decoded</th>
+            <td>Nearest colorbar color in CIELAB, then the median of the valid pixels of each 1 degree cell. A cell with fewer than half valid pixels is no data.</td>
+            <td>Pixels that differ from the empty base map are fire, then fire pixels over land pixels in each 1 degree cell. A cell that is less than half land is no data.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How we use the frames as data</h3>
+    <p>The challenge's resources link the <a href="https://svs.gsfc.nasa.gov/gallery/earth-information-center/">EIC gallery</a>, whose <a href="https://svs.gsfc.nasa.gov/gallery/daily-visualizations/">Daily Visualizations</a> page lists both visualizations. We took the unlabeled equirectangular frames (4096 by 2048 pixels) for the 10th of each month and decoded them with the Python scripts in <code>pipeline/</code>. The browser does not read NASA's servers: it loads the small files that decoding produced (<code>web/data/</code>), whose format is described in <code>docs/DATA-FORMAT.md</code>.</p>
+
+    <h3>How we checked the decoding</h3>
+    <p>The frames are pictures, so we checked our reading of them against <a href="https://nasa-gibs.github.io/gibs-api-docs/">NASA GIBS</a>, a separate NASA rendering of the same data. This tests our decoding, not the satellite data. GIBS is used only for this check, never as a source of the values the app plays.</p>
+
+    <p class="hint">This table scrolls sideways.</p>
+    <div class="scroll" role="region" aria-labelledby="cap-check" tabindex="0">
+      <table>
+        <caption id="cap-check">The decoding checked against NASA GIBS</caption>
+        <thead>
+          <tr><th scope="col">Aspect</th><th scope="col">Sea record</th><th scope="col">Fire record</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Reference</th>
+            <td>GIBS layer <code>GHRSST_L4_MUR_<wbr>Sea_Surface_<wbr>Temperature_<wbr>Anomalies</code> (0.1 °C classes), median of the same 1 degree cell</td>
+            <td>GIBS layers <code>VIIRS_SNPP_<wbr>Thermal_Anomalies_<wbr>375m_All</code> and <code>VIIRS_NOAA21_<wbr>Thermal_Anomalies_<wbr>375m_All</code>, union of the 5 days ending on the date, same 1 degree cell</td>
+          </tr>
+          <tr>
+            <th scope="row">Sample</th>
+            <td>93 points on 8 dates. Left out: 2 at the end of the scale and 1 with no reference value.</td>
+            <td>80 points on 5 dates. The cells without fire were drawn from land within 3 cells of fire, between 60°S and 60°N, outside Greenland.</td>
+          </tr>
+          <tr>
+            <th scope="row">Result</th>
+            <td>Mean absolute error 0.17 °C, bias +0.04 °C. 90% of points within 0.34 °C, 77.4% within 0.25 °C. 88.2% in the same class (cold below −0.5 °C, neutral, warm above +0.5 °C).</td>
+            <td>Both agree on fire or no fire in 97.5% of cells (1 cell with fire in the reference only, 1 in ours only). Rank correlation (Spearman rho) 0.97 over all sampled cells and 0.94 among the 41 cells with fire on either side. Amounts are compared by rank only, because GIBS draws the same detections at a different size.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Every compared point is published as <code>validation.csv</code> next to each record's data, the same numbers are shown in the app under "Data and method", and the full report is <code>docs/VALIDATION.md</code>.</p>
+
+    <h3>What the numbers can and cannot say</h3>
+    <ul>
+      <li><strong>Top of scale.</strong> The sea scale ends at −4 and +4 °C. A value at the top is given as "at or above +4 °C (top of scale)", never as a measured number.</li>
+      <li><strong>Fire is fire activity (hot-pixel density).</strong> The value is the share of land pixels covered by detection dots in the NASA rendering. It is relative: not a measure of fire power, and not the share of land that burned.</li>
+      <li><strong>Snapshots.</strong> Each sea date is one daily frame, not a monthly mean, and each fire date is one 5-day window. On the fire record, 10 November 2026 is left out because the newest frames were still being filled in.</li>
+      <li><strong>El Niño and La Niña</strong> are never read from the pixels. They are cited from the NOAA Climate Prediction Center.</li>
+      <li><strong>No data</strong> has its own sound and its own words, so a missing value is not mistaken for a low one.</li>
+    </ul>
+
+    <h3>Two comparisons the app suggests</h3>
+    <ul>
+      <li>Equatorial Pacific (near 0°, 140°W), sea record: −0.66 °C on 10 November 2025, and at or above +4 °C (top of scale) on 10 November 2026. The NOAA Climate Prediction Center issued a La Niña Advisory on 13 November 2025 and an El Niño Advisory on 12 November 2026.</li>
+      <li>Uberlândia, Brazil, fire record: fire dots on 1.2% of land pixels on 10 February 2025 (wet season) and on 22.0% on 10 September 2025 (dry season).</li>
+    </ul>
+
+    <h3>Other NASA resources</h3>
+    <ul>
+      <li>NASA Earth Observatory, Blue Marble Next Generation: the picture of the Earth on the globe.</li>
+      <li>NASA SVS 4851, Deep Star Maps 2020: the sky behind the globe.</li>
+      <li>NASA SVS 4720, CGI Moon Kit: the Moon.</li>
+      <li>JPL, "Approximate Positions of the Planets" (E. M. Standish): where the planets are drawn for the date shown.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="references" aria-labelledby="h-references">
+  <div class="wrap">
+    <h2 id="h-references">Space Agency Partner Data and Other References</h2>
+
+    <h3>Space Agency Partner data</h3>
+    <p>None. We did not use data or resources from the 2026 Space Agency Partners.</p>
+
+    <h3>NASA data and imagery</h3>
+    <ul>
+      <li><a href="https://svs.gsfc.nasa.gov/5176/">NASA Scientific Visualization Studio (SVS) 5176</a>: sea surface temperature anomaly, near real time (MUR SST v4.1 anomaly, JPL). The frames and the colorbar of the sea record.</li>
+      <li><a href="https://svs.gsfc.nasa.gov/5113/">NASA SVS 5113</a>: active fires as observed by VIIRS (Suomi NPP and NOAA-21, 5-day moving window). The frames of the fire record.</li>
+      <li>NASA SVS, <a href="https://svs.gsfc.nasa.gov/gallery/earth-information-center/">Earth Information Center gallery</a> and its <a href="https://svs.gsfc.nasa.gov/gallery/daily-visualizations/">Daily Visualizations</a> page.</li>
+      <li><a href="https://nasa-gibs.github.io/gibs-api-docs/">NASA GIBS</a>, used only to validate our decoding: layers <code>GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies</code>, <code>VIIRS_SNPP_Thermal_Anomalies_375m_All</code> and <code>VIIRS_NOAA21_Thermal_Anomalies_375m_All</code>.</li>
+      <li><a href="https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1">JPL MUR SST v4.1</a> (PO.DAAC): the dataset drawn in SVS 5176. Our values come from the frames.</li>
+      <li>NASA Earth Observatory, Blue Marble Next Generation (with topography and bathymetry): the Earth and cloud pictures of the globe.</li>
+      <li><a href="https://svs.gsfc.nasa.gov/4851/">NASA SVS 4851</a>, Deep Star Maps 2020: the sky and the star positions.</li>
+      <li><a href="https://svs.gsfc.nasa.gov/4720/">NASA SVS 4720</a>, CGI Moon Kit: the picture of the Moon.</li>
+    </ul>
+    <p>Licence: NASA media, generally not copyrighted (NASA media usage guidelines). No NASA logo is used.</p>
+
+    <h3>Other data and reference texts</h3>
+    <ul>
+      <li><a href="https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/">NOAA Climate Prediction Center, ENSO diagnostic discussions</a>: La Niña Advisory (13 November 2025) and El Niño Advisory (12 November 2026). A publication of the United States government.</li>
+      <li>The Astronomical Almanac, low-precision formulas for the Sun and the Moon, and JPL, "Approximate Positions of the Planets" (E. M. Standish). Our own implementation, in <code>web/js/ui/ephemeris.js</code>.</li>
+      <li>Mean wind figures for the stylized drift of the clouds on the globe (a picture, not a weather simulation): NOAA JetStream, <a href="https://www.noaa.gov/jetstream/global-circulations">Global circulations</a>; R. Stull, <a href="https://www.eoas.ubc.ca/books/Practical_Meteorology/mse3/Ch11-Global.pdf">Practical Meteorology, chapter 11</a>; <a href="https://publications.gc.ca/collections/collection_2017/eccc/En56-261-2011-eng.pdf">Environment and Climate Change Canada</a>; <a href="https://meted.ucar.edu/ams/wim_2014/9a.html">COMET MetEd</a>; and discussions of the US National Hurricane Center. Cited in <code>web/js/ui/globe3d.js</code>.</li>
+    </ul>
+
+    <h3>Code libraries shipped with the app</h3>
+    <ul>
+      <li><a href="https://github.com/Tonejs/Tone.js">Tone.js</a> 15.1.22, by Yotam Mann. MIT licence, copied in <code>web/vendor/Tone.LICENSE.txt</code>.</li>
+      <li><a href="https://github.com/mrdoob/three.js">three.js</a> r170, by the Three.js Authors. MIT licence.</li>
+    </ul>
+
+    <h3>Recorded instruments</h3>
+    <p>Every file is one note of a real instrument, played by a person, or one gesture of an instrument. None is a song, a phrase or a chord.</p>
+    <p class="hint">This table scrolls sideways.</p>
+    <div class="scroll" role="region" aria-labelledby="cap-instruments" tabindex="0">
+      <table class="t-inst">
+        <caption id="cap-instruments">Recorded instruments, their sources and licences</caption>
+        <thead>
+          <tr><th scope="col">Instruments</th><th scope="col">Source</th><th scope="col">Licence</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Acoustic guitar, every fret (0 to 12) of the six strings</td>
+            <td>Recorded by the team for this project during the hackathon (files dated 14 November 2026)</td>
+            <td>Our own work</td>
+          </tr>
+          <tr>
+            <td>Folk harp (played by Jordi Francis, Etherealwinds), grand piano (Steinway B), baroque recorders, vibraphone, glockenspiel, marimba, Nyunga Nyunga (Mozambique), mbira dzaVadzimu (Zimbabwe), ocarinas, wine glasses, ocean drum, cabasa, wind chimes, and percussion: cajón, frame drum, bass drum, darbuka, triangle, hand claps, suspended cymbals, timpani, tubular bells</td>
+            <td><a href="https://github.com/sgossner/VCSL">Versilian Community Sample Library (VCSL)</a>, Versilian Studios LLC (Sam Gossner), revision <code>c1ea7bcc3c7309650ab0<wbr>da9d15c9cd1fbc4a4c7e</code></td>
+            <td>CC0 1.0</td>
+          </tr>
+          <tr>
+            <td>Concert flute, clarinet, French horn in F, cello section, violin section (tremolo), double bass (pizzicato)</td>
+            <td><a href="https://github.com/sgossner/VSCO-2-CE">VS Chamber Orchestra: Community Edition (VSCO 2 CE)</a>, Versilian Studios LLC (Sam Gossner), recorded by Sam Gossner and Simon Dalzell, revision <code>440300901dfe9275fd84<wbr>e0b7763af1f8443ae62e</code></td>
+            <td>CC0 1.0</td>
+          </tr>
+          <tr>
+            <td>Hohner button accordion ("Button Accordion HN", version 2024-03-29), recorded by Jeff Stauffer, edited by michael02022</td>
+            <td><a href="https://freepats.zenvoid.org/Organ/accordion.html">FreePats project</a>, <a href="https://github.com/freepats/button-accordion-HN/releases/tag/2024-03-29">release 2024-03-29</a></td>
+            <td>CC0 1.0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>CC0 1.0 Universal: <a href="https://creativecommons.org/publicdomain/zero/1.0/">creativecommons.org/publicdomain/zero/1.0/</a>. We kept only the notes the music plays, made them mono, measured their tuning and marked loop points on the sustained notes. Each instrument, its original file names and what we changed are listed in <code>web/vendor/samples/README.md</code> and in the <code>manifest.json</code> of each folder.</p>
+
+    <h3>Fonts of the app</h3>
+    <ul>
+      <li>Cormorant, copyright 2015 The Cormorant Project Authors (<a href="https://github.com/CatharsisFonts/Cormorant">github.com/CatharsisFonts/Cormorant</a>).</li>
+      <li>Michroma, copyright 2011 The Michroma Project Authors (<a href="https://github.com/googlefonts/Michroma-font">github.com/googlefonts/Michroma-font</a>).</li>
+      <li>Schibsted Grotesk, copyright 2023 The Schibsted-Grotesk Project Authors (<a href="https://github.com/schibsted/schibsted-grotesk">github.com/schibsted/schibsted-grotesk</a>).</li>
+      <li>Martian Mono, copyright 2020 The Martian Mono Project Authors (<a href="https://github.com/evilmartians/mono">github.com/evilmartians/mono</a>).</li>
+    </ul>
+    <p>All four are under the <a href="https://scripts.sil.org/OFL">SIL Open Font License 1.1</a>. This page uses only the fonts of the reader's own device.</p>
+
+    <h3>Voice guide</h3>
+    <ul>
+      <li><a href="https://elevenlabs.io/">ElevenLabs</a> text to speech, model <code>eleven_v4</code>, voices "James" (English) and "Rafael Valente" (Brazilian Portuguese): 77 clips in each language, synthesized on 15 November 2026 from lines written and reviewed by the team. SI-generated, as stated under Use of Super Intelligence (SI) and in <code>web/voice/README.md</code>.</li>
+      <li>faster-whisper, a speech recognition model run on our own computer, used only to check each clip against its line. It is not part of the app.</li>
+    </ul>
+
+    <h3>Tools used to build and serve</h3>
+    <ul>
+      <li>Python with NumPy (BSD 3-Clause), Pillow (MIT-CMU) and OpenEXR (BSD 3-Clause): the scripts in <code>pipeline/</code>.</li>
+      <li><a href="https://nginx.org/">nginx</a> (BSD 2-Clause), from the image <code>nginx:1.27-alpine</code>, and Docker.</li>
+      <li>Git and GitHub.</li>
+      <li>AI coding assistants (large language models), as stated under Use of Super Intelligence (SI).</li>
+    </ul>
+
+    <h3>Lineage</h3>
+    <p>Blue Marble Records follows earlier work that turned data into sound, or opened data to people who cannot see it. We cite it as prior art, and none of its code, audio or images is used here: the Voyager Golden Record; the Caldwell 73 sonification (<a href="https://svs.gsfc.nasa.gov/13786/">NASA SVS 13786</a>), which the challenge lists among its resources; "A Universe of Sound" from NASA's Chandra X-ray Observatory; iSonic; Accessible Oceans; and NASA's "Atmospheric Symphony".</p>
+
+    <h3>Licence of our own work</h3>
+    <p>Our own work in the repository is offered under the <a href="https://www.opensource.org/licenses/Apache-2.0">Apache License 2.0</a> (see <code>LICENSE</code> in the repository root). Third-party materials keep the licences listed above.</p>
+  </div>
+</section>
+
+<section id="run" aria-labelledby="h-run">
+  <div class="wrap">
+    <h2 id="h-run">How to run it</h2>
+    <p>With Docker, from the root of the repository:</p>
+    <pre><code>docker build -t blue-marble-records .
+docker run -p 8080:80 blue-marble-records</code></pre>
+    <p>Then open <code>http://localhost:8080/</code> in a browser. Without Docker, serve the <code>web/</code> folder with any static file server. There is no backend and no build step.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>SI disclosure: this page was drafted with an AI assistant and reviewed by the team.</p>
+    <p>Blue Marble Records, NASA Space Apps Challenge 2026, local event Uberlândia, Brazil. Our own work is offered under the Apache License 2.0; third-party materials keep their own licences.</p>
+  </div>
+</footer>
+</body>
+</html>

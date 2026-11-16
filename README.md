@@ -8,6 +8,7 @@ Built at the NASA Space Apps Challenge 2026 (14 and 15 November 2026), challenge
 
 - Live app: <https://blue.oantitrend.com/>
 - Project page: <https://otavioturatti.github.io/Blue-Marble-Records-Nasa/>
+- Demo video (29 seconds): <https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4>
 
 ## What is in the app
 
@@ -37,7 +38,7 @@ Then open <http://localhost:8080/>. Without Docker, serve the `web/` folder with
 | `pipeline/` | Python scripts that decode the NASA frames into the data files of `web/data/` and validate them |
 | `docs/VALIDATION.md` | How we know the numbers behind the sound are right |
 | `docs/DATA-FORMAT.md` | The format of the data files |
-| `docs/index.html` | The project page |
+| `docs/index.html`, `docs/demo.mp4` | The project page and the 29-second demo video |
 | `Dockerfile`, `deploy/nginx.conf` | Serving the app with nginx |
 
 ## NASA data

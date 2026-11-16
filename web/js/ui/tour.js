@@ -130,29 +130,29 @@ export const GATE_OPTIONS = Object.freeze(["a", "b", "c"]);
  * "swipeDown" (a finger on the gate). target: "a", "b", "c" or "bg" (the background). Returns
  * { action: "enter" | "wake" | "select" | "say" | "none", option, lines }.
  */
-export function gateDecision({ input, woken = false, target = "bg", selected = "a" } = {}) {
+export function gateDecision({ input, woken = false, target = "bg", selected = null } = {}) {
   const name = (o) => `G02${o}`;
   const isOpt = GATE_OPTIONS.includes(target);
+  const prompt = input === "mouse" ? "G01" : "G01t";
   if (input === "assist") return isOpt ? { action: "enter", option: target, lines: [] } : { action: "none", option: selected, lines: [] };
-  if (!woken) {
-    // The first option of the list, wherever a finger landed (it lands anywhere). A mouse: the option
-    // clicked. Entered by a raw finger, the first option is led by the app's voice (app.js enterGate).
-    const option = input === "mouse" && isOpt ? target : "a";
-    return { action: "wake", option, lines: [input === "mouse" ? "G01" : "G01t", name(option)] };
-  }
-  if (input === "double") return { action: "enter", option: selected, lines: [] };
+  // The first raw interaction only speaks the prompt: nothing is selected, nothing is entered.
+  if (!woken) return { action: "wake", option: null, lines: [prompt] };
+  // Only a double tap or double click (or Enter, in the page's keys) enters, and only a chosen option.
+  if (input === "double") return selected ? { action: "enter", option: selected, lines: [] } : { action: "none", option: null, lines: [] };
   if (input === "swipeUp" || input === "swipeDown") {
+    // The first swipe, either way, chooses the first option; after it, down is next and up is previous.
     const i = GATE_OPTIONS.indexOf(selected);
-    const option = GATE_OPTIONS[(i + (input === "swipeDown" ? 1 : -1) + 3) % 3];
+    const option = selected ? GATE_OPTIONS[(i + (input === "swipeDown" ? 1 : -1) + 3) % 3] : GATE_OPTIONS[0];
     return { action: "select", option, lines: [name(option)] };
   }
-  if (!isOpt) return { action: "say", option: selected, lines: [name(selected)] };
-  if (target === selected) return { action: "enter", option: target, lines: [] };
-  return { action: "select", option: target, lines: [name(target)] };
+  // A single press never enters. On an option: it is chosen and its name is said (again, if it already
+  // was). On the background: the chosen option's name again, or the prompt when nothing is chosen yet.
+  if (isOpt) return { action: "select", option: target, lines: [name(target)] };
+  return { action: "say", option: selected, lines: [selected ? name(selected) : prompt] };
 }
 
 /** Two taps or clicks close enough in time and place to be one double tap. */
-export function isDoubleTap(prev, next, { ms = 350, px = 40 } = {}) {
+export function isDoubleTap(prev, next, { ms = 500, px = 60 } = {}) {
   if (!prev || !next) return false;
   return next.t - prev.t <= ms && Math.hypot(next.x - prev.x, next.y - prev.y) <= px;
 }

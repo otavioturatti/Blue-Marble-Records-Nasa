@@ -6,7 +6,7 @@ A web jukebox that turns NASA Earth Information Center (EIC) frames into music c
 
 Built at the NASA Space Apps Challenge 2026 (14 and 15 November 2026), challenge "The Earth Information Jukebox", local event Uberlândia, Brazil.
 
-- Live app: <https://teste-blue-marble.dqnaqh.easypanel.host/>
+- Live app: <https://blue.oantitrend.com/>
 - Project page: <https://otavioturatti.github.io/Blue-Marble-Records-Nasa/>
 
 ## What is in the app

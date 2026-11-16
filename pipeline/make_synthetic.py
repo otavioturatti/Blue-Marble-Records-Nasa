@@ -1,5 +1,5 @@
 # SI disclosure: parts of this file were drafted with an AI coding assistant and reviewed by Arthur.
-"""Generate SYNTHETIC data in the exact format of docs/CONTRACT.md section 2.
+"""Generate SYNTHETIC data in the exact format of docs/DATA-FORMAT.md section 2.
 
 This lets the interface and the sound engine be built before the real NASA frames are
 decoded. Every meta.json says "synthetic": true and every image is stamped

@@ -197,7 +197,7 @@ export const STRINGS = {
     hintVoice: "A synthetic voice speaks; for visitors without a screen reader.",
     hintSwitch: "sea or fire",
     keySpace: "Space",
-    gateTap: "Click an option or use ↑ ↓ to hear it; click it again or press Enter to confirm.",
+    gateTap: "Click an option or use ↑ ↓ to hear it; double click or press Enter to confirm.",
     gateTapTouch: "Swipe up or down to hear the options. Double tap to confirm.",
   },
   "pt-BR": {
@@ -392,7 +392,7 @@ export const STRINGS = {
     hintVoice: "Uma voz sintética fala; para quem não usa leitor de tela.",
     hintSwitch: "mar ou fogo",
     keySpace: "Espaço",
-    gateTap: "Clique numa opção ou use ↑ ↓ para ouvir; clique de novo ou aperte Enter para confirmar.",
+    gateTap: "Clique numa opção ou use ↑ ↓ para ouvir; dois cliques ou Enter confirmam.",
     gateTapTouch: "Deslize para cima ou para baixo para ouvir as opções. Toque duas vezes para confirmar.",
   },
 };

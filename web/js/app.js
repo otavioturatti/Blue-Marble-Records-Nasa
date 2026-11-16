@@ -62,7 +62,8 @@ let pendingPlay = 0; // the token of a Play that is waiting to start (0: none)
 let gateWoken = false;
 let voiceTouch = false;
 let lastRawPointerAt = -Infinity;
-let gateSelected = "a"; // the gate's option chosen and not yet confirmed (after the wake)
+let gateSelected = null; // the gate's option chosen and not yet confirmed (none until a swipe, an arrow or a press on one)
+let gateSelAtTap = null; // the option chosen before the last single press: a double tap confirms that one, wherever it lands
 let lastGateTap = null; // { t, x, y } of the last raw tap on the gate, for the double tap
 let lastTouchAt = -Infinity;
 /**
@@ -1782,8 +1783,12 @@ function wire() {
     if (!mouse && touchUi()) fingerProven = true;
     const tap = { t: performance.now(), x: e.clientX, y: e.clientY };
     const double = gateWoken && (e.detail >= 2 || isDoubleTap(lastGateTap, tap));
-    lastGateTap = tap;
-    gateAct(gateDecision({ input: double ? "double" : mouse ? "mouse" : "touch", woken: gateWoken, target, selected: gateSelected }), mouse ? "mouse" : "touch");
+    lastGateTap = double ? null : tap;
+    // A double tap confirms the option that was chosen before its first tap (a blind visitor's double
+    // tap lands anywhere, a button included); with none chosen before, the one its first tap chose.
+    const chosen = double ? (gateSelAtTap ?? gateSelected) : gateSelected;
+    if (!double) gateSelAtTap = gateSelected;
+    gateAct(gateDecision({ input: double ? "double" : mouse ? "mouse" : "touch", woken: gateWoken, target, selected: chosen }), mouse ? "mouse" : "touch");
   }, true);
   // A finger's swipe up or down on the gate: the previous or next option (while the gate fits).
   let gateTouch = null;
@@ -2011,7 +2016,7 @@ function selectGate(option, { say = true } = {}) {
 /** Carry out the gate's decision (tour.js gateDecision). */
 function gateAct(d, kind) {
   if (d.action === "enter") { enterGate(d.option); return; }
-  if (d.action === "wake") { selectGate(d.option, { say: false }); wakeGate(kind, d.lines); return; }
+  if (d.action === "wake") { if (d.option) selectGate(d.option, { say: false }); wakeGate(kind, d.lines); return; }
   if (d.action === "select") { selectGate(d.option); return; }
   if (d.action === "say") voice?.say(d.lines, { force: true, kind: "status" });
 }

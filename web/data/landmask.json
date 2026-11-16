@@ -1,6 +1,6 @@
 {
   "file": "landmask.png",
-  "encoding": "255 = land, 0 = ocean; same 1-degree grid as the frames (docs/CONTRACT.md 2.4)",
+  "encoding": "255 = land, 0 = ocean; same 1-degree grid as the frames (docs/DATA-FORMAT.md 2.4)",
   "grid": {
     "width": 360,
     "height": 180,

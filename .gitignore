@@ -1,0 +1,4 @@
+# Downloaded NASA frames (hundreds of MB) and Python caches are never committed.
+raw/
+__pycache__/
+*.pyc

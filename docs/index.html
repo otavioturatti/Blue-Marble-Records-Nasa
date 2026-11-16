@@ -245,7 +245,7 @@ h3 { margin: 0; font: 600 clamp(1.6rem, 1.4rem + 0.7vw, 2rem)/1.06 var(--font-di
 .plain li { margin: 0; padding: 1rem 0; border-bottom: 1px solid var(--hair); color: var(--ink-2); }
 @media (min-width: 56.25rem) { .cols { grid-template-columns: 1fr 1fr; gap: 4rem; } }
 
-/* ---------- For the Space Apps form ---------- */
+/* ---------- Documentation ---------- */
 .form { background: var(--sheet); border-top: 1px solid var(--hair-2); padding-block: var(--sec) clamp(3rem, 6vw, 5rem); }
 .form__head { display: grid; gap: 2rem 3rem; align-items: center; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
 .form__head p { max-width: 36rem; margin: 1.25rem 0 0; color: var(--ink-2); }
@@ -374,7 +374,7 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 <header class="hero" id="top">
   <div class="top">
     <p class="mark" translate="no"><span class="mark__name">Blue Marble</span> <span class="mark__sub"><span class="mark__word">Rec<span class="mark__o">o<svg class="mark__disc" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle class="md-body" cx="16" cy="16" r="14.4"/><circle class="md-groove" cx="16" cy="16" r="9.7"/><path class="md-sheen" d="M16 16L22.06 4.61A12.9 12.9 0 0 1 26.17 8.06ZM16 16L9.94 27.39A12.9 12.9 0 0 1 5.83 23.94Z"/><circle class="md-label" cx="16" cy="16" r="5.6"/><circle class="md-hole" cx="16" cy="16" r="1.5"/></svg></span>rds</span></span></p>
-    <a class="top__link" href="#form">Form fields</a>
+    <a class="top__link" href="#form">Documentation</a>
   </div>
   <picture class="hero__pic">
     <source media="(max-width: 899px)" srcset="img/hero-sea-square.webp" width="900" height="900">
@@ -591,24 +591,23 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
   </div>
 </section>
 
-<!-- ================= For the Space Apps form ================= -->
+<!-- ================= Documentation ================= -->
 
 <div class="form" id="form">
   <div class="wrap">
     <div class="form__head">
       <div>
-        <h2 id="h-form">For the Space Apps form</h2>
-        <p>The sections below follow the fields of the Space Apps project form, in the same order and with the same names. Each one holds the complete text of its field.</p>
+        <h2 id="h-form">Documentation</h2>
+        <p>The full text of the project: what it does and how it works, how SI was used, the NASA data behind it, and every reference and licence.</p>
         <nav aria-labelledby="h-form">
           <ol class="toc">
-            <li><a href="#project-name">Project Name</a></li>
-            <li><a href="#summary">High-Level Project Summary</a></li>
-            <li><a href="#demo">Link to Project Demo</a></li>
-            <li><a href="#final-project">Link to Final Project</a></li>
-            <li><a href="#description">Detailed Project Description</a></li>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#demo">Demo video</a></li>
+            <li><a href="#final-project">Live app and source code</a></li>
+            <li><a href="#description">Project description</a></li>
             <li><a href="#si">Use of Super Intelligence (SI)</a></li>
             <li><a href="#nasa-data">NASA Data</a></li>
-            <li><a href="#references">Space Agency Partner Data and Other References</a></li>
+            <li><a href="#references">References</a></li>
           </ol>
         </nav>
       </div>
@@ -632,22 +631,9 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
       </div>
     </div>
 
-    <section class="field" id="project-name" aria-labelledby="h-project-name">
-      <div class="field__head">
-        <p class="label">Field 1 of 8</p>
-        <h3 id="h-project-name">Project Name</h3>
-        <button type="button" class="copy" data-copy="f-project-name" data-what="Project Name" hidden>Copy</button>
-      </div>
-      <div class="field__body" id="f-project-name">
-        <p class="name">Blue Marble Records</p>
-      </div>
-    </section>
-
     <section class="field" id="summary" aria-labelledby="h-summary">
       <div class="field__head">
-        <p class="label">Field 2 of 8</p>
-        <h3 id="h-summary">High-Level Project Summary</h3>
-        <button type="button" class="copy" data-copy="f-summary" data-what="High-Level Project Summary" hidden>Copy</button>
+        <h3 id="h-summary">Summary</h3>
       </div>
       <div class="field__body" id="f-summary">
         <p>Blue Marble Records is a web app that turns NASA Earth Information Center (EIC) frames into music, made for blind and low-vision people. The visitor picks one of 30 places on Earth. A needle reads that point of the NASA frame, decoded back into its physical value, and the browser composes music from the values live, date after date, like a record turning. It has two records: sea surface temperature anomaly (NASA SVS 5176) and active fires seen by VIIRS (NASA SVS 5113).</p>
@@ -658,12 +644,10 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 
     <section class="field" id="demo" aria-labelledby="h-demo">
       <div class="field__head">
-        <p class="label">Field 3 of 8</p>
-        <h3 id="h-demo">Link to Project Demo</h3>
-        <button type="button" class="copy" data-copy="f-demo" data-what="Link to Project Demo" hidden>Copy</button>
+        <h3 id="h-demo">Demo video</h3>
       </div>
       <div class="field__body" id="f-demo">
-        <p class="url"><a id="u-demo" href="https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4">https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4</a> <button type="button" class="copy" data-copy="u-demo" data-what="Demo link" hidden>Copy link</button></p>
+        <p class="url"><a id="u-demo" href="https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4">https://otavioturatti.github.io/Blue-Marble-Records-Nasa/demo.mp4</a></p>
         <p>29 seconds, in English, with English subtitles. The pictures are screen captures of the app and the music is the app's own sound, composed live from NASA data. The narration is an SI-generated voice (ElevenLabs text to speech) reading a script written by the team.</p>
         <p data-nocopy><a href="#watch">The video plays at the top of this page.</a></p>
       </div>
@@ -671,22 +655,18 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 
     <section class="field" id="final-project" aria-labelledby="h-final-project">
       <div class="field__head">
-        <p class="label">Field 4 of 8</p>
-        <h3 id="h-final-project">Link to Final Project</h3>
-        <button type="button" class="copy" data-copy="f-final-project" data-what="Link to Final Project" hidden>Copy</button>
+        <h3 id="h-final-project">Live app and source code</h3>
       </div>
       <div class="field__body" id="f-final-project">
-        <p class="url"><span class="label" id="live-app">Live app</span> <a id="u-app" href="https://blue.oantitrend.com/">https://blue.oantitrend.com/</a> <button type="button" class="copy" data-copy="u-app" data-what="Live app link" hidden>Copy link</button></p>
-        <p class="url"><span class="label" id="source-code">Code repository</span> <a id="u-code" href="https://github.com/otavioturatti/Blue-Marble-Records-Nasa">https://github.com/otavioturatti/Blue-Marble-Records-Nasa</a> <button type="button" class="copy" data-copy="u-code" data-what="Code repository link" hidden>Copy link</button></p>
+        <p class="url"><span class="label" id="live-app">Live app</span> <a id="u-app" href="https://blue.oantitrend.com/">https://blue.oantitrend.com/</a></p>
+        <p class="url"><span class="label" id="source-code">Code repository</span> <a id="u-code" href="https://github.com/otavioturatti/Blue-Marble-Records-Nasa">https://github.com/otavioturatti/Blue-Marble-Records-Nasa</a></p>
         <p>The repository holds the app (<code>web/</code>), the Python scripts that decode and validate the NASA frames (<code>pipeline/</code>), the validation report (<code>docs/VALIDATION.md</code>) and the licence (<code>LICENSE</code>).</p>
       </div>
     </section>
 
     <section class="field" id="description" aria-labelledby="h-description">
       <div class="field__head">
-        <p class="label">Field 5 of 8</p>
-        <h3 id="h-description">Detailed Project Description</h3>
-        <button type="button" class="copy" data-copy="f-description" data-what="Detailed Project Description" hidden>Copy</button>
+        <h3 id="h-description">Project description</h3>
       </div>
       <div class="field__body" id="f-description">
         <h4>What it does</h4>
@@ -746,9 +726,7 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 
     <section class="field" id="si" aria-labelledby="h-si">
       <div class="field__head">
-        <p class="label">Field 6 of 8</p>
         <h3 id="h-si">Use of Super Intelligence (SI)</h3>
-        <button type="button" class="copy" data-copy="f-si" data-what="Use of Super Intelligence (SI)" hidden>Copy</button>
       </div>
       <div class="field__body" id="f-si">
         <p>Yes, we used SI tools. Each use is marked where it happens, in descriptive text and in metadata.</p>
@@ -803,9 +781,7 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 
     <section class="field" id="nasa-data" aria-labelledby="h-nasa-data">
       <div class="field__head">
-        <p class="label">Field 7 of 8</p>
         <h3 id="h-nasa-data">NASA Data</h3>
-        <button type="button" class="copy" data-copy="f-nasa-data" data-what="NASA Data" hidden>Copy</button>
       </div>
       <div class="field__body" id="f-nasa-data">
         <p>NASA data is the core of the project: the music is composed from values decoded from NASA Earth Information Center frames.</p>
@@ -888,9 +864,7 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 
     <section class="field" id="references" aria-labelledby="h-references">
       <div class="field__head">
-        <p class="label">Field 8 of 8</p>
-        <h3 id="h-references">Space Agency Partner Data and Other References</h3>
-        <button type="button" class="copy" data-copy="f-references" data-what="Space Agency Partner Data and Other References" hidden>Copy</button>
+        <h3 id="h-references">References</h3>
       </div>
       <div class="field__body" id="f-references">
         <details open>

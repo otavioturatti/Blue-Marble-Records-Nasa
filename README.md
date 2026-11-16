@@ -17,7 +17,7 @@ Built at the NASA Space Apps Challenge 2026 (14 and 15 November 2026), challenge
 - **Music composed live from the values**, played by recorded instruments. On the sea record the distance from normal sets the tension, warm water is bright and cold water is dark, and a harp runs up when the water warmed and down when it cooled. On the fire record more fire is darker, heavier and louder. Nothing is a recorded song: the files are single notes.
 - **Compare:** the same place on two dates, so the change between them can be heard.
 - **Built for a screen reader from the start:** native controls, full keyboard use, one polite live region for the sentences, a guided tour of four places, an optional voice guide, vibration on phones that support it, and a distinct "dead groove" sound where there is no data, so silence never reads as a low value.
-- English and Brazilian Portuguese. The page starts in English unless the device is set to Portuguese.
+- English and Brazilian Portuguese. The page starts in English; Portuguese is on the language switch.
 
 ## Run it
 

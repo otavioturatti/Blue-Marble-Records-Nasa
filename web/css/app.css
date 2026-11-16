@@ -1162,3 +1162,68 @@ body.guided-touch #console, body.guided-touch .sleeve, body.guided-touch .consol
 .gate .remote__entry .is-selected { outline: 2px solid var(--focus); outline-offset: 3px; }
 html.gate-on .gate { touch-action: manipulation; }
 html.gate-on.gate-fits .gate { touch-action: none; }
+
+/* Guided mode on a touch layout: ONE fitted screen, nothing cut, nothing to scroll. The page is a
+   column exactly the visible height above the remote (its real height, measured: --remote-bar); the
+   texts keep their size and the picture takes what is left. The reading sits over the lower part of
+   the picture, the way it does on the desktop, and the globe centers the Earth in the free part
+   above it (--band, measured in js/app.js). */
+body.guided-touch:not(.guided-scroll) {
+  display: flex; flex-direction: column; box-sizing: border-box;
+  height: 100vh; height: 100dvh; overflow: hidden;
+  padding-bottom: calc(var(--remote-bar, 0px));
+}
+body.guided-touch:not(.guided-scroll) > main { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+body.guided-touch > footer { display: none; }
+body.guided-touch .intro { flex: none; padding-bottom: 6px; }
+body.guided-touch .remote { flex: none; }
+body.guided-touch:not(.guided-scroll) .stage { flex: 1 1 auto; min-height: 34vh; min-height: 34dvh; padding-top: 0; overflow: hidden; }
+body.guided-touch:not(.guided-scroll) .stage__view { inset: 0; height: auto; }
+body.guided-touch:not(.guided-scroll) .stage__safe { top: 0; height: var(--band); }
+body.guided-touch:not(.guided-scroll) .readout { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 6px; text-shadow: 0 1px 3px var(--space), 0 0 10px var(--space); }
+body.guided-touch:not(.guided-scroll) .stage__credit { top: auto; bottom: calc(var(--reading, 0px) - 1rem - 6px); left: auto; right: var(--gutter); }
+/* Short screens: the lede gives way first (it is aria-hidden), then the decorative picture disc. */
+/* A text size too large for one screen: the page scrolls instead (nothing is ever cut or covered). */
+body.guided-touch.guided-scroll { padding-bottom: var(--remote-bar, 0px); }
+@media (max-height: 760px) { body.guided-touch .intro__lede { display: none; } }
+@media (max-height: 640px) { body.guided-touch .readout__disc { display: none; } body.guided-touch .readout__value { padding-right: 0; min-height: 0; } }
+body.guided-touch.guided-scroll .stage { --band: 34vh; --band: 34dvh; }
+
+/* Explore on a touch layout: the pinned bar folds to one slim row, a native toggle in the console
+   toggle's language (a chevron and a word); the five buttons open above it. */
+.remote__fold { display: none; }
+@media (max-width: 1099.98px), (max-width: 51.99em) {
+  body.remote-fold .remote__fold {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: fixed; z-index: 31; left: 0; right: 0; bottom: 0; width: 100%; min-height: 44px; margin: 0;
+    padding: 6px 12px calc(6px + env(safe-area-inset-bottom)); border: 0; border-top: 1px solid var(--hair-2); border-radius: 0;
+    background: var(--space); color: var(--ink-2); font: 600 var(--t-sm)/1.2 var(--font-ui); cursor: pointer;
+  }
+  body.remote-fold .remote__fold .ico { width: 18px; height: 18px; transition: transform 200ms var(--ease); }
+  body.remote-fold .remote__fold[aria-expanded="true"] .ico { transform: rotate(180deg); }
+  body.remote-fold .remote__keys { bottom: var(--fold-h, 44px); }
+  /* The picture's credit: a fixed place, the top right corner of the picture, small and muted. */
+  .stage__credit { top: 8px; bottom: auto; left: auto; right: var(--gutter); text-shadow: 0 1px 3px var(--space); }
+}
+body.guided-touch:not(.guided-scroll) .stage__credit { top: 8px; bottom: auto; }
+
+/* The guided mode on a phone: "All controls" (and back to the simple screen); never elsewhere. */
+.bar__all { display: none; }
+body.guided-phone .bar__all { display: inline-flex; }
+/* A Compare on the fitted phone screen: the two dates and values with the beat take the note's and
+   the legends' room (the A and B rows carry the reading meanwhile). */
+@media (max-height: 760px) {
+  body.guided-touch.is-comparing .readout__note, body.guided-touch.is-comparing .readout__beatcap,
+  body.guided-touch.is-comparing .scale__legend, body.guided-touch.is-comparing .scale__tick { display: none; }
+}
+@media (max-height: 700px) {
+  /* The smallest phones: during a Compare the A and B rows (both dates and values) stand for the
+     big value and the scale, which come back when it ends. */
+  body.guided-touch.is-comparing .readout__value, body.guided-touch.is-comparing #scale { display: none; }
+}
+
+/* The record card's key (the arrow that switches to it): a key cap, a keyboard thing only. */
+.record__side kbd { font-size: 0.6875rem; line-height: 1.3; padding: 1px 5px; color: var(--ink-2); border-color: var(--line); }
+body.touch-ui .record__side { display: none; }
+/* The A and B of a Compare label date A and date B: letters, not key caps. */
+.cpair__letter, .readout__letter, .plate__letter, body.is-comparing .cpair__letter { border: 0; border-radius: 0; }

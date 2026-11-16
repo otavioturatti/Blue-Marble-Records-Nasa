@@ -54,6 +54,9 @@ const FOCUS_HALF_SPAN = 44 * RAD; // arrived: about 88 degrees of Earth around t
 const PLAY_FIT = 0.92; // while Play runs: the Earth as close as it can be with its whole disc (and the place at the center) inside this fraction of the safe area's half width and half height (see playDistFor)
 const PLAY_LIMB_R = 1.03; // the radius fitted: the Earth and the brightest part of its atmosphere
 const PLAY_TIP_ROOM = 1 / 3; // and the record's stylus tip, wherever it rests beside the planet over the record's dates, at least this many Earth radii inside the safe area (playDistOf)
+const PHONE_PLAY_W = 600; // a canvas narrower than this (and not wider than tall by more than a fifth) is a phone's portrait picture
+const PHONE_EARTH_SHARE = 0.5; // during Play on a phone: the Earth's diameter as this fraction of the picture's width (the record around it shows)
+const PHONE_MIN_CAM_LAT = 47.5 * RAD; // and the camera at least this far from the equator: the record (within 23.44 degrees of it) is then seen at 24 degrees or more on every date
 const PLAY_MAX_FILL = 0.62; // but never farther than the first Play framing (the Earth's diameter this fraction of the safe area's short side): the user prefers the closer view
 const RECORD_OPEN_DEG = 12; // the record fades out when the camera is within about this many degrees of its plane (record3d.js): its tip does not count then
 const PLAY_TILT_LAT = 35 * RAD; // while Play runs: a camera tilted from the place's vertical toward its hemisphere's pole aims for this latitude, so the record is less often edge on over the year
@@ -71,6 +74,8 @@ const WIDE_FILL = 0.36; // the farthest pull-back of a long trip
 const CLICK_SLOP = 6; // px of pointer travel that still counts as a click
 const HIT_R = 14; // px: the dot hit area is at least 28 px across
 const HIT_R_TOUCH = 22; // px: on coarse pointers (touch) a 44 px target
+const TOUCH_EARTH_MARGIN = 12; // px round the Earth's disc on screen where a finger turns the globe on both axes (Explore on touch)
+const TOUCH_DOT_SCALE = 0.6; // Explore on a touch layout: place dots (and the selected ring) at this fraction of their size
 const TEX_BUDGET_UHD = 230e6; // bytes of data textures on the GPU when the 4096 px tier is used (one is about 45 MB with mipmaps)
 const TEX_BUDGET = 80e6; // the same with the 2048 px tier (about 11 MB each)
 const TEX_BUDGET_SMALL = 24e6; // the same on small or low-memory devices
@@ -492,6 +497,9 @@ export async function createGlobe3d(host, opts = {}) {
   const weak = !!(navigator.deviceMemory && navigator.deviceMemory <= 2);
   const pixelRatio = () => Math.min(window.devicePixelRatio || 1, weak ? PIXEL_RATIO_WEAK : 2);
   const hitR = coarse ? HIT_R_TOUCH : HIT_R;
+  // "Explore on my own" on a touch layout (<body class="touch-ui">, not the guided mode, which takes
+  // every touch for its own gestures): the fingers handle the globe, two of them zoom it.
+  const exploreTouch = () => !!document.body && document.body.classList.contains("touch-ui") && !document.body.classList.contains("guided-touch");
   // While a Play runs the drawing buffer uses at most 1 device pixel per CSS px (fewer pixels while
   // the music needs the machine); the normal ratio comes back when the Play ends (one redraw).
   let playRatio = false;
@@ -764,7 +772,7 @@ export async function createGlobe3d(host, opts = {}) {
 
 
   // Pointer.
-  const ptr = { inside: false, x: 0, y: 0, drag: null, scratch: null };
+  const ptr = { inside: false, x: 0, y: 0, drag: null, scratch: null, pinch: null };
 
   // ------------------------------------------------------------ helpers
   function moonVec(T, out) {
@@ -976,8 +984,17 @@ export async function createGlobe3d(host, opts = {}) {
   }
 
   /** The Play camera's tilt from a place's vertical, and the hemisphere it tilts toward (+1 north, -1 south). */
+  /** A phone's portrait picture (by the canvas's own size): Play frames the record in view there. */
+  const phonePlay = () => M.W < PHONE_PLAY_W && M.W <= M.H * 1.2;
   function playTiltOf(p) {
     const lat = p.lat * RAD;
+    if (phonePlay()) {
+      // On a phone the record must show whole all through the Play: the camera sits at least
+      // PHONE_MIN_CAM_LAT from the equator, tilted from the place's vertical toward its hemisphere's
+      // pole (south near the equator) only as far as that needs.
+      const sg = lat > PLAY_EQ_BAND ? 1 : -1;
+      return [Math.max(0, PHONE_MIN_CAM_LAT - Math.abs(lat)), sg];
+    }
     if (Math.abs(lat) >= PLAY_TILT_LAT) return [0, 0];
     const sg = lat > PLAY_EQ_BAND ? 1 : -1;
     return [Math.min(PLAY_MAX_TILT, Math.abs(sg * PLAY_TILT_LAT - lat)), sg];
@@ -1028,6 +1045,12 @@ export async function createGlobe3d(host, opts = {}) {
     if (!p) return M.play;
     const [tilt, sg] = playTiltOf(p);
     const fit = playDistFor(tilt);
+    if (phonePlay()) {
+      // A phone: the Earth at PHONE_EARTH_SHARE of the picture's width (the record, its played grooves
+      // and the stylus around it), never closer than the whole Earth needs.
+      const share = PLAY_LIMB_R / Math.sin(Math.atan(((PHONE_EARTH_SHARE * (M.sw || M.W)) / M.H) * Math.tan((FOV / 2) * RAD)));
+      return Math.max(fit, share);
+    }
     const dates = Array.isArray(record?.dates) ? record.dates : [];
     if (!dates.length || !vinyl.radiusAt) return fit;
     const short = Math.min(M.sh || M.H, M.sw || M.W);
@@ -2043,9 +2066,10 @@ export async function createGlobe3d(host, opts = {}) {
     // The pointer's hover wins while the pointer is over the picture; otherwise the list's.
     const hov = p.id === (hoveredId || (ptr.inside ? null : listHoverId));
     // Active places: 11 px; places of the other record: the same mark a little smaller, still clearly visible.
-    if (sel) return [12, 1];
-    if (p.active === false) return [hov ? 12 : 10, hov ? 1 : 0.92];
-    return [hov ? 13.5 : 11, 1];
+    const k = exploreTouch() ? TOUCH_DOT_SCALE : 1; // smaller on a touch layout in Explore (constant on screen at any zoom)
+    if (sel) return [12 * k, 1];
+    if (p.active === false) return [(hov ? 12 : 10) * k, hov ? 1 : 0.92];
+    return [(hov ? 13.5 : 11) * k, 1];
   }
 
   /** Ocean places: a ring (1); land places: a solid dot (0); + 2 for the place being read (amber). */
@@ -2096,7 +2120,7 @@ export async function createGlobe3d(host, opts = {}) {
     if (!ring.visible) return false;
     const rm = reducedMotion();
     let moving = false;
-    let base = 26;
+    let base = 26 * (exploreTouch() ? TOUCH_DOT_SCALE / 0.75 : 1); // the ring a little smaller in proportion on a touch layout
     let a = power ? 1 : 0.85;
     if (fx.arrive && !rm) {
       const e = (t - fx.arrive) / 650;
@@ -2188,6 +2212,9 @@ export async function createGlobe3d(host, opts = {}) {
 
   function onPointerDown(e) {
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.pointerType === "touch") touches.set(e.pointerId, localXY(e));
+    if (e.pointerType === "touch" && exploreTouch() && touches.size === 2 && !ptr.pinch) { startPinch(); return; }
+    if (ptr.pinch) return; // a third finger: ignored
     if (ptr.drag && ptr.drag.id !== e.pointerId) {
       // A second finger: a pinch, which belongs to the page's zoom. Drop the drag (no click, no
       // fling) and ignore the fingers until they are lifted.
@@ -2214,7 +2241,8 @@ export async function createGlobe3d(host, opts = {}) {
       reportScratch(true, 0);
       return;
     }
-    ptr.drag = { id: e.pointerId, type: e.pointerType, x0: x, y0: y, x, y, t: now(), travel: 0, active: false, hit: hitTest(x, y) };
+    // free: a finger that starts on the Earth (Explore on touch) turns it on both axes, as the mouse does.
+    ptr.drag = { id: e.pointerId, type: e.pointerType, x0: x, y0: y, x, y, t: now(), travel: 0, active: false, hit: hitTest(x, y), free: e.pointerType === "touch" && exploreTouch() && onEarth(x, y) };
     try { canvas.setPointerCapture(e.pointerId); } catch {}
     if (e.pointerType === "mouse") e.preventDefault();
     cam.vLon = cam.vLat = 0;
@@ -2251,6 +2279,8 @@ export async function createGlobe3d(host, opts = {}) {
 
   function onPointerMove(e) {
     noteTouch();
+    if (e.pointerType === "touch" && touches.has(e.pointerId)) touches.set(e.pointerId, localXY(e));
+    if (ptr.pinch) { if (ptr.pinch.ids.includes(e.pointerId)) movePinch(); return; }
     if (ptr.drag || ptr.scratch) lastInputAt = now();
     if (ptr.scratch && ptr.scratch.id === e.pointerId) { moveScratch(e); return; }
     const { x, y } = localXY(e);
@@ -2264,7 +2294,7 @@ export async function createGlobe3d(host, opts = {}) {
       return;
     }
     const dx = x - d.x;
-    const dy = d.type === "touch" ? 0 : y - d.y; // touch: vertical swipes belong to the page
+    const dy = d.type === "touch" && !d.free ? 0 : y - d.y; // touch off the Earth: vertical swipes belong to the page
     d.travel += Math.hypot(x - d.x, y - d.y);
     const t = now();
     const dtm = Math.max(1, t - d.t);
@@ -2394,13 +2424,25 @@ export async function createGlobe3d(host, opts = {}) {
   // Touch: a finger that lands on the record during Play scratches it, so the page must not scroll
   // for that touch (touch-action is decided at touchstart; pointer events cannot cancel it).
   function onTouchStart(e) {
-    if (!playing || e.touches.length !== 1) return;
+    if (e.touches.length !== 1) return;
     const r = canvas.getBoundingClientRect();
     const tch = e.touches[0];
-    if (recordAngleAt(tch.clientX - r.left, tch.clientY - r.top, true) != null) e.preventDefault();
+    const x = tch.clientX - r.left, y = tch.clientY - r.top;
+    if (playing && recordAngleAt(x, y, true) != null) { e.preventDefault(); return; } // the scratch
+    // Explore on touch: a finger that starts on the Earth turns it freely, so the page must not scroll
+    // for that gesture (touch-action is decided here; the pointer events keep coming).
+    if (exploreTouch() && onEarth(x, y)) e.preventDefault();
+  }
+  /** On the Earth's disc on screen (its projected radius plus TOUCH_EARTH_MARGIN), CSS px. */
+  function onEarth(x, y) {
+    earthGroup.updateMatrixWorld();
+    camera.updateMatrixWorld();
+    tmpV.set(0, 0, 0).project(camera);
+    const ex = ((tmpV.x + 1) / 2) * M.W, ey = ((1 - tmpV.y) / 2) * M.H;
+    return Math.hypot(x - ex, y - ey) <= earthRadiusPx() + TOUCH_EARTH_MARGIN;
   }
   function onTouchMove(e) {
-    if (ptr.scratch) e.preventDefault();
+    if (ptr.scratch || ptr.pinch || (e.touches.length >= 2 && exploreTouch())) e.preventDefault();
   }
 
   function endDrag(e, cancelled) {
@@ -2411,7 +2453,7 @@ export async function createGlobe3d(host, opts = {}) {
     cam.lastInteract = now();
     if (!d.active) {
       cam.vLon = cam.vLat = 0;
-      if (!cancelled) {
+      if (!cancelled && !d.noClick) {
         // The dot under the pointer now, or the one under it when it was pressed (the globe
         // keeps turning between press and release).
         const h = hitTest(d.x, d.y) || d.hit;
@@ -2428,8 +2470,54 @@ export async function createGlobe3d(host, opts = {}) {
     kick();
   }
 
-  const onUp = (e) => { if (ptr.scratch && ptr.scratch.id === e.pointerId) endScratch(); else endDrag(e, false); };
-  const onCancel = (e) => { if (ptr.scratch && ptr.scratch.id === e.pointerId) endScratch(); else endDrag(e, true); };
+  const onUp = (e) => { if (endPinchFor(e)) return; if (ptr.scratch && ptr.scratch.id === e.pointerId) endScratch(); else endDrag(e, false); };
+  const onCancel = (e) => { if (endPinchFor(e)) return; if (ptr.scratch && ptr.scratch.id === e.pointerId) endScratch(); else endDrag(e, true); };
+
+  // ------------------------------------------------------------ pinch (Explore on a touch layout)
+  // Two fingers on the picture zoom the Earth with the wheel's model (zoomNotches: the same limits and
+  // the same fade to the real map at the far end); the ratio of their distance from one move to the
+  // next is the zoom step. No drag, scratch or dot click meanwhile; when one finger lifts, the other
+  // carries on as a fresh drag from where it is (no jump) that never counts as a click.
+  const touches = new Map(); // touch pointer id -> its last position (CSS px)
+  function pinchDist() {
+    const [a, b] = ptr.pinch.ids.map((id) => touches.get(id));
+    return a && b ? Math.hypot(a.x - b.x, a.y - b.y) : 0;
+  }
+  function startPinch() {
+    if (ptr.scratch) endScratch();
+    if (ptr.drag) { try { canvas.releasePointerCapture(ptr.drag.id); } catch {} ptr.drag = null; }
+    cam.vLon = cam.vLat = 0;
+    ptr.pinch = { ids: [...touches.keys()].slice(0, 2), dist: 0 };
+    for (const id of ptr.pinch.ids) { try { canvas.setPointerCapture(id); } catch {} }
+    ptr.pinch.dist = pinchDist();
+    lastInputAt = now();
+    noteTouch();
+    kick();
+  }
+  function movePinch() {
+    const d = pinchDist();
+    const pd = ptr.pinch.dist;
+    if (d > 4 && pd > 4) zoomNotches(Math.log(pd / d) / Math.log(ZOOM_PER_NOTCH)); // fingers apart: closer
+    ptr.pinch.dist = d;
+    lastInputAt = now();
+  }
+  function endPinchFor(e) {
+    if (e.pointerType === "touch") {
+      const was = touches.has(e.pointerId);
+      touches.delete(e.pointerId);
+      if (!ptr.pinch) return false;
+      if (!was || !ptr.pinch.ids.includes(e.pointerId)) return true;
+      const other = ptr.pinch.ids.find((id) => id !== e.pointerId);
+      ptr.pinch = null;
+      try { canvas.releasePointerCapture(e.pointerId); } catch {}
+      const pos = touches.get(other);
+      if (pos) ptr.drag = { id: other, type: "touch", x0: pos.x, y0: pos.y, x: pos.x, y: pos.y, t: now(), travel: 0, active: false, hit: null, noClick: true };
+      cam.lastInteract = now();
+      kick();
+      return true;
+    }
+    return false;
+  }
   function onLeave() {
     ptr.inside = false;
     if (hoveredId && !ptr.drag) {
@@ -2578,6 +2666,17 @@ export async function createGlobe3d(host, opts = {}) {
     if (up !== gateUp) { gateUp = up; if (!up) kick(); }
   });
   gateMo.observe(rootEl, { attributes: true, attributeFilter: ["class"] });
+  // Explore on a touch layout: the browser leaves two-finger gestures to the picture (pinch zoom),
+  // one finger keeps its rule (sideways turns the globe, up and down scrolls the page), and the dots
+  // are drawn smaller. Elsewhere, as before (two fingers zoom the page).
+  const applyTouchMode = () => {
+    canvas.style.touchAction = exploreTouch() ? "pan-y" : "pan-y pinch-zoom";
+    restyleDots();
+    kick();
+  };
+  const bodyMo = document.body ? new MutationObserver(applyTouchMode) : null;
+  bodyMo?.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  applyTouchMode();
   io.observe(host);
   const onVis = () => { pageVisible = !document.hidden; if (pageVisible) kick(); };
   document.addEventListener("visibilitychange", onVis);
@@ -2934,6 +3033,7 @@ export async function createGlobe3d(host, opts = {}) {
       clearTimeout(wakeTimer);
       io.disconnect();
       gateMo.disconnect();
+      bodyMo?.disconnect();
       document.removeEventListener("visibilitychange", onVis);
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("touchstart", onTouchStart);

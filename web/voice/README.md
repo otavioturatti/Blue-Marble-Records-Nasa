@@ -2,8 +2,8 @@
 
 These MP3 files are the spoken lines of the optional voice guide (`web/js/ui/voice.js`): the welcome, the guided tour, the place names, and short status words (paused, stopped, end of a place). There is one file per line and per language:
 
-- `en/{Id}.mp3`: English, 77 clips.
-- `pt-BR/{Id}.mp3`: Brazilian Portuguese, 77 clips.
+- `en/{Id}.mp3`: English, 81 clips.
+- `pt-BR/{Id}.mp3`: Brazilian Portuguese, 81 clips.
 
 `{Id}` is the key of the line in the `LINES` table of `web/js/ui/voice.js` (for example `T01.mp3`, `P-uberlandia.mp3`). That table is the text of every clip: the clips and the table must stay in step.
 
@@ -30,7 +30,7 @@ When the voice guide is on, the page asks once per language for `voice/{lang}/S0
 
 ## How to regenerate
 
-The generation script (`generate.py`, with its helper `transcribe.py`) lives outside the repository, in the scratch folder of the session that made the clips. It reads the API key from a local file outside the repository (`eleven.key/eleven.key.txt` in the user's home folder), only inside the process; the key is never written to the repository, a log or a command line. Steps:
+The generation script (`generate.py`, with its helper `transcribe.py`) lives outside the repository. It reads the API key from a local file outside the repository, only inside the process; the key is never written to the repository, a log or a command line. Steps:
 
 1. Export the table: `node -e` importing `web/js/ui/voice.js` and writing `LINES` to `lines.json`.
 2. `python generate.py gen` (all lines, or a list of ids), then `python generate.py process`, then `python generate.py measure`.

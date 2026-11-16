@@ -102,6 +102,7 @@ export function guidedKey(key, focus = "other") {
   if (key === "ArrowRight") return "fire";
   if (key === "ArrowLeft") return "sea";
   if (key === " " || key === "Enter") return focus === "button" ? null : "pause";
+  if (key === "c" || key === "C") return "compare"; // the place's two dates (the record's tour pair)
   return null;
 }
 
@@ -134,6 +135,7 @@ export function gateDecision({ input, woken = false, target = "bg", selected = n
   const name = (o) => `G02${o}`;
   const isOpt = GATE_OPTIONS.includes(target);
   const prompt = input === "mouse" ? "G01" : "G01t";
+  const hint = input === "mouse" ? "G03" : "G03t"; // "double click (or double tap) to confirm"
   if (input === "assist") return isOpt ? { action: "enter", option: target, lines: [] } : { action: "none", option: selected, lines: [] };
   // The first raw interaction only speaks the prompt: nothing is selected, nothing is entered.
   if (!woken) return { action: "wake", option: null, lines: [prompt] };
@@ -145,15 +147,52 @@ export function gateDecision({ input, woken = false, target = "bg", selected = n
     const option = selected ? GATE_OPTIONS[(i + (input === "swipeDown" ? 1 : -1) + 3) % 3] : GATE_OPTIONS[0];
     return { action: "select", option, lines: [name(option)] };
   }
-  // A single press never enters. On an option: it is chosen and its name is said (again, if it already
-  // was). On the background: the chosen option's name again, or the prompt when nothing is chosen yet.
-  if (isOpt) return { action: "select", option: target, lines: [name(target)] };
-  return { action: "say", option: selected, lines: [selected ? name(selected) : prompt] };
+  // A single press never enters. On an option: it is chosen, its name is said (again, if it already
+  // was) and then how to confirm it. On the background: the chosen option's name and how to confirm,
+  // or the prompt when nothing is chosen yet.
+  // A mouse is a deliberate pointer: a second click on the option already chosen enters it, however
+  // long after the first (a double click that is too slow must not leave a sighted visitor stuck).
+  // A finger never enters with a single tap.
+  if (isOpt && input === "mouse" && target === selected) return { action: "enter", option: target, lines: [] };
+  if (isOpt) return { action: "select", option: target, lines: [name(target), hint] };
+  return { action: "say", option: selected, lines: selected ? [name(selected), hint] : [prompt] };
 }
 
 /** Two taps or clicks close enough in time and place to be one double tap. */
 export function isDoubleTap(prev, next, { ms = 500, px = 60 } = {}) {
   if (!prev || !next) return false;
   return next.t - prev.t <= ms && Math.hypot(next.x - prev.x, next.y - prev.y) <= px;
+}
+
+/**
+ * A record's "tour pair": the two dates every Compare of the tour, the remote's Compare button, the
+ * key C and the two-finger tap play, with the place it was published for. It is the record's first
+ * published pair (meta.json compare[0]), so its dates live in one place only.
+ */
+export function tourPair(meta) {
+  const c = meta && Array.isArray(meta.compare) ? meta.compare[0] : null;
+  return c && c.a && c.b ? { a: c.a, b: c.b, place: c.place || null } : null;
+}
+
+/** The line that says a record's tour pair's dates. */
+export const PAIR_LINE = Object.freeze({ "sst-anomaly": "C04", fire: "C05" });
+/** The line that cites the published pair, said only at its own place. */
+export const PLACE_LINE = Object.freeze({ "equatorial-pacific": "C02", uberlandia: "C03" });
+
+/**
+ * The lines before a Compare on the tour pair: C01 the first time in the session (how to hear it),
+ * the dates always (C04 sea, C05 fire), then the published pair's citation only at its place.
+ */
+export function compareLines({ first = false, recordId, placeId, pairPlace = null } = {}) {
+  const lines = [];
+  if (first) lines.push("C01");
+  if (PAIR_LINE[recordId]) lines.push(PAIR_LINE[recordId]);
+  if (placeId && placeId === pairPlace && PLACE_LINE[placeId]) lines.push(PLACE_LINE[placeId]);
+  return lines;
+}
+
+/** A tap with two fingers: both down and up within about 350 ms, little movement. */
+export function isTwoFingerTap({ fingers = 0, ms = 0, move = 0 } = {}) {
+  return fingers === 2 && ms <= 350 && move <= 20;
 }
 

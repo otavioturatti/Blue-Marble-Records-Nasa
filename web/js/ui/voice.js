@@ -11,7 +11,7 @@
 // S00 is not in the script yet: the voice's first words must say how to turn it off.
 // The clips' version, in their address: raise it whenever a clip is recorded again, so a browser that
 // kept the old file (the site lets recordings be cached for a day) fetches the new one.
-const CLIPS_V = "3";
+const CLIPS_V = "4";
 
 export const LINES = {
   en: {
@@ -82,9 +82,11 @@ export const LINES = {
     T03c: "Now, fire. The more fire the satellites see, the fuller and heavier the music.",
     T03d: "Rains and dry seasons, one after the other.",
     T03e: "The same months, across the ocean.",
-    T04: "End of the tour. Now the up and down arrows go through every place, and Space plays it. The full list comes after these buttons.",
-    T04t: "End of the tour. Next and Previous now go through every place; double tap Play to hear one. The full list comes after these buttons.",
-    T04v: "End of the tour. Swipe sideways to visit other places; tap to hear a place again.",
+    T04: "End of the tour. Now the up and down arrows go through every place, and Space plays it. The C key compares two dates. The full list comes after these buttons.",
+    T04t: "End of the tour. Next and Previous now go through every place; double tap Play to hear one, and Compare to compare two dates. The All controls button shows the full list.",
+    T04v: "End of the tour. Swipe sideways to visit other places; tap to hear a place again; tap with two fingers to compare two dates.",
+    C04: "Comparing November 2025 with November 2026.",
+    C05: "Comparing February 2025 with September 2025.",
     T05: "Tour stopped. Start the tour begins it again.",
     S10v: "End of this place. Swipe sideways for another place, or tap to hear it again.",
     // The gate speaks (a visitor without a screen reader: a raw touch or key reached the page).
@@ -93,6 +95,8 @@ export const LINES = {
     G02a: "Guided tour, with my screen reader.",
     G02b: "Guided tour, with the app's voice.",
     G02c: "Explore on my own.",
+    G03: "Double click to confirm.",
+    G03t: "Double tap to confirm.",
   },
   "pt-BR": {
     S00: "Voz guia ligada. Para desligar, aperte G.",
@@ -162,9 +166,11 @@ export const LINES = {
     T03c: "Agora, o fogo. Quanto mais fogo os satélites veem, mais cheia e pesada fica a música.",
     T03d: "Chuvas e secas, uma depois da outra.",
     T03e: "Os mesmos meses, do outro lado do oceano.",
-    T04: "Fim do passeio. Agora as setas para cima e para baixo percorrem todos os lugares, e Espaço toca. A lista completa vem depois destes botões.",
-    T04t: "Fim do passeio. Próximo e Anterior agora percorrem todos os lugares; toque duas vezes em Tocar para ouvir. A lista completa vem depois destes botões.",
-    T04v: "Fim do passeio. Deslize para o lado para visitar outros lugares; toque para ouvir um lugar de novo.",
+    T04: "Fim do passeio. Agora as setas para cima e para baixo percorrem todos os lugares, e Espaço toca. A tecla C compara duas datas. A lista completa vem depois destes botões.",
+    T04t: "Fim do passeio. Próximo e Anterior agora percorrem todos os lugares; toque duas vezes em Tocar para ouvir, e em Comparar para comparar duas datas. O botão Todos os controles mostra a lista completa.",
+    T04v: "Fim do passeio. Deslize para o lado para visitar outros lugares; toque para ouvir um lugar de novo; toque com dois dedos para comparar duas datas.",
+    C04: "Comparando novembro de 2025 com novembro de 2026.",
+    C05: "Comparando fevereiro de 2025 com setembro de 2025.",
     T05: "Passeio parado. Começar o passeio recomeça.",
     S10v: "Fim deste lugar. Deslize para o lado para outro lugar, ou toque para ouvir de novo.",
     G01: "Blue Marble Records. Ouça o planeta que a NASA vê. Aperte Espaço para começar o passeio guiado com esta voz. As setas mostram as outras opções.",
@@ -172,6 +178,8 @@ export const LINES = {
     G02a: "Passeio guiado, com o meu leitor de tela.",
     G02b: "Passeio guiado, com a voz do aplicativo.",
     G02c: "Explorar por conta própria.",
+    G03: "Clique duas vezes para confirmar.",
+    G03t: "Toque duas vezes para confirmar.",
   },
 };
 

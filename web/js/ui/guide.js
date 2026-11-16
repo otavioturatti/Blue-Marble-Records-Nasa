@@ -11,8 +11,8 @@ export const GUIDE = {
     {
       title: "Tour and remote",
       rows: [
-        ["Down arrow, Up arrow", "wherever the focus is: next and previous place (the tour's stops during the tour, every place of the record otherwise)"],
-        ["Right arrow, Left arrow", "wherever the focus is: switch to the fire record, switch to the sea record"],
+        ["Down arrow, Up arrow", "wherever the focus is, except on the date slider and the Compare with list: next and previous place (the tour's stops during the tour, every place of the record otherwise)"],
+        ["Right arrow, Left arrow", "wherever the focus is, except on the date slider and the Compare with list: switch to the fire record, switch to the sea record"],
         ["Space, Enter", "play, pause and continue (on another button they press that button); the tour starts again only with its button"],
         ["Esc, S", "stop the tour, or all sound (some screen readers keep Esc for themselves: S works too)"],
         ["Tab", "move to the next control; the full place list comes after the remote"],
@@ -31,7 +31,7 @@ export const GUIDE = {
     {
       title: "More keys",
       rows: [
-        ["C", "compare two dates"],
+        ["C", "compare the place's two published dates (the record's pair), wherever the focus is, except on the date slider and the Compare with list; the panel's Compare button keeps its own date choice"],
         ["L", "sound legend"],
         ["V", "say the value under the needle"],
         ["W", "say the place under the needle, with its latitude and longitude"],
@@ -71,6 +71,8 @@ export const GUIDE = {
         ["Swipe right or left", "next or previous control (TalkBack, VoiceOver)"],
         ["Double tap", "on Start sound, a record or a button: activate it; on a place: choose it and play it, and again to pause or continue"],
         ["Date slider", "change the date (VoiceOver: swipe up or down; TalkBack: volume keys)"],
+        ["Two-finger tap", "in the tour with the app's voice: compare the place's two published dates"],
+        ["All controls", "on the simple screen of a guided tour: show the panel and the NASA frame; Simple screen goes back"],
         ["Vibration", "Android, Chrome or Samsung Internet: count the pulses, 1 low to 5 high; a rough buzz is no data"],
       ],
     },
@@ -79,8 +81,8 @@ export const GUIDE = {
     {
       title: "Passeio e controle remoto",
       rows: [
-        ["Seta para baixo, Seta para cima", "onde estiver o foco: próximo e anterior lugar (as paradas durante o passeio, todos os lugares do disco fora dele)"],
-        ["Seta para a direita, Seta para a esquerda", "onde estiver o foco: troca para o disco do fogo, troca para o disco do mar"],
+        ["Seta para baixo, Seta para cima", "onde estiver o foco, menos no controle de data e na lista Comparar com: próximo e anterior lugar (as paradas durante o passeio, todos os lugares do disco fora dele)"],
+        ["Seta para a direita, Seta para a esquerda", "onde estiver o foco, menos no controle de data e na lista Comparar com: troca para o disco do fogo, troca para o disco do mar"],
         ["Espaço, Enter", "toca, pausa e continua (em outro botão, apertam esse botão); o passeio só recomeça pelo botão dele"],
         ["Esc, S", "para o passeio, ou todo o som (alguns leitores de tela guardam o Esc para si: o S também funciona)"],
         ["Tab", "vai para o próximo controle; a lista completa de lugares vem depois do controle remoto"],
@@ -99,7 +101,7 @@ export const GUIDE = {
     {
       title: "Mais teclas",
       rows: [
-        ["C", "compara duas datas"],
+        ["C", "compara as duas datas publicadas do lugar (o par do disco), onde estiver o foco, menos no controle de data e na lista Comparar com; o botão Comparar do painel mantém a sua escolha de datas"],
         ["L", "legenda sonora"],
         ["V", "diz o valor sob a agulha"],
         ["W", "diz o lugar sob a agulha, com a latitude e a longitude"],
@@ -139,6 +141,8 @@ export const GUIDE = {
         ["Deslizar para a direita ou esquerda", "próximo controle ou anterior (TalkBack, VoiceOver)"],
         ["Toque duplo", "em Ligar o som, um disco ou um botão: ativa; em um lugar: escolhe e toca, e de novo pausa ou continua"],
         ["Controle de data", "muda a data (VoiceOver: deslizar para cima ou para baixo; TalkBack: teclas de volume)"],
+        ["Toque com dois dedos", "no passeio com a voz do aplicativo: compara as duas datas publicadas do lugar"],
+        ["Todos os controles", "na tela simples de um passeio guiado: mostra o painel e o quadro da NASA; Tela simples volta"],
         ["Vibração", "Android, Chrome ou Samsung Internet: conte os pulsos, 1 baixo a 5 alto; vibração áspera é sem dados"],
       ],
     },

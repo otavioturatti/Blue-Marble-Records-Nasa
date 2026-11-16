@@ -10,12 +10,12 @@ import { setLang, getLang, t } from "./ui/i18n.js";
 import { dateText, monthText, monthYearText, pairText, latText, lonText } from "./ui/valuetext.js";
 import { formatValue, normalWord, compactValue } from "./ui/format.js";
 import { localizeData } from "./ui/names.js";
-import { createPlaceList, linkQuery, selectionCode } from "./ui/places.js";
+import { createPlaceList, linkQuery } from "./ui/places.js";
 import * as view from "./ui/view.js";
 import * as haptics from "./ui/haptics.js";
 import { createVoice, linesFor, lineText, placeLine, FULL_POLICY } from "./ui/voice.js";
 import { splitLine, GUARD_MS, FOCUS_MS } from "./ui/pace.js";
-import { TOUR, stopRange, inputKind, remoteKey, gateKey, choiceSaysScreenReader, guidedKey, touchGesture, gateDecision, isDoubleTap, GATE_OPTIONS } from "./ui/tour.js";
+import { TOUR, stopRange, inputKind, remoteKey, gateKey, choiceSaysScreenReader, guidedKey, touchGesture, gateDecision, isDoubleTap, GATE_OPTIONS, tourPair, compareLines, isTwoFingerTap } from "./ui/tour.js";
 
 const $ = (id) => document.getElementById(id);
 // Play through time: one date every two beats of the label's 84 BPM. Change PLAY_BPM alone:
@@ -239,9 +239,11 @@ function buildRecords() {
     short.textContent = meta.short || "";
     // One short name per record ("Sea: ocean temperature"); the visible texts are hidden from the tree.
     input.setAttribute("aria-label", t(rec.id === "fire" ? "recordAriaFire" : "recordAriaSea"));
-    // The record's letter, the first letter of its places' selection codes (A01, B01).
+    // The key that switches to this record (the page's key map: Left the sea, Right the fire).
+    const key = guidedKey("ArrowLeft") === (rec.id === "fire" ? "fire" : "sea") ? "ArrowLeft" : "ArrowRight";
+    input.setAttribute("aria-keyshortcuts", key);
     const side = row.querySelector('[data-slot="side"]');
-    if (side) side.textContent = selectionCode(state.records.indexOf(rec), 0).slice(0, 1);
+    if (side) { const k = document.createElement("kbd"); k.textContent = key === "ArrowLeft" ? "←" : "→"; side.replaceChildren(k); }
     list.append(row);
   }
   $("records").disabled = false;
@@ -821,7 +823,33 @@ function ensureStarted({ notice = null, keepStart = false, button = null } = {})
 function hideStart() {
   $("remote-keys").hidden = false;
   document.body.classList.add("remote-on");
+  applyFold();
   syncRemote();
+}
+
+/**
+ * Explore on a touch layout: the pinned bar folds to one slim row ("Controls"); its five buttons open
+ * above it on a tap. Folded at the start of the session, then as the visitor left it (this session).
+ * The guided entrances and the desktop never fold: their five buttons stay open.
+ */
+let foldOn = false;
+function applyFold() {
+  foldOn = touchUi() && !document.body.classList.contains("guided-phone") && !document.body.classList.contains("guided-touch") && !tour.active;
+  if (gateLeaving && !gateLeaving.explore) foldOn = false;
+  document.body.classList.toggle("remote-fold", foldOn);
+  if (!foldOn) { $("r-fold").setAttribute("aria-expanded", "true"); return; }
+  let open = false;
+  try { open = sessionStorage.getItem("bmr-fold") === "open"; } catch { /* storage blocked */ }
+  setFold(open, { store: false });
+}
+
+function setFold(open, { store = true } = {}) {
+  const keys = $("remote-keys");
+  if (!open && keys.contains(document.activeElement)) $("r-fold").focus({ preventScroll: true }); // never the body
+  keys.hidden = !open;
+  $("r-fold").setAttribute("aria-expanded", String(open));
+  document.body.classList.toggle("remote-folded", !open);
+  if (store) { try { sessionStorage.setItem("bmr-fold", open ? "open" : "closed"); } catch { /* storage blocked */ } }
 }
 
 /**
@@ -908,7 +936,7 @@ function leaveGate(chosen = null, { explore = false } = {}) {
   // Chosen during the opening (a screen reader presses a button under it): the opening ends at once.
   if (rootEl.classList.contains("intro-on")) window.dispatchEvent(new Event("bmr:skip-intro"));
   const gate = $("gate");
-  const leaving = { chosen, ready: true, landed: false, timer: 0, entrance: !(explore && deepLinked) };
+  const leaving = { chosen, ready: true, landed: false, timer: 0, entrance: !(explore && deepLinked), explore };
   gateLeaving = leaving;
   announcer?.cancel(); // the gate's intro, if it is still waiting to be said, is not said now
   announcer?.interrupted(); // the reader stopped the intro at her press (the focus move is added when it happens)
@@ -984,7 +1012,7 @@ function landFocus(target) {
 // The tour: four stops, each an excerpt of a place's record, played by itself one after the other.
 // It never moves the focus after the single move to Pause when it starts; it never speaks over the
 // music; with the voice off its lines go to the live region, with gaps.
-const tour = { active: false, index: -1, token: 0, range: null, paused: false };
+const tour = { active: false, index: -1, token: 0, range: null, paused: false, phase: "music" };
 let liveToken = 0;
 
 /** How the visitor is using the page: "key", "sr" (a likely screen reader on a touch screen) or "touch". */
@@ -1100,10 +1128,11 @@ async function startTour({ voice: withVoice = null, button = null } = {}) {
   if (!ok) { tour.active = false; syncRemote(); landFocus($("r-play")); return; }
   hideStart();
   if (first) {
-    // A guided entrance needs no panel: the console starts closed and never opens by itself (on a
-    // touch layout the console and the flat frame are not shown at all: the picture and the remote).
-    if (touchUi()) document.body.classList.add("guided-touch");
-    else { autoCollapsed = false; setConsoleCollapsed(true); }
+    // On a touch layout a guided entrance needs no panel: the console and the flat frame are not
+    // shown at all (the picture and the remote, one fitted screen). On the desktop the console behaves
+    // as it always did (open, stepping aside around a Play like Explore).
+    if (touchUi()) document.body.classList.add("guided-touch", "guided-phone");
+    else if (consoleCollapsed) setConsoleCollapsed(false);
     // The voice tour on a touch screen: taps and swipes anywhere (she cannot find buttons).
     if (withVoice && touchUi()) { voiceTouch = true; document.documentElement.classList.add("voice-touch"); }
     // The single focus move of the tour: to Pause, the visitor's own action just started it (from
@@ -1133,6 +1162,7 @@ async function runStop(i) {
   const stop = TOUR[i];
   tour.active = true;
   tour.paused = false;
+  tour.phase = "music";
   tour.index = i;
   const { from, to } = await goToStop(i);
   if (my !== tour.token) return;
@@ -1176,7 +1206,84 @@ async function playStop(my, { resume = false } = {}) {
   const done = await togglePlay({ range, inTour: true, resume });
   if (my !== tour.token || done !== "ended") return;
   await wait(1000);
+  if (my !== tour.token) return;
+  await compareStop(my);
+}
+
+/**
+ * The end of a stop that played to its end: the Compare of that place on its record's tour pair
+ * (the lines, then the sound), about 1.5 s of quiet, then the next stop. Next or Previous cut it
+ * (a new token); Pause pauses the tour here (Play says the Compare's lines again).
+ */
+async function compareStop(my) {
+  tour.phase = "compare";
+  const ok = await pairCompare(() => my === tour.token);
+  if (my !== tour.token || !ok) return;
+  tour.phase = "music";
+  await wait(1500);
   if (my === tour.token) runStop(tour.index + 1);
+}
+
+/**
+ * The Compare on the record's tour pair at the current place: C01 the first time, the dates, the
+ * published pair's citation at its place; the sound only after the last line has ended (the voice's
+ * clip, or the reader's estimate and its guard); on the reader path the values follow the sound.
+ * stillMine: false when the visitor did something else meanwhile. Resolves true when it played.
+ */
+async function pairCompare(stillMine = () => true) {
+  const meta = state.meta;
+  const place = currentPlace();
+  const pair = tourPair(meta);
+  if (!pair || !place) return false;
+  if (state.playing) { stopEngine(); endPlay(); }
+  cancelAutoPlay();
+  pausedHere = false;
+  const lines = compareLines({ first: !comparedOnce, recordId: meta.id, placeId: place.id, pairPlace: pair.place });
+  comparedOnce = true;
+  comparedBefore = true;
+  // The picture and the readout go to date A of the pair, quietly.
+  const ia = meta.dates.indexOf(pair.a);
+  if (ia >= 0 && state.dateIndex !== ia) { state.dateIndex = ia; await update("settle"); }
+  if (!stillMine()) return false;
+  let fa;
+  let fb;
+  try { [fa, fb] = await Promise.all([loadFrame(meta, pair.a), loadFrame(meta, pair.b)]); } catch { announcer.now(t("loadError")); return false; }
+  const a = readSample(meta, fa, place.lat, place.lon);
+  const b = readSample(meta, fb, place.lat, place.lon);
+  if (!(await speak(lines)) || !stillMine()) return false; // the voice's clips end, or the reader's lines
+  if (!(await readerGuard(stillMine))) return false;
+  state.compareDate = pair.b;
+  state.sample = a;
+  setCompare(true, b);
+  view.focusPlace();
+  engine.compare(a, b);
+  haptics.compare(a.nodata ? null : a.v01, b.nodata ? null : b.v01);
+  view.pulse(a.nodata ? null : a.v01);
+  await wait(COMPARE_SOUND_MS);
+  if (!stillMine()) return false;
+  // The reader path: the values follow the sound (the next lines queue behind them, never over).
+  if (!voice?.isOn()) announcer.say(dj.describeCompare(djCtx({ dateB: pair.b, sample: a, sampleB: b, brief: true, omitPlace: true })));
+  return true;
+}
+
+/** The remote's Compare, the key C and the two-finger tap: the tour pair at the current place. */
+function remoteCompare() {
+  userActed();
+  if (tour.active) {
+    // In the tour: the stop pauses where it is; Play goes on from there.
+    tour.token += 1;
+    tour.paused = true;
+    tour.phase = "compare";
+    cutSpeech();
+    syncRemote();
+    const my = tour.token;
+    // Afterwards Play goes on with the same stop (its lines, then its music).
+    pairCompare(() => my === tour.token).then(() => { if (my === tour.token) tour.phase = "music"; });
+    return;
+  }
+  const my = ++playToken;
+  cutSpeech();
+  pairCompare(() => my === playToken);
 }
 
 /** The end of the tour: the focus stays; one sentence says how to go on. */
@@ -1223,6 +1330,7 @@ function remotePlay() {
   tour.paused = false;
   syncRemote();
   if (tour.index < 0) { runStop(0); return; }
+  if (tour.phase === "compare") { const my = ++tour.token; compareStop(my); return; }
   if (tour.range && state.dateIndex >= tour.range.from && pausedHere) { const my = ++tour.token; playStop(my, { resume: true }); return; }
   runStop(tour.index);
 }
@@ -1711,9 +1819,13 @@ function wire() {
   $("start").addEventListener("click", () => enterGate("c"));
   // The remote.
   $("r-play").addEventListener("click", () => remotePlay());
+  $("r-fold").addEventListener("click", () => setFold($("remote-keys").hidden));
   $("r-next").addEventListener("click", () => remoteStep(1));
   $("r-prev").addEventListener("click", () => remoteStep(-1));
   $("r-record").addEventListener("click", () => remoteRecord());
+  $("r-compare").addEventListener("click", () => remoteCompare());
+  // The guided mode on a phone: every control (the console and the flat frame), and back.
+  $("all-controls").addEventListener("click", () => setAllControls(!document.body.classList.contains("guided-full")));
   $("r-tour").addEventListener("click", () => (tour.active ? stopTour() : startTour()));
   // The toggle by hand: the user takes the console over from the Play rule.
   $("console-toggle")?.addEventListener("click", () => { autoCollapsed = false; setConsoleCollapsed(!consoleCollapsed); });
@@ -1772,7 +1884,9 @@ function wire() {
   window.addEventListener("click", (e) => {
     if (!e.isTrusted || !document.documentElement.classList.contains("gate-on") || gateLeaving) return;
     const t = e.target instanceof Element ? e.target : null;
-    if (t?.closest(".gate__lang") || !t?.closest("#gate")) return; // the language switch stays direct
+    // The language switch stays direct. A press on the opening's veil (it covers the gate while the
+    // record animation plays) counts as the gate's background: the first touch always speaks.
+    if (t?.closest(".gate__lang") || !t?.closest("#gate, #splash")) return;
     const raw = e.detail > 0 && performance.now() - lastRawPointerAt <= 1500;
     if (!raw) return; // assistive activation: the button's own handler enters it
     e.preventDefault();
@@ -1812,14 +1926,38 @@ function wire() {
   // from the globe and the page (no rotating, zooming or scrolling under the finger).
   const isControl = (t) => t instanceof Element && !!t.closest("button, a, input, select, textarea, label, dialog");
   let touchFrom = null;
+  let twoFrom = null; // a tap with two fingers: the Compare
   window.addEventListener("touchstart", (e) => {
+    if (voiceTouch && e.touches.length === 2) {
+      e.stopPropagation();
+      const [p, q] = [e.touches[0], e.touches[1]];
+      twoFrom = { t: twoFrom?.t ?? performance.now(), pts: [[p.clientX, p.clientY], [q.clientX, q.clientY]], move: 0 };
+      touchFrom = null;
+      return;
+    }
     if (!voiceTouch || isControl(e.target) || e.touches.length > 1) { touchFrom = null; return; }
+    twoFrom = { t: performance.now(), pts: null, move: 0 };
     e.stopPropagation();
     const p = e.changedTouches[0];
     touchFrom = { x: p.clientX, y: p.clientY, t: performance.now() };
   }, { capture: true, passive: false });
-  window.addEventListener("touchmove", (e) => { if (voiceTouch && touchFrom) { e.preventDefault(); e.stopPropagation(); } }, { capture: true, passive: false });
+  window.addEventListener("touchmove", (e) => {
+    if (!voiceTouch) return;
+    if (twoFrom?.pts && e.touches.length === 2) {
+      for (let k = 0; k < 2; k++) twoFrom.move = Math.max(twoFrom.move, Math.hypot(e.touches[k].clientX - twoFrom.pts[k][0], e.touches[k].clientY - twoFrom.pts[k][1]));
+    }
+    if (touchFrom || twoFrom?.pts) { e.preventDefault(); e.stopPropagation(); }
+  }, { capture: true, passive: false });
   window.addEventListener("touchend", (e) => {
+    if (voiceTouch && twoFrom?.pts) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.touches.length > 0) return; // wait for the second finger
+      const two = isTwoFingerTap({ fingers: 2, ms: performance.now() - twoFrom.t, move: twoFrom.move });
+      twoFrom = null;
+      if (two) remoteCompare();
+      return;
+    }
     if (!voiceTouch || !touchFrom) return;
     e.preventDefault(); // no click after it: nothing under the finger is pressed
     e.stopPropagation();
@@ -1926,7 +2064,6 @@ function wire() {
         if (!e.isTrusted) return;
         e.preventDefault();
         wakeGate("key");
-        if (next != null) selectGate(GATE_OPTIONS[next], { say: false });
         return;
       }
       if (next != null) { e.preventDefault(); selectGate(GATE_OPTIONS[next]); return; }
@@ -1938,7 +2075,7 @@ function wire() {
     if (!document.documentElement.classList.contains("gate-on") && !e.defaultPrevented && !e.ctrlKey && !e.altKey && !e.metaKey) {
       // (defaultPrevented: the place list has already acted, Enter on a place or a letter.)
       const act = guidedKey(e.key, focusKindOf(target));
-      const run = { stop: () => { userActed(); stopAll(); }, next: () => remoteStep(1), prev: () => remoteStep(-1), fire: () => remoteRecord("fire"), sea: () => remoteRecord("sea"), pause: () => remotePlay() }[act];
+      const run = { stop: () => { userActed(); stopAll(); }, next: () => remoteStep(1), prev: () => remoteStep(-1), fire: () => remoteRecord("fire"), sea: () => remoteRecord("sea"), pause: () => remotePlay(), compare: () => remoteCompare() }[act];
       if (run) { e.preventDefault(); run(); return; }
     }
     if (e.key === "Escape") { userActed(); stopAll(); return; }
@@ -1961,12 +2098,14 @@ function wire() {
     // Single-key shortcuts can be limited to the place list (an option in the keyboard guide).
     // While the console is hidden, its toggle stands in for the place list.
     const onToggle = consoleCollapsed && target?.id === "console-toggle";
+    // ? and H open the keyboard guide anywhere but a text field, a select or the date slider (the
+    // header's button announces H).
+    if ((e.key === "?" || e.key.toLowerCase() === "h") && !target?.matches("select, input[type=range], input[type=text], input[type=search], textarea")) { e.preventDefault(); openGuide(); return; }
     if (!lettersOn && !inPlaces && !onToggle) return;
-    if (e.key === "?") { e.preventDefault(); openGuide(); return; }
     if (!inPlayer || !state.meta) return;
     const k = e.key.toLowerCase();
     const actions = {
-      p: () => playPause(), c: runCompare, l: playLegend, w: sayWhere, v: sayValue, d: describeFrame,
+      p: () => playPause(), l: playLegend, w: sayWhere, v: sayValue, d: describeFrame,
       n: () => stepPlace(e.shiftKey ? -1 : 1), ",": () => stepDate(-1), ".": () => stepDate(1),
       // S is a second stop key: some screen readers keep Esc for themselves.
       s: () => stopAll(), h: openGuide,
@@ -2005,19 +2144,19 @@ function enterGate(option) {
 }
 
 /** Select a gate option (focus and the selected look); the voice says its name unless told not to. */
-function selectGate(option, { say = true } = {}) {
+function selectGate(option, { say = true, lines = null } = {}) {
   gateSelected = option;
   const rows = { a: $("tour-start"), b: $("tour-voice"), c: $("start") };
   for (const [o, el] of Object.entries(rows)) el.classList.toggle("is-selected", o === option);
   rows[option].focus({ preventScroll: true });
-  if (say) voice?.say(`G02${option}`, { force: true, kind: "status" });
+  if (say) voice?.say(lines || `G02${option}`, { force: true, kind: "status" });
 }
 
 /** Carry out the gate's decision (tour.js gateDecision). */
 function gateAct(d, kind) {
   if (d.action === "enter") { enterGate(d.option); return; }
   if (d.action === "wake") { if (d.option) selectGate(d.option, { say: false }); wakeGate(kind, d.lines); return; }
-  if (d.action === "select") { selectGate(d.option); return; }
+  if (d.action === "select") { selectGate(d.option, { lines: d.lines }); return; }
   if (d.action === "say") voice?.say(d.lines, { force: true, kind: "status" });
 }
 
@@ -2027,6 +2166,34 @@ function fitGate() {
   if (!g) return;
   document.documentElement.classList.toggle("gate-fits", g.scrollHeight <= g.clientHeight + 1);
 }
+
+/**
+ * The guided mode on a phone: "All controls" shows the console and the flat frame (the page scrolls,
+ * the voice tour's full-screen gestures pause), "Simple screen" goes back. The focus goes to the
+ * console's first control on opening and back to the button on closing.
+ */
+function setAllControls(on) {
+  const body = document.body;
+  if (!body.classList.contains("guided-phone")) return;
+  body.classList.toggle("guided-full", on);
+  body.classList.toggle("guided-touch", !on);
+  if (on) { body.classList.remove("guided-scroll"); voiceTouchWas = voiceTouch; voiceTouch = false; document.documentElement.classList.remove("voice-touch"); }
+  else if (voiceTouchWas) { voiceTouch = true; document.documentElement.classList.add("voice-touch"); }
+  const btn = $("all-controls");
+  btn.setAttribute("aria-pressed", String(on));
+  const label = $("all-controls-label");
+  label.dataset.i18n = on ? "simpleScreen" : "allControls";
+  label.textContent = t(label.dataset.i18n);
+  if (on) {
+    if (consoleCollapsed) setConsoleCollapsed(false);
+    const first = $("console").querySelector("input:not([disabled]), button:not([disabled]), select, [tabindex='0']");
+    (first || btn).focus({ preventScroll: false });
+  } else {
+    window.scrollTo(0, 0);
+    btn.focus({ preventScroll: true });
+  }
+}
+let voiceTouchWas = false;
 
 /** The tour with the app's voice, from the gate (the second tap, or Space on the page). */
 function startVoiceTour() {
@@ -2047,12 +2214,12 @@ function lostFocus() {
   const a = document.activeElement;
   if (a && a !== document.body && a !== document.documentElement) return false;
   if ($("guide").open || $("about").open) return false;
-  return !document.documentElement.classList.contains("gate-on") && !$("remote-keys").hidden;
+  return !document.documentElement.classList.contains("gate-on") && document.body.classList.contains("remote-on");
 }
 
 /** The focus back on a real control: Pause or Play on the remote. */
 function rescueFocus() {
-  $("r-play")?.focus({ preventScroll: true });
+  ($("remote-keys").hidden ? $("r-fold") : $("r-play"))?.focus({ preventScroll: true });
 }
 
 /* ---------- Boot ---------- */
@@ -2090,12 +2257,36 @@ async function boot() {
     const measure = () => {
       const desk = !narrow.matches;
       const remote = $("remote");
-      const bar = $("remote-keys").hidden ? null : $("remote-keys");
+      const keysH = $("remote-keys").hidden ? 0 : Math.ceil($("remote-keys").getBoundingClientRect().height);
+      const foldH = foldOn ? Math.ceil($("r-fold").getBoundingClientRect().height) : 0;
       document.documentElement.style.setProperty("--remote-h", `${desk ? Math.ceil(remote.getBoundingClientRect().height) : 0}px`);
-      document.documentElement.style.setProperty("--remote-bar", `${!desk && bar ? Math.ceil(bar.getBoundingClientRect().height) : 0}px`);
+      document.documentElement.style.setProperty("--fold-h", `${foldH}px`);
+      document.documentElement.style.setProperty("--remote-bar", `${!desk ? keysH + foldH : 0}px`);
     };
+    // Guided mode on a touch layout: the free part of the picture is what the reading leaves.
+    const fitStage = () => {
+      const stage = $("stage");
+      const body = document.body;
+      if (!body.classList.contains("guided-touch")) { stage.style.removeProperty("--band"); return; }
+      // The reading must fit whole over the picture; when it cannot (a very large text size), the
+      // page scrolls instead (guided-scroll), so nothing is cut or covered.
+      const reading = $("readout").offsetHeight;
+      if (!body.classList.contains("guided-scroll") && reading > stage.clientHeight - 8) { body.classList.add("guided-scroll"); return; }
+      if (body.classList.contains("guided-scroll")) {
+        // Back to one screen once the reading fits the height the column would give it.
+        const room = innerHeight - (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--remote-bar")) || 0) - stage.getBoundingClientRect().top - scrollY;
+        if (reading < room * 0.66) body.classList.remove("guided-scroll");
+        else { stage.style.removeProperty("--band"); return; }
+      }
+      // The free part above the reading, at least about a third of the screen (the Earth may then
+      // pass behind the lower lines, which keep their shade).
+      stage.style.setProperty("--band", `${Math.round(Math.min(stage.clientHeight, Math.max(stage.clientHeight - reading, 0.34 * innerHeight)))}px`);
+      stage.style.setProperty("--reading", `${reading}px`); // the credit sits in the reading's top margin
+    };
+    new ResizeObserver(fitStage).observe($("stage"));
+    new ResizeObserver(fitStage).observe($("readout"));
     const ro = new ResizeObserver(measure);
-    for (const el of [$("remote"), $("remote-keys")]) ro.observe(el);
+    for (const el of [$("remote"), $("remote-keys"), $("r-fold")]) ro.observe(el);
     narrow.addEventListener("change", measure);
   }
   // One date of Play: the record thumbnail in the console turns once per date, like the readout's disc.

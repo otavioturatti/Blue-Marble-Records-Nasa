@@ -23,10 +23,9 @@
 <script>
 /**
  * The language the page starts in. In order: ?lang= in the address; the choice made earlier on the
- * language switch in this browser (stored as "bmr-lang"); the device: when its first language is
- * any Portuguese (pt-BR, pt-PT, pt), Brazilian Portuguese. Every other language starts in English,
- * because the interface the judges open must be English; Portuguese is offered.
- * To force one language for everyone, make this function return it.
+ * language switch in this browser (stored as "bmr-lang"); otherwise English, whatever the device's
+ * language, because the interface the judges open must be English. Portuguese
+ * is offered on the switch and with ?lang=pt-BR.
  */
 function startLang(search, stored, languages) {
   var m = /[?&]lang=([^&#]*)/.exec(search || "");
@@ -34,8 +33,7 @@ function startLang(search, stored, languages) {
   if (/^pt/.test(asked)) return "pt-BR";
   if (/^en/.test(asked)) return "en";
   if (stored === "en" || stored === "pt-BR") return stored;
-  var first = String((languages && languages[0]) || "").toLowerCase();
-  return /^pt(-|$)/.test(first) ? "pt-BR" : "en";
+  return "en"; // the device's language is not looked at: English by default (changed on 15 Nov)
 }
 (function () {
   var r = document.documentElement, stored = null, langs = [];
@@ -104,7 +102,7 @@ function startLang(search, stored, languages) {
     <div class="mark gate__mark" id="gate-mark" aria-hidden="true"><span class="mark__name">Blue Marble</span> <span class="mark__sub"><span class="mark__word">Rec<span class="mark__o">o<svg class="mark__disc" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle class="md-body" cx="16" cy="16" r="14.4"/><circle class="md-groove" cx="16" cy="16" r="9.7"/><path class="md-sheen" d="M16 16L22.06 4.61A12.9 12.9 0 0 1 26.17 8.06ZM16 16L9.94 27.39A12.9 12.9 0 0 1 5.83 23.94Z"/><circle class="md-label" cx="16" cy="16" r="5.6"/><circle class="md-hole" cx="16" cy="16" r="1.5"/></svg></span>rds</span></span></div>
     <hr class="gate__rule" aria-hidden="true">
 <!-- The statement of purpose (text only: no NASA logo or mark anywhere near it). -->
-<p class="gate__tap" id="gate-tap" aria-hidden="true" data-i18n="gateTap">Click an option or use ↑ ↓ to hear it; double click or press Enter to confirm.</p>
+<p class="gate__tap" id="gate-tap" aria-hidden="true" data-i18n="gateTap">Click an option or use ↑ ↓ to hear it; click it again or press Enter to start.</p>
 <p class="remote__purpose" id="purpose" data-i18n="purpose">Built for the NASA Space Apps Challenge 2026, a NASA hackathon. Made for blind and low-vision people, and for anyone who wants to listen.</p>
 <div class="remote__entry" id="remote-entry" role="group" aria-labelledby="entry-q">
   <h2 class="remote__q" id="entry-q" data-i18n="entryQuestion">How do you want to start?</h2>
@@ -130,7 +128,7 @@ function startLang(search, stored, languages) {
 (function () {
   var r = document.documentElement;
   if (r.lang === "pt-BR") {
-    var T = {"purpose": "Desenvolvido para o NASA Space Apps Challenge 2026, um hackathon da NASA. Feito para pessoas cegas e com baixa visão, e para quem quiser ouvir.", "entryQuestion": "Como você quer começar?", "tourSr": "Passeio guiado, com o meu leitor de tela", "hintSr": "O seu leitor de tela fala; o aplicativo fica quieto entre as músicas.", "tourVoice": "Passeio guiado, com a voz do aplicativo", "hintVoice": "Uma voz sintética fala; para quem não usa leitor de tela.", "explore": "Explorar por conta própria", "language": "Idioma", "gateChoose": "escolher", "gateConfirm": "confirma", "gateTap": "Clique numa opção ou use ↑ ↓ para ouvir; dois cliques ou Enter confirmam.", "gateTapTouch": "Deslize para cima ou para baixo para ouvir as opções. Toque duas vezes para confirmar."};
+    var T = {"purpose": "Desenvolvido para o NASA Space Apps Challenge 2026, um hackathon da NASA. Feito para pessoas cegas e com baixa visão, e para quem quiser ouvir.", "entryQuestion": "Como você quer começar?", "tourSr": "Passeio guiado, com o meu leitor de tela", "hintSr": "O seu leitor de tela fala; o aplicativo fica quieto entre as músicas.", "tourVoice": "Passeio guiado, com a voz do aplicativo", "hintVoice": "Uma voz sintética fala; para quem não usa leitor de tela.", "explore": "Explorar por conta própria", "language": "Idioma", "gateChoose": "escolher", "gateConfirm": "confirma", "gateTap": "Clique numa opção ou use ↑ ↓ para ouvir; clique de novo ou aperte Enter para começar.", "gateTapTouch": "Deslize para cima ou para baixo para ouvir as opções. Toque duas vezes para confirmar."};
     var els = document.querySelectorAll("#gate [data-i18n]");
     for (var i = 0; i < els.length; i++) { var k = els[i].getAttribute("data-i18n"); if (T[k]) els[i].textContent = T[k]; }
     var b = document.querySelectorAll("#gate .lang__btn");
@@ -151,6 +149,8 @@ function startLang(search, stored, languages) {
   <a class="mark" id="home" href="./" translate="no" aria-label="Blue Marble Records: back to the start" data-i18n-attr="aria-label:homeLabel"><span class="mark__name">Blue Marble</span> <span class="mark__sub"><span class="mark__word">Rec<span class="mark__o">o<svg class="mark__disc" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle class="md-body" cx="16" cy="16" r="14.4"/><circle class="md-groove" cx="16" cy="16" r="9.7"/><path class="md-sheen" d="M16 16L22.06 4.61A12.9 12.9 0 0 1 26.17 8.06ZM16 16L9.94 27.39A12.9 12.9 0 0 1 5.83 23.94Z"/><circle class="md-label" cx="16" cy="16" r="5.6"/><circle class="md-hole" cx="16" cy="16" r="1.5"/></svg></span>rds</span></span></a>
   <!-- One cluster, its right edge on the console's: the two dialogs, then the language switch. -->
   <div class="bar__tools">
+    <!-- The guided mode on a phone: a way out of the simple screen to every control, and back. -->
+    <button type="button" class="bar__btn bar__all" id="all-controls" aria-pressed="false"><span id="all-controls-label" data-i18n="allControls">All controls</span></button>
     <button type="button" class="bar__btn" id="about-open" aria-haspopup="dialog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.2v.1"/></svg><span data-i18n="aboutOpen">Data and method</span></button>
     <button type="button" class="bar__btn" id="guide-open" aria-haspopup="dialog" aria-keyshortcuts="H"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.5" y="6" width="19" height="12" rx="1.5"/><path d="M6 9.5h.1M9.4 9.5h.1M12.8 9.5h.1M16.2 9.5h.1M18 9.5h.1M6 12.5h.1M18 12.5h.1M9 15h6"/></svg><span data-i18n="guideTitle">Keyboard guide</span></button>
     <div class="lang" role="group" aria-labelledby="lang-label">
@@ -178,11 +178,14 @@ function startLang(search, stored, languages) {
        place, Previous place, Switch to fire or sea, Stop or Start the tour. Every button is native;
        the status line under them is for the eye only. -->
   <section class="remote" id="remote" aria-label="Player" data-i18n-attr="aria-label:player">
+    <!-- Explore on a touch layout: the pinned bar folds to this one slim row (its five buttons open above it). -->
+    <button type="button" class="remote__fold" id="r-fold" aria-expanded="false" aria-controls="remote-keys"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="rControls">Controls</span></button>
     <div class="remote__keys" id="remote-keys" hidden>
       <button type="button" class="key remote__play" id="r-play"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path class="ico--play" d="M8 5.5v13l11-6.5z"/><path class="ico--pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><span id="r-play-label" data-i18n="rPause">Pause</span></button>
       <button type="button" class="key" id="r-next"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6.5v11l8.5-5.5zM16 6h2.5v12H16z"/></svg><span data-i18n="rNext">Next place</span></button>
       <button type="button" class="key" id="r-prev"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6.5v11l-8.5-5.5zM5.5 6H8v12H5.5z"/></svg><span data-i18n="rPrev">Previous place</span></button>
       <button type="button" class="key" id="r-record"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3.5-3.5M20 15H7l3.5 3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="r-record-label" data-i18n="rToFire">Switch to fire</span></button>
+      <button type="button" class="key" id="r-compare" aria-keyshortcuts="C"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c2.2-5 3.8-5 6 0s3.8 5 6 0 3.8-5 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="rCompare">Compare</span></button>
       <button type="button" class="key" id="r-tour"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.2"/></svg><span id="r-tour-label" data-i18n="rTourStop">Stop the tour</span></button>
     </div>
     <p class="remote__status" id="r-status" aria-hidden="true"></p>
@@ -269,7 +272,7 @@ function startLang(search, stored, languages) {
     <fieldset class="group places" id="places" aria-describedby="places-help" disabled>
       <legend data-i18n="places">Place</legend>
       <p class="hint" id="places-hint" aria-hidden="true"></p>
-      <p class="group__help" id="places-help" aria-hidden="true" data-i18n="placesHelp">Arrow keys choose a place and sound it. Enter plays it through time.</p>
+      <p class="group__help" id="places-help" aria-hidden="true" data-i18n="placesHelp">Up and down choose a place, left and right switch sea and fire, Space or Enter plays and pauses.</p>
       <div class="places__list" id="places-list"></div>
     </fieldset>
 

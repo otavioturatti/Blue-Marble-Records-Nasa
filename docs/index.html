@@ -14,6 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23173aa6' stroke-width='.8'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%232f6bff'/%3E%3Ccircle cx='16' cy='16' r='1.2' fill='%23000'/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/cormorant-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
 <style>
 /* One self-contained page: its own fonts and pictures, no outside requests. The identity is the app's. */
 @font-face { font-family: "Cormorant"; src: url("fonts/cormorant-latin-wght-normal.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
@@ -116,19 +117,19 @@ pre code { padding: 0; background: none; font-size: 0.875rem; line-height: 1.8; 
   min-height: 3.25rem; padding: 0.5rem 1.4rem;
   font: 600 1rem/1.2 var(--font-ui); color: var(--ink); text-decoration: none; text-align: center;
   border: 1px solid var(--line); border-radius: var(--radius); background: rgb(0 0 0 / 0.55);
-  transition: background-color 180ms, border-color 180ms;
+  transition: background-color 180ms, border-color 180ms, transform 220ms var(--ease);
 }
 .btn:hover { border-color: var(--ink); color: var(--ink); background: #08102a; }
 .btn--go { background: var(--cobalt-deep); border-color: var(--cobalt-deep); }
 .btn--go:hover { background: var(--cobalt-press); border-color: var(--cobalt-hi); }
-.btn svg { width: 1rem; height: 1rem; fill: currentColor; flex: none; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; flex: none; transition: transform 220ms var(--ease); }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; isolation: isolate; overflow: hidden; background: var(--space); }
 .top { position: absolute; z-index: 3; top: 0; left: 50%; translate: -50% 0; width: min(100% - 2 * var(--gutter), 78rem); display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: clamp(14px, 2.2vw, 30px); }
 .top .mark { font-size: clamp(1rem, 0.86rem + 0.7vw, 1.5rem); --hl: 1.5px; }
 .top__link { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 0.25rem; font-size: 0.9375rem; font-weight: 500; color: var(--ink); text-shadow: 0 1px 6px #000; }
-.hero__pic { display: block; position: relative; z-index: -2; height: min(100vw, 60svh); min-height: 17rem; }
+.hero__pic { display: block; overflow: hidden; position: relative; z-index: -2; height: min(100vw, 60svh); min-height: 17rem; }
 .hero__pic img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
 .hero__shade { position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: min(100vw, 60svh); min-height: 17rem; background: linear-gradient(180deg, rgb(0 0 0 / 0.72) 0, transparent 26%, transparent 58%, #000 100%); pointer-events: none; }
 .hero__body { position: relative; width: min(100% - 2 * var(--gutter), 78rem); margin: -3.4rem auto 0; padding: 0 0 2.75rem; }
@@ -203,7 +204,7 @@ h3 { margin: 0; font: 600 clamp(1.6rem, 1.4rem + 0.7vw, 2rem)/1.06 var(--font-di
 /* The numbers */
 .stats { display: grid; grid-template-columns: 1fr; margin: 0; border-top: 1px solid var(--hair-2); }
 .stat { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 0.9rem; padding: 1.9rem 0 2rem; border-bottom: 1px solid var(--hair); }
-.stat dd { margin: 0; font: 600 clamp(3.75rem, 1.5rem + 4.6vw, 6.5rem)/0.82 var(--font-display); letter-spacing: -0.03em; font-variant-numeric: lining-nums; white-space: nowrap; }
+.stat dd { margin: 0; font: 600 clamp(3.75rem, 1.5rem + 4.6vw, 6.5rem)/0.82 var(--font-display); letter-spacing: -0.03em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
 .stat dd small { margin-left: 0.35em; font: 500 0.24em/1 var(--font-num); letter-spacing: 0; color: var(--ink-2); }
 .stat dt { max-width: 19rem; font-size: 0.9375rem; line-height: 1.45; color: var(--ink-2); }
 @media (min-width: 36rem) {
@@ -310,21 +311,42 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
 .foot nav a { display: inline-flex; align-items: center; min-height: 44px; }
 @media (min-width: 56.25rem) { .foot .wrap { grid-template-columns: auto minmax(0, 1fr); } }
 
-/* ---------- Motion: one entrance for the hero, a quiet rise on scroll. All off with reduced motion. ---------- */
-@keyframes rise { from { opacity: 0; translate: 0 26px; } }
-@keyframes settle { from { opacity: 0; scale: 1.05; } }
-@keyframes turn { to { rotate: 360deg; } }
+/* ---------- Motion. Only opacity and transform move. With reduced motion nothing below applies:
+   the content is simply there. Without JavaScript nothing is hidden (the js class is never set). ---------- */
+.progress { position: fixed; z-index: 20; top: 0; left: 0; width: 100%; height: 2px; background: var(--amber); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; }
+@keyframes enter { from { opacity: 0; transform: translate3d(0, 22px, 0); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes drift { from { transform: scale(1.02) translate3d(0, 0, 0); } to { transform: scale(1.1) translate3d(-1.4%, -1.1%, 0); } }
+@keyframes turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .progress { display: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  .hero__pic img { animation: settle 1800ms var(--ease) both; }
-  .hero h1, .hero__lede, .hero__actions { animation: rise 900ms var(--ease) both; }
-  .hero h1 { animation-delay: 250ms; }
-  .hero__lede { animation-delay: 420ms; }
-  .hero__actions { animation-delay: 560ms; }
-  .mark__disc { animation: turn 9s linear infinite; }
-  .vinyl svg { animation: turn 22s linear infinite; }
-  @supports (animation-timeline: view()) {
-    .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% cover 16%; }
-  }
+  /* The entrance: wordmark, the two lines of the title, the sentence, the three buttons. */
+  .top .mark, .hero h1 .l, .hero__lede, .hero__actions .btn { animation: enter 600ms var(--ease) backwards; }
+  .hero h1 .l { animation-delay: 100ms; }
+  .hero h1 .l ~ .l { animation-delay: 200ms; }
+  .hero__lede { animation-delay: 300ms; }
+  .hero__actions .btn { animation-delay: 400ms; }
+  .hero__actions .btn:nth-child(2) { animation-delay: 500ms; }
+  .hero__actions .btn:nth-child(3) { animation-delay: 600ms; }
+  /* The picture pushes in and drifts, slowly, without end; the two records turn. */
+  .hero__pic img { animation: fade 1600ms var(--ease) backwards, drift 30s ease-in-out infinite alternate; will-change: transform; }
+  .mark__disc { animation: turn 8s linear infinite; }
+  .vinyl svg { animation: turn 48s linear infinite; }
+  /* Reveal on scroll: the script adds .rise, then .is-in when the block enters the view. */
+  .js .rise { opacity: 0; transform: translate3d(0, 20px, 0); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
+  .js .rise.is-in { opacity: 1; transform: none; }
+  /* The notes of step 3 come one by one, the amber one last. */
+  .js .step .n { opacity: 0; transform: translateY(10px); transition: opacity 420ms var(--ease), transform 420ms var(--ease); transition-delay: calc(700ms + var(--n) * 130ms); }
+  .js .step.is-in .n { opacity: 1; transform: none; }
+  /* Answers to the pointer and to focus. */
+  .btn:hover, .btn:focus-visible { transform: translate3d(0, -1px, 0); }
+  .btn:hover svg, .btn:focus-visible svg { transform: translate3d(3px, 0, 0); }
+  .step figure, .record figure { transition: transform 260ms var(--ease); }
+  .step:hover figure, .record:hover figure, .record:focus-within figure { transform: translate3d(0, -2px, 0); }
+  .top__link, .foot nav a, .toc a { position: relative; text-decoration: none; }
+  .top__link::after, .foot nav a::after, .toc a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 9px; height: 1px; background: var(--cobalt); transform: scaleX(0); transform-origin: 0 50%; transition: transform 320ms var(--ease); }
+  .toc a::after { bottom: -1px; }
+  .top__link:hover::after, .top__link:focus-visible::after, .foot nav a:hover::after, .foot nav a:focus-visible::after, .toc a:hover::after, .toc a:focus-visible::after { transform: scaleX(1); }
 }
 @media (forced-colors: active) {
   .mark__sub::before, .mark__sub::after { forced-color-adjust: none; background: CanvasText; }
@@ -332,13 +354,22 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
   .mark__disc { display: none; }
 }
 @media print {
-  .hero__pic, .hero__shade, .copy, video { display: none; }
+  .hero__pic, .hero__shade, .copy, video, .progress { display: none; }
+  .js .rise, .js .step .n { opacity: 1 !important; transform: none !important; }
   body { background: #fff; color: #000; }
 }
+.tried { display: grid; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; margin-top: clamp(2.5rem, 5vw, 4.5rem); }
+@media (min-width: 44rem) { .tried { grid-template-columns: minmax(0, 17rem) minmax(0, 1fr); } }
+.tried__film { margin: 0; width: min(17rem, 72vw); }
+.tried__film video { display: block; width: 100%; height: auto; aspect-ratio: 474 / 850; border: 1px solid var(--hair-2); border-radius: var(--radius); background: #000; }
+.tried__film figcaption { margin-top: 0.7rem; font-size: 0.8125rem; line-height: 1.45; color: var(--ink-3); }
+.tried__title { margin: 0 0 1rem; font-size: clamp(2rem, 1.5rem + 1.8vw, 3rem); line-height: 1; }
+.tried .trial { margin-top: 0; }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to main content</a>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="hero" id="top">
   <div class="top">
@@ -426,16 +457,16 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
             <g stroke="#253150" stroke-width="1"><path d="M34 104h332M34 127h332M34 150h332M34 173h332M34 196h332"/></g>
             <g stroke="#5d6d93" stroke-width="1"><path d="M34 104v92M144.500 104v92M255.500 104v92M366 104v92"/></g>
             <g fill="#e8f0ff" stroke="#e8f0ff" stroke-width="1.6">
-              <ellipse cx="62" cy="219" rx="8" ry="6"/><path d="M70 219v-52"/><path d="M50 219h24" stroke-width="1"/>
-              <ellipse cx="90" cy="207.500" rx="8" ry="6"/><path d="M98 207.500v-52"/>
-              <ellipse cx="118" cy="196" rx="8" ry="6"/><path d="M126 196v-52"/>
-              <ellipse cx="172" cy="184.500" rx="8" ry="6"/><path d="M180 184.500v-52"/>
-              <ellipse cx="200" cy="173" rx="8" ry="6"/><path d="M208 173v-52"/>
-              <ellipse cx="228" cy="161.500" rx="8" ry="6"/><path d="M236 161.500v-52"/>
-              <ellipse cx="283" cy="150" rx="8" ry="6"/><path d="M291 150v-52"/>
-              <ellipse cx="311" cy="138.500" rx="8" ry="6"/><path d="M319 138.500v-52"/>
+              <g class="n" style="--n:0"><ellipse cx="62" cy="219" rx="8" ry="6"/><path d="M70 219v-52"/><path d="M50 219h24" stroke-width="1"/></g>
+              <g class="n" style="--n:1"><ellipse cx="90" cy="207.500" rx="8" ry="6"/><path d="M98 207.500v-52"/></g>
+              <g class="n" style="--n:2"><ellipse cx="118" cy="196" rx="8" ry="6"/><path d="M126 196v-52"/></g>
+              <g class="n" style="--n:3"><ellipse cx="172" cy="184.500" rx="8" ry="6"/><path d="M180 184.500v-52"/></g>
+              <g class="n" style="--n:4"><ellipse cx="200" cy="173" rx="8" ry="6"/><path d="M208 173v-52"/></g>
+              <g class="n" style="--n:5"><ellipse cx="228" cy="161.500" rx="8" ry="6"/><path d="M236 161.500v-52"/></g>
+              <g class="n" style="--n:6"><ellipse cx="283" cy="150" rx="8" ry="6"/><path d="M291 150v-52"/></g>
+              <g class="n" style="--n:7"><ellipse cx="311" cy="138.500" rx="8" ry="6"/><path d="M319 138.500v-52"/></g>
             </g>
-            <g fill="#ffb547" stroke="#ffb547" stroke-width="1.6"><ellipse cx="339" cy="127" rx="8" ry="6"/><path d="M347 127v-52"/></g>
+            <g class="n" style="--n:8" fill="#ffb547" stroke="#ffb547" stroke-width="1.6"><ellipse cx="339" cy="127" rx="8" ry="6"/><path d="M347 127v-52"/></g>
           </svg>
         </figure>
         <p class="label">Step 3</p>
@@ -473,7 +504,18 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
       <li class="rise"><h3>A voice that says what it is</h3><p>The optional voice guide is a synthetic voice, labelled as one. It never reads the values and never speaks over the music.</p></li>
       <li class="rise"><h3>Pulses in the hand</h3><p>On Android phones that can vibrate, the value is also given as 1 to 5 pulses, and no data as a rough buzz.</p></li>
     </ul>
-    <p class="trial">During the hackathon, on 15 November 2026, a blind person tried the app. One person and one session: we report it as a first trial, not as a validation.</p>
+    <div class="tried">
+      <figure class="tried__film">
+        <video controls playsinline preload="none" poster="img/tester-poster.webp" width="474" height="850" aria-label="A blind tester listens to the app playing on her phone, 15 seconds">
+          <source src="tester.mp4" type="video/mp4">
+        </video>
+        <figcaption>15 seconds. A blind tester listens to the app playing on her phone. Shown with her permission.</figcaption>
+      </figure>
+      <div class="tried__text">
+        <h3 class="tried__title">Tried by a blind listener</h3>
+        <p class="trial">During the hackathon, on 15 November 2026, a blind person tried the app on her own phone, a Motorola Moto G54, with Google's Gemini on the phone. One person and one session: we report it as a first trial, not as a validation.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -677,7 +719,7 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
           <li>The optional voice guide is a synthetic voice, labelled as one. It never reads the values and never speaks over the music.</li>
           <li>On Android phones that can vibrate, the value is also given as 1 to 5 pulses, and no data as a rough buzz.</li>
         </ul>
-        <p>During the hackathon, on 15 November 2026, a blind person tried the app. One person and one session: we report it as a first trial, not as a validation.</p>
+        <p>During the hackathon, on 15 November 2026, a blind person tried the app on her own phone, a Motorola Moto G54, with Google's Gemini on the phone. One person and one session: we report it as a first trial, not as a validation.</p>
 
         <h4>Benefits</h4>
         <ul>
@@ -928,7 +970,7 @@ details > :not(summary):last-child { margin-bottom: 1.5rem; }
         <details>
           <summary>Voice guide</summary>
           <ul>
-            <li><a href="https://elevenlabs.io/">ElevenLabs</a> text to speech, model <code>eleven_v4</code>, voices "James" (English) and "Rafael Valente" (Brazilian Portuguese): 77 clips in each language, synthesized on 15 November 2026 from lines written and reviewed by the team. SI-generated, as stated under Use of Super Intelligence (SI) and in <code>web/voice/README.md</code>.</li>
+            <li><a href="https://elevenlabs.io/">ElevenLabs</a> text to speech, model <code>eleven_v4</code>, voices "James" (English) and "Rafael Valente" (Brazilian Portuguese): 81 clips in each language, synthesized on 15 November 2026 from lines written and reviewed by the team. SI-generated, as stated under Use of Super Intelligence (SI) and in <code>web/voice/README.md</code>.</li>
             <li>faster-whisper, a speech recognition model run on our own computer, used only to check each clip against its line. It is not part of the app.</li>
           </ul>
         </details>
@@ -1027,6 +1069,46 @@ docker run -p 8080:80 blue-marble-records</code></pre>
       }).then(function () { setTimeout(function () { b.textContent = label; b.classList.remove("is-done"); status.textContent = ""; }, 2200); });
     });
   });
+})();
+
+/* Motion: reveal on scroll, the count on the four numbers, the reading line at the top.
+   Runs only when the head set the js class (IntersectionObserver exists, reduced motion not asked for). */
+(function () {
+  var root = document.documentElement;
+  if (!root.classList.contains("js")) return;
+  try {
+    var items = document.querySelectorAll(".credits dl > div, .head > *, .film, .step, .after, .stat, .ear > li, .trial, .record, .note, .cols > div, .form__head > *, .field__head, .field__body > *, .run .wrap > *");
+    function count(dd, wait) {
+      var node = dd.childNodes[0], end = node.nodeValue, n = parseFloat(end), dec = (end.split(".")[1] || "").length, t0 = null;
+      if (isNaN(n)) return;
+      node.nodeValue = (0).toFixed(dec);
+      setTimeout(function () {
+        requestAnimationFrame(function step(t) {
+          if (t0 === null) t0 = t;
+          var k = Math.min(1, (t - t0) / 900), e = 1 - Math.pow(1 - k, 3);
+          node.nodeValue = k < 1 ? (n * e).toFixed(dec) : end;
+          if (k < 1) requestAnimationFrame(step);
+        });
+      }, wait);
+      setTimeout(function () { node.nodeValue = end; }, wait + 2500);
+    }
+    var io = new IntersectionObserver(function (entries) {
+      var k = 0;
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target, wait = Math.min(k, 6) * (el.classList.contains("step") ? 220 : 90); k++;
+        el.style.transitionDelay = wait + "ms";
+        el.classList.add("is-in"); io.unobserve(el);
+        if (el.classList.contains("stat")) count(el.querySelector("dd"), wait);
+      });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.01 });
+    [].forEach.call(items, function (el) { el.classList.add("rise"); io.observe(el); });
+    var bar = document.querySelector(".progress"), busy = false;
+    function prog() { busy = false; var max = root.scrollHeight - innerHeight; bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0) + ")"; }
+    addEventListener("scroll", function () { if (!busy) { busy = true; requestAnimationFrame(prog); } }, { passive: true });
+    addEventListener("resize", prog);
+    prog();
+  } catch (e) { root.classList.remove("js"); }
 })();
 </script>
 </body>
